@@ -55,6 +55,9 @@ function getYinPitch(buffer, sampleRate) {
 }
 
 class AudioManager {
+    on = false;
+    pitch = null;
+
     async init() {
         const stream = await window.navigator.mediaDevices.getUserMedia({
             audio: true,
@@ -75,9 +78,20 @@ class AudioManager {
             }
 
             const volume = getVolume(inputData);
+            const newOn = volume > 0.09;
+
+            if (newOn !== this.on) {
+                this.on = newOn;
+                console.log("AAAA", newOn)
+            }
+
+
             const pitchData = getYinPitch(inputData, audioContext.sampleRate);
-            // console.log({ volume })
-            console.log(pitchData)
+            this.pitch = pitchData.probability ? pitchData.pitch : null;
+            if (this.on && pitchData.probability) {
+                console.log(pitchData)
+            }
+
         }
 
 
@@ -85,5 +99,5 @@ class AudioManager {
 }
 
 
-const instance = new AudioManager();
+export const instance = new AudioManager();
 instance.init();
