@@ -54,6 +54,7 @@ function getYinPitch(buffer, sampleRate) {
     return { pitch: pitchInHertz, probability: probability };
 }
 
+//	need to bind this
 class AudioManager {
     on = false;
     pitch = null;
@@ -69,6 +70,8 @@ class AudioManager {
 
         source.connect(proccessor);
         proccessor.connect(audioContext.destination);
+		const that = this;
+		
         proccessor.onaudioprocess = function (e) {
             const inputData = e.inputBuffer.getChannelData(0);
             const ouyputData = e.outputBuffer.getChannelData(0);
@@ -80,21 +83,20 @@ class AudioManager {
             const volume = getVolume(inputData);
             const newOn = volume > 0.09;
 
-            if (newOn !== this.on) {
-                this.on = newOn;
+            if (newOn !== that.on) {
+                that.on = newOn;
                 console.log("AAAA", newOn)
             }
 
 
             const pitchData = getYinPitch(inputData, audioContext.sampleRate);
-            this.pitch = pitchData.probability ? pitchData.pitch : null;
-            if (this.on && pitchData.probability) {
-                console.log(pitchData)
+            that.pitch = pitchData.probability ? pitchData.pitch : null;
+			
+            /*if (that.on && pitchData.probability) {
+                console.log(that.pitch)
             }
-
+			*/
         }
-
-
     }
 }
 

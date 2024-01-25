@@ -1,4 +1,7 @@
 import * as BABYLON from 'babylonjs'
+import {instance} from './audioCheck.js'
+import {game_status} from './gameState.js'
+
 export class AppScene {
     engine;
     scene;
@@ -9,7 +12,6 @@ export class AppScene {
             this.engine.resize();
         });
         this.scene = createScene(this.engine, this.canvas)
-
     }
 
     debug(debugOn = true) {
@@ -24,6 +26,27 @@ export class AppScene {
         this.debug(false);
         this.engine.runRenderLoop(() => {
             this.scene.render();
+			//console.log(instance.pitch);
+			game_status.movement = null;
+			
+			if(instance.pitch >= 100 && instance.pitch <= 200){
+	            console.log("down");
+				game_status.movement = "down";
+			}
+			if(instance.pitch >= 201 && instance.pitch <= 300){
+	            console.log("left");
+				game_status.movement = "left";
+			}
+			if(instance.pitch >= 301 && instance.pitch <= 400){
+	            console.log("right");
+				game_status.movement = "right";
+			}
+			if(instance.pitch >= 401 && instance.pitch <= 500){
+	            console.log("up");
+				game_status.movement = "up";
+			}
+			
+			console.log(game_status.movement);
         });
     }
 
