@@ -1,4 +1,5 @@
 import * as BABYLON from 'babylonjs'
+
 export class AppScene {
     engine;
     scene;
@@ -21,44 +22,77 @@ export class AppScene {
     }
 
     run() {
-        this.debug(false);
         this.engine.runRenderLoop(() => {
             this.scene.render();
+
+            this.scene.debugLayer.show({
+                embedMode: true,
+            });
+
+            const startFrame = 0;
+            const endFrame = 10;
+            const frameRate = 10;
+
+            new BABYLON.Animation("moveCamera", "position.x", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
         });
     }
 
 }
 
-
 var createScene = function (engine, canvas) {
-    // this is the default code from the playground:
+    const scene = new BABYLON.Scene(engine);
 
-    // This creates a basic Babylon Scene object (non-mesh)
-    var scene = new BABYLON.Scene(engine);
+    const camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2, Math.PI / 2, 8, BABYLON.Vector3.Zero());
+    //camera.attachControl(canvas, true);
+    const light = new BABYLON.PointLight("Point", new BABYLON.Vector3(5, 10, 5));
+    
+    // Load the spritesheet (with appropriate settings) associated with the JSON Atlas.
+    let spriteSheet = new BABYLON.Texture("textures/spriteMap/none_trimmed/Legends_Level_A.png", scene,
+        false, //NoMipMaps
+        false, //InvertY usually false if exported from TexturePacker
+        BABYLON.Texture.NEAREST_NEAREST, //Sampling Mode
+        null, //Onload, you could spin up the sprite map in a function nested here
+        null, //OnError
+        null, //CustomBuffer
+        false, //DeleteBuffer
+        BABYLON.Engine.TEXTURETYPE_RGBA //ImageFormageType RGBA
+    );
+    
 
-    // This creates and positions a free camera (non-mesh)
-    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+    // Create an assets manager to load the JSON file 
+    const assetsManager = new BABYLON.AssetsManager(scene);
+    const textTask = assetsManager.addTextFileTask("text task", "textures/spriteMap/none_trimmed/Legends_Level_A.json");
+    
+    //Create the sprite map on succeful loading
+    textTask.onSuccess = (task) => {        
+        const atlasJSON = JSON.parse(task.text)
+        let backgroundSize = new BABYLON.Vector2(7, 10);
+    
+        let background = new BABYLON.SpriteMap('background', atlasJSON, spriteSheet,
+        {
+            stageSize: backgroundSize,
+            maxAnimationFrames:8,
+            flipU: true,
+        },
+        scene);  
+        background.position = new BABYLON.Vector2(0.1, 0.1);
+    
+        background.changeTiles(0, new BABYLON.Vector2(0, 0), 24);
 
-    // This targets the camera to scene origin
-    camera.setTarget(BABYLON.Vector3.Zero());
+        let eighth = 1 / 8
+        let speed = 0.005
+        background.addAnimationToTile(24, 0, 25, eighth * 1, speed);
+        background.addAnimationToTile(24, 1, 26, eighth * 2, speed);
+        background.addAnimationToTile(24, 2, 27, eighth * 3, speed);
+        background.addAnimationToTile(24, 3, 28, eighth * 4, speed);
+        background.addAnimationToTile(24, 4, 29, eighth * 5, speed);
+        background.addAnimationToTile(24, 5, 30, eighth * 6, speed);
+        background.addAnimationToTile(24, 6, 31, eighth * 7, speed);
+        background.addAnimationToTile(24, 7, 24, 1, 	 	 speed);
+    };
 
-    // This attaches the camera to the canvas
-    camera.attachControl(canvas, true);
-
-    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-
-    // Default intensity is 1. Let's dim the light a small amount
-    light.intensity = 0.7;
-
-    // Our built-in 'sphere' shape.
-    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 2, segments: 32 }, scene);
-
-    // Move the sphere upward 1/2 its height
-    sphere.position.y = 1;
-
-    // Our built-in 'ground' shape.
-    var ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
-
+    //load the assets manager
+    assetsManager.load();
+       
     return scene;
 };

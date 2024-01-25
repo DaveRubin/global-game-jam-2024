@@ -12,6 +12,8 @@
     "vite": "^5.0.8"
   },
   "dependencies": {
+    "@babylonjs/gui-editor": "^6.40.0",
+    "@babylonjs/inspector": "^6.40.0",
     "babylonjs": "^6.39.0"
   }
 }
