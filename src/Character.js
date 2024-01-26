@@ -4,6 +4,7 @@ export class Character extends Phaser.GameObjects.Container {
   scene;
   sprite;
   isMoving = false;
+  onMoveComplete;
   constructor(scene, x = 0, y = 0, moveSpeed) {
     super(scene, x, y);
     this.scene = scene;
@@ -11,6 +12,7 @@ export class Character extends Phaser.GameObjects.Container {
     this.createAnimation("side", "Side ", 1, 8, 50);
     this.createAnimation("jump", "Jump ", 1, 5, 15);
     this.sprite = scene.add.sprite(16, 16);
+    this.sprite.originY = this.sprite.originX = 1;
     this.moveSpeed = moveSpeed;
 
     this.add(this.sprite);
@@ -48,6 +50,23 @@ export class Character extends Phaser.GameObjects.Container {
     this.sprite.chain(["front"]);
   }
 
+  fallOnPit(onComplete) {
+    this.sprite.play("front");
+    this.scene.tweens.add({
+      targets: this,
+      scale: 0,
+      ease: Phaser.Math.Easing.Back.In,
+      duration: 300,
+
+      onStart: () => {
+        this.isMoving = true;
+      },
+      onComplete: () => {
+        onComplete?.();
+      },
+    });
+  }
+
   move(x = 0, y = 0) {
     this.scene.tweens.add({
       targets: this,
@@ -57,12 +76,11 @@ export class Character extends Phaser.GameObjects.Container {
       duration: this.moveSpeed,
 
       onStart: () => {
-        console.log("onStart");
         this.isMoving = true;
       },
       onComplete: () => {
         this.isMoving = false;
-        console.log("onComplete");
+        this.onMoveComplete?.();
       },
     });
   }

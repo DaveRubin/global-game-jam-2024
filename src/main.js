@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 
-import HelloWorldScene from "./HelloWorldScene";
+import GameScene from "./GameScene";
+import MainMenuScene from "./MainMenuScene";
+import YouLoseScene from "./YouLoseScene";
 
 const config = {
   type: Phaser.AUTO,
@@ -13,7 +15,7 @@ const config = {
       gravity: { y: 200 },
     },
   },
-  scene: [HelloWorldScene],
+  scene: [GameScene, YouLoseScene, MainMenuScene],
 };
 
 export default new Phaser.Game(config);

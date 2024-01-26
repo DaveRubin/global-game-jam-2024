@@ -4,9 +4,9 @@ import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
 import constants from './Constants';
 
-export default class HelloWorldScene extends Phaser.Scene {
+export default class GameScene extends Phaser.Scene {
   constructor() {
-    super("hello-world");
+    super("game");
   }
 
   preload() {
@@ -54,8 +54,8 @@ export default class HelloWorldScene extends Phaser.Scene {
       ['path', 'path', 'path', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'wall', 'wall', 'wall', 'path',],
-      ['path', 'path', 'wall', 'path', 'path',],
+      ['path', 'pits', 'pits', 'pits', 'path',],
+      ['path', 'path', 'pits', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
       ['path', 'path', 'plsp', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
@@ -100,6 +100,8 @@ export default class HelloWorldScene extends Phaser.Scene {
     const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
     this.positionAnything(enemy, 2, 2);
     this.worldContainer = this.add.container(0, 0, [layer]);
+    this.worldContainer.x += 16;
+    this.worldContainer.y += 6;
     this.worldContainer.add(enemy);
 
     const startingPoint = this.findOnGameMap(x => x === constants.playerStartingPoint);
@@ -107,6 +109,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.characterX = startingPoint.x;
 
     this.character = new Character(this, 0, 0, this.moveSpeed);
+    this.character.onMoveComplete = () => this.calculateLanding();
     this.add.existing(this.character);
     this.positionAnything(this.character, startingPoint.x, startingPoint.y);
 
@@ -198,13 +201,6 @@ export default class HelloWorldScene extends Phaser.Scene {
       y: target.y + y,
       ease: "Power1",
       duration: this.moveSpeed,
-
-      onStart: () => {
-        console.log("onStart");
-      },
-      onComplete: () => {
-        console.log("onComplete");
-      },
     });
   }
 
@@ -215,7 +211,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   getPositionOnScreen(x, y) {
-    return new Phaser.Math.Vector2(x * 32 + 16, 8 * 32 - (y-(this.characterY - 1)) * 32 + 16);
+    return new Phaser.Math.Vector2(x * 32 + 32, 8 * 32 - (y-(this.characterY - 1)) * 32 + 32);
   }
 
   findOnGameMap(predicate) {
@@ -227,5 +223,31 @@ export default class HelloWorldScene extends Phaser.Scene {
       }
     }
     return new Phaser.Math.Vector2(-1, -1);
+  }
+
+  getTile(x, y) {
+    return this.gameMap[y][x];
+  }
+
+  getTileVector(vector) {
+    return this.gameMap[vector.y][vector.x];
+  }
+
+  calculateLanding() {
+    const tile = this.getTile(this.characterX, this.characterY);
+
+    switch(tile) {
+      case constants.pits: 
+        this.handleLandingOnPit();
+        return;
+    }
+  }
+
+  handleLandingOnPit() {
+    this.character.fallOnPit(() => this.goToYouLose());
+  }
+
+  goToYouLose() {
+    this.time.delayedCall(1000, () => this.scene.start('you-lose'));
   }
 }

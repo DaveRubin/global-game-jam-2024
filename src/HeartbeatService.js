@@ -18,9 +18,9 @@ class HeartbeatService {
     this.offset = 0.35;
 
     this.actions = [
-      // { window: new Phaser.Math.Vector2(100, 200), name: "up" },
-      // { window: new Phaser.Math.Vector2(300, 400), name: "left" },
-      // { window: new Phaser.Math.Vector2(200, 300), name: "right" },
+      { window: new Phaser.Math.Vector2(0, 200), name: "up" },
+      { window: new Phaser.Math.Vector2(200, 400), name: "left" },
+      { window: new Phaser.Math.Vector2(400, 600), name: "right" },
     ];
   }
 
