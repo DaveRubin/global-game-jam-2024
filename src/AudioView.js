@@ -53,6 +53,7 @@ export class AudioView extends Phaser.GameObjects.Container {
     this.add(background);
     this.add(background2);
   }
+
   createHidingGradients = () => {
     const graphics = this.scene.add.graphics();
     const color = [DARK_COLOR, DARK_COLOR, DARK_COLOR, DARK_COLOR];
