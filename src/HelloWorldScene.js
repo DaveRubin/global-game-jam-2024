@@ -111,10 +111,15 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.positionAnything(this.character, startingPoint.x, startingPoint.y);
 
     new AudioView(this, 0, 0);
+
+    this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
+    this.beatDebugRect.alpha = 0;
   }
 
   update(time, delta) {
     Heartbeat.update(time);
+
+    this.beatDebugRect.fillColor = Heartbeat.isBeat ? 0xff0000 : 0xffffff;
 
     if (this.character.isMoving) {
       return;

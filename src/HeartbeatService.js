@@ -4,6 +4,9 @@ import { instance } from "../audioCheck";
 class HeartbeatService {
   total;
   onSuccess;
+
+  isCalibrating = true;
+
   constructor() {
     this.beatCount = 0;
     this.hadBeat = false;
@@ -11,13 +14,13 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatWindowLength = 750;
     this.beatTempo = 1000;
+    this.offset = 0.35;
 
     this.actions = [
-      { window: new Phaser.Math.Vector2(100, 200), name: "up" },
-      { window: new Phaser.Math.Vector2(300, 400), name: "left" },
-      { window: new Phaser.Math.Vector2(200, 300), name: "right" },
+      // { window: new Phaser.Math.Vector2(100, 200), name: "up" },
+      // { window: new Phaser.Math.Vector2(300, 400), name: "left" },
+      // { window: new Phaser.Math.Vector2(200, 300), name: "right" },
     ];
   }
 
@@ -65,14 +68,22 @@ class HeartbeatService {
     }
   }
   calculateBeat(now) {
-    const module = now % this.beatTempo;
-    const isWithinBeatWindow = module < this.beatWindowLength;
+    this.module = now % this.beatTempo;
+    const isWithinBeatWindow = this.normalizedModule < this.offset || this.normalizedModule > 1-this.offset;
+    this.normalizedModule = this.module / this.beatTempo;
+
     return isWithinBeatWindow;
   }
   getCurrentAction() {
     if (instance.volume < 0.1) {
       return null;
     }
+
+    if (this.isCalibrating) {
+      this.calibrate();
+      return null;
+    }
+    
     for (let action of this.actions) {
       if (
         action.window.x < instance.pitch &&
@@ -82,6 +93,25 @@ class HeartbeatService {
       }
     }
     return null;
+  }
+  calibrate() {
+    if (this.latestCalibratedBeat === this.beatCount) {
+      return;
+    }
+    if (!instance.pitch) {
+      return;
+    }
+    this.latestCalibratedBeat = this.beatCount;
+    const list = ['up', 'left', 'right'];
+    for(let action of list) {
+      if (this.actions.map(x => x.name).includes(action)) {
+        continue;
+      }
+      this.actions.push({name: action, window: new Phaser.Math.Vector2(instance.pitch - 100, instance.pitch + 100)})
+      break;
+    }
+    console.log('calibrating', JSON.stringify(this.actions));
+    this.isCalibrating = list.length !== this.actions.length;
   }
 }
 

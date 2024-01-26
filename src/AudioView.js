@@ -101,14 +101,10 @@ export class AudioView extends Phaser.GameObjects.Container {
   };
 
   moveBars(scene, time, delta) {
-    this.bars.forEach((bar) => {
-      bar.x -= delta * this.barSpeed;
+    this.bars.forEach((bar, i) => {
+      const targetX = 0 + this.barDistance * i;
+      const startX = this.barDistance * (i+1);
+      bar.x = Phaser.Math.Linear(startX, targetX, Heartbeat.normalizedModule);
     });
-
-    if (this.bars[0].x < 0) {
-      const replacedBar = this.bars.shift();
-      replacedBar.x = this.bars.at(-1).x + this.barDistance;
-      this.bars.push(replacedBar);
-    }
   }
 }
