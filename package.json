@@ -1,19 +1,18 @@
 {
-  "name": "babylon-vite-example",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^5.0.8"
-  },
-  "dependencies": {
-    "@babylonjs/gui-editor": "^6.40.0",
-    "@babylonjs/inspector": "^6.40.0",
-    "babylonjs": "^6.39.0"
-  }
+	"name": "phaser3-vite-template",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"start": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"eslint": "^8.25.0",
+		"vite": "^3.1.0"
+	},
+	"dependencies": {
+		"phaser": "^3.55.2"
+	}
 }
