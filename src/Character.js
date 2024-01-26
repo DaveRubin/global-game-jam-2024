@@ -17,6 +17,7 @@ export class Character extends Phaser.GameObjects.Container {
 
     this.add(this.sprite);
     this.jump();
+    this.isAlive = true;
   }
 
   up(isStand) {
@@ -51,6 +52,7 @@ export class Character extends Phaser.GameObjects.Container {
   }
 
   fallOnPit(onComplete) {
+    this.isAlive = false;
     this.sprite.play("front");
     this.scene.tweens.add({
       targets: this,

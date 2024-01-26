@@ -2,6 +2,8 @@ import Phaser from "phaser";
 import { AudioView } from "./AudioView";
 import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
+import { Electricy } from "./Electricy";
+import { Pit } from "./Pit";
 import constants from './Constants';
 
 export default class GameScene extends Phaser.Scene {
@@ -52,10 +54,10 @@ export default class GameScene extends Phaser.Scene {
       ['path', 'path', 'plgo', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'path', 'pits', 'pits', 'path',],
+      ['path', 'path', 'pits', 'pits', 'path',],
+      ['path', 'path', 'pits', 'pits', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'pits', 'pits', 'pits', 'path',],
-      ['path', 'path', 'pits', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
       ['path', 'path', 'plsp', 'path', 'path',],
       ['path', 'path', 'path', 'path', 'path',],
@@ -63,18 +65,26 @@ export default class GameScene extends Phaser.Scene {
     this.totalHeight = this.gameMap.length;
     this.totalWidth = this.gameMap[0].length;
 
+    this.obstacles = [];
+
     const convert = {};
-    convert['pits'] = 16;
+    convert['pits'] = -1;
     convert['plsp'] = 0;
     convert['plgo'] = 14;
     convert['path'] = 0;
     convert['wall'] = 36;
-    
+
     const level = [];
     for (let y = 0; y < this.gameMap.length; y ++) {
       level.push([36, 0, 0, 0, 0, 0, 36]);
       for (let x = 0; x < this.gameMap[0].length; x++) {
-        level[y][x+1] = convert[this.gameMap[y][x]];
+        const tile = convert[this.gameMap[y][x]];
+        if (tile == null) {
+          level[y][x+1] = -1;
+        } 
+        else {
+          level[y][x+1] = tile;
+        }
       }
     }
     level.push([36, 36, 36, 36, 36, 36, 36]);
@@ -97,12 +107,10 @@ export default class GameScene extends Phaser.Scene {
       (layer.layer.widthInPixels * layer.scale) / 2;
     this.layer = layer;
 
-    const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
-    this.positionAnything(enemy, 2, 2);
-    this.worldContainer = this.add.container(0, 0, [layer]);
-    this.worldContainer.x += 16;
-    this.worldContainer.y += 6;
-    this.worldContainer.add(enemy);
+    this.worldContainer = this.add.container(0, 0);
+    this.worldContainer.x += 32;
+    this.worldContainer.y += 6 - 32 * (this.gameMap.length - 10);
+    this.worldContainer.add(this.obstacles);
 
     const startingPoint = this.findOnGameMap(x => x === constants.playerStartingPoint);
     this.characterY = startingPoint.y;
@@ -111,19 +119,47 @@ export default class GameScene extends Phaser.Scene {
     this.character = new Character(this, 0, 0, this.moveSpeed);
     this.character.onMoveComplete = () => this.calculateLanding();
     this.add.existing(this.character);
-    this.positionAnything(this.character, startingPoint.x, startingPoint.y);
+    this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
     new AudioView(this, 0, 0);
 
     this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
     this.beatDebugRect.alpha = 0;
+
+    const obstacles = [
+      new Electricy(this, 0, 0, 0, 5, 1, 3),
+      new Electricy(this, 0, 0, 1, 5, 1, 3),
+      new Electricy(this, 0, 0, 0, 6, 2, 3),
+      new Electricy(this, 0, 0, 1, 6, 2, 3),
+      new Electricy(this, 0, 0, 0, 7, 0, 3),
+      new Electricy(this, 0, 0, 1, 7, 0, 3),
+
+      new Pit(this, 0, 0, 2, 5, 0, 3),
+      new Pit(this, 0, 0, 3, 5, 0, 3),
+      new Pit(this, 0, 0, 2, 6, 0, 3),
+      new Pit(this, 0, 0, 3, 6, 0, 3),
+    ];
+    for(let obstacle of obstacles) {
+      this.add.existing(obstacle);
+      this.worldContainer.add(obstacle);
+      obstacle.x = 32 * obstacle.worldX;
+      obstacle.y = 32 * obstacle.worldY;
+      this.obstacles.push(obstacle);
+    }
   }
 
   update(time, delta) {
+    if (!this.character.isAlive) {
+      return;
+    }
     Heartbeat.update(time);
 
     this.beatDebugRect.fillColor = Heartbeat.isBeat ? 0xff0000 : 0xffffff;
+    this.obstacleMovement();
+    this.characterMovement();
+  }
 
+  characterMovement() {
     if (this.character.isMoving) {
       return;
     }
@@ -150,6 +186,21 @@ export default class GameScene extends Phaser.Scene {
       if (this.tryMove(this.characterX+1, this.characterY)) {
         this.character.right();
         this.characterX += 1;
+      }
+    }
+  }
+
+  obstacleMovement() {
+    for(let obstacle of this.obstacles) {
+      obstacle.beat?.(Heartbeat.beatCount);
+      
+      if (!this.character.isAlive) {
+        return;
+      }
+      if (obstacle.kill) {
+        if (obstacle.worldX === this.characterX && obstacle.worldY === this.characterY) {
+          this.handleLandingOnPit();
+        }
       }
     }
   }
@@ -204,14 +255,10 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
-  positionAnything(sprite, x, y) {
-    const position = this.getPositionOnScreen(x, y);
+  positionCharacter(sprite, x, y) {
+    const position = new Phaser.Math.Vector2((x + 1) * 32, (8 - y + this.characterY) * 32);
     sprite.x = position.x;
     sprite.y = position.y;
-  }
-
-  getPositionOnScreen(x, y) {
-    return new Phaser.Math.Vector2(x * 32 + 32, 8 * 32 - (y-(this.characterY - 1)) * 32 + 32);
   }
 
   findOnGameMap(predicate) {
