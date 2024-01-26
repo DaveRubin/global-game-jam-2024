@@ -37,7 +37,6 @@ export class AudioView extends Phaser.GameObjects.Container {
     scene.events.on("update", () => {
       if (instance.pitch) {
         this.targetY = this.initialY + (instance.pitch - 200) * 2;
-        emitter;
       } else {
         this.targetY = this.initialY;
       }
