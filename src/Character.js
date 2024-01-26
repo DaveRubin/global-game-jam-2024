@@ -1,0 +1,66 @@
+import Phaser from "phaser";
+
+export class Character extends Phaser.GameObjects.Container {
+  scene;
+  sprite;
+  constructor(scene, x = 0, y = 0) {
+    super(scene, x, y);
+    this.scene = scene;
+    this.createAnimation("front", "Front ", 1, 3, 2);
+    this.createAnimation("side", "Side ", 1, 8);
+
+    this.sprite = scene.add.sprite(32, 32);
+    this.sprite.setScale(2);
+
+    this.add(this.sprite);
+    this.idle();
+  }
+
+  up() {
+    this.sprite.play("side");
+    this.move(0, -64);
+  }
+  right() {
+    this.sprite.play("side");
+    this.move(64);
+  }
+  left() {
+    this.sprite.play("side");
+    this.sprite.flipX = true;
+    this.move(-64);
+  }
+  idle() {
+    this.sprite.play("front");
+  }
+
+  move(x = 0, y = 0) {
+    this.scene.tweens.add({
+      targets: this,
+      x: this.x + x,
+      y: this.y + y,
+      ease: "Power1",
+      duration: 800,
+
+      onStart: () => {
+        console.log("onStart");
+      },
+      onComplete: () => {
+        console.log("onComplete");
+      },
+    });
+  }
+
+  createAnimation(key, prefix, start, end, frameRate = 12) {
+    this.scene.anims.create({
+      key,
+      frames: this.scene.anims.generateFrameNames("character", {
+        prefix,
+        start,
+        end,
+        zeroPad: 0,
+      }),
+      repeat: -1,
+      frameRate,
+    });
+  }
+}

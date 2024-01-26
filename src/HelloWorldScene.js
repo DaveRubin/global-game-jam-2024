@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { AudioView } from "./AudioView";
-import {Heartbeat} from './HeartbeatService';
+import { Heartbeat } from "./HeartbeatService";
+import { Character } from "./Character";
 
 export default class HelloWorldScene extends Phaser.Scene {
   constructor() {
@@ -13,6 +14,11 @@ export default class HelloWorldScene extends Phaser.Scene {
       textureURL: "assets/spriteMap/Legends_Level_A.png",
       atlasURL: "assets/spriteMap/Legends_Level_A.json",
     });
+    this.load.atlas({
+      key: "character",
+      textureURL: "assets/character/character.png",
+      atlasURL: "assets/character/character.json",
+    });
 
     this.load.image("sky", "assets/skies/space3.png");
     this.load.image("logo", "assets/Untitled.png");
@@ -23,7 +29,8 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.add.image(400, 300, "sky");
 
     new AudioView(this, 0, 0);
-
+    const character = new Character(this, 400, 400);
+    this.add.existing(character);
 
     // const particles = this.add.particles("logo");
     // const emitter = particles.createEmitter({
@@ -35,7 +42,9 @@ export default class HelloWorldScene extends Phaser.Scene {
     // });
 
     // const logo = this.physics.add.image(400, 100, "logo");
-    // const logo2 = this.add.image(32, 32, "temp", "Stone-Platform-5.png");
+
+    //
+
     // const logo3 = this.add.image(50, 50, "temp", "Torch-A-3.png");
     // logo3.scale = 2;
 
