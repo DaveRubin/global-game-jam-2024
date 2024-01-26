@@ -1,0 +1,56 @@
+{
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/davidrubin/Projects/global-game-jam-2024/tiles/tileMap.tmx": {
+            "scale": 1.2549,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 119.53143676786996,
+                "y": -158.1799346561479
+            }
+        },
+        "/Users/davidrubin/Projects/global-game-jam-2024/tiles/tileMap.tmx#tiles": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "/Users/davidrubin/Projects/global-game-jam-2024/tiles/tiles.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/davidrubin/Projects/global-game-jam-2024/tiles/tilesa.tsx": {
+            "scaleInDock": 1
+        },
+        "tileMap.tmx": {
+            "scale": 0.8797,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 152.3246561327725,
+                "y": -159.71353870637716
+            }
+        },
+        "tileMap.tmx#aaaa": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "tileMap.tmx#tile": {
+            "scaleInDock": 1
+        },
+        "tiles.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 4.29
+        },
+        "tilesa.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "recentFiles": [
+        "tileMap.tmx",
+        "tiles.tsx",
+        "/Users/davidrubin/Projects/global-game-jam-2024/tiles/tileMap.tmx",
+        "tilesa.tsx"
+    ]
+}
