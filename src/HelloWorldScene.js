@@ -152,8 +152,6 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   moveVertical(direction) {
-    const top = 5;
-    const bottom = this.gameMap.length;
     if (direction > 0) {
       if (this.characterY > 5 && this.characterY < this.gameMap.length - 1) {
         this.character.up(true);
@@ -217,7 +215,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   getPositionOnScreen(x, y) {
-    return new Phaser.Math.Vector2(x * 32, 8 * 32 - (y-(this.characterY - 1)) * 32);
+    return new Phaser.Math.Vector2(x * 32 + 16, 8 * 32 - (y-(this.characterY - 1)) * 32 + 16);
   }
 
   findOnGameMap(predicate) {
