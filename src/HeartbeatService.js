@@ -3,6 +3,7 @@ import { instance } from "../audioCheck";
 
 class HeartbeatService {
   total;
+  onSuccess;
   constructor() {
     this.beatCount = 0;
     this.hadBeat = false;
@@ -54,6 +55,7 @@ class HeartbeatService {
           this.skipBeat = true;
         } else if (this.inputAction) {
           this.currentAction = this.inputAction;
+          this.onSuccess?.(this.currentAction);
           this.skipBeat = true;
         }
       }

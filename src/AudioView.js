@@ -23,13 +23,32 @@ export class AudioView extends Phaser.GameObjects.Container {
     this.barWidth = 2;
     this.barSpeed = this.barDistance / Heartbeat.beatTempo;
     this.createBackground();
-
+    Heartbeat.onSuccess = () => {
+      this.successOnCurrent();
+    };
     for (let i = 0; i < 3; i++) {
       const bar = scene.add.rectangle(0, 96 / 2, this.barWidth, 96, 0xffffff);
       bar.x = i * this.barDistance;
       this.add(bar);
       this.bars.push(bar);
     }
+    const particlesEngine = this.scene.add.particles("flares");
+
+    this.emitter = particlesEngine.createEmitter({
+      frame: "blue",
+      emitZone: {
+        source: new Phaser.Geom.Rectangle(0, -96 / 2, 2, 96),
+      },
+      x: 0,
+      y: 0,
+      quantity: 0,
+      lifespan: 500,
+      speed: { min: 10, max: 50 },
+      scale: { start: 0.4, end: 0 },
+      gravityY: 2,
+      blendMode: "ADD",
+      emitting: false,
+    });
 
     scene.events.on("update", (time, delta) => {
       this.moveBars(scene, time, delta);
@@ -41,6 +60,15 @@ export class AudioView extends Phaser.GameObjects.Container {
       96 / 2
     );
     this.add(particle);
+  }
+
+  successOnCurrent() {
+    const bar = this.bars.find(
+      (bar) => Math.abs(this.scene.scale.gameSize.width / 2 - bar.x) < 32
+    );
+    if (bar) {
+      this.emitter.explode(100, bar.x, bar.y);
+    }
   }
 
   createBackground() {
