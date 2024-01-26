@@ -23,39 +23,51 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.load.image("sky", "assets/skies/space3.png");
     this.load.image("logo", "assets/Untitled.png");
     this.load.image("red", "assets/particles/red.png");
+
+    this.load.image('tiles', 'assets/Tilemap.png');
+
   }
 
   create() {
-    this.add.image(400, 300, "sky");
+    this.add.existing(new Character(this, 0, 0));
 
-    new AudioView(this, 0, 0);
-    const character = new Character(this, 400, 400);
     this.add.existing(character);
 
-    // const particles = this.add.particles("logo");
-    // const emitter = particles.createEmitter({
-    //   speed: 100,
-    //   gravityX: -700,
-    //   gravityY: 0,
-    //   scale: { start: 1, end: 0 },
-    //   blendMode: "ADD",
-    // });
+    const level = [
+        [ 15, 0, 0, 0, 0, 0],
+        [ 0, 1, 2, 3, 0, 0],
+        [ 0, 5, 6, 7, 0, 0],
+        [ 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 14, 13, 0],
+        [ 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 0, 0, 0, 0],
+        [ 0, 0, 14, 14, 14, 14],
+        [ 0, 0, 0, 0, 0, 0, 0],
+        [ 35, 36, 37, 0, 0, 0],
+        [ 35, 36, 37, 0, 0, 0],
+        [ 35, 36, 37, 0, 0, 0],
+        [ 35, 36, 37, 0, 0, 0],
+        [ 39, 39, 39, 39, 39, 39]
+    ];
 
-    // const logo = this.physics.add.image(400, 100, "logo");
-
-    //
-
-    // const logo3 = this.add.image(50, 50, "temp", "Torch-A-3.png");
-    // logo3.scale = 2;
-
-    // logo.setVelocity(100, 200);
-    // logo.setBounce(1, 1);
-    // logo.setCollideWorldBounds(true);
-
-    // emitter.startFollow(logo);
+    // When loading from an array, make sure to specify the tileWidth and tileHeight
+    const map = this.make.tilemap({ data: level, tileWidth: 16, tileHeight: 16 });
+    const tiles = map.addTilesetImage('tiles');
+    const layer = map.createLayer(0, tiles, 0, 0);
+    layer.scale = 64 / 16;
+    layer.originY = 0;
+    const layerHeight = layer.layer.heightInPixels * layer.scale;
+    layer.y = -layerHeight + this.scale.gameSize.height;
+    layer.x = this.scale.gameSize.width/2 - layer.layer.widthInPixels * layer.scale / 2;
+  
+  
+    //new AudioView(this, 0, 0);
   }
 
   update(time, delta) {
     Heartbeat.update(time);
+
+    
+
   }
 }
