@@ -2,14 +2,10 @@ import Phaser from "phaser";
 import { AudioView } from "./AudioView";
 import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
-<<<<<<< HEAD
 import { Electricy } from "./Electricy";
 import { Pit } from "./Pit";
 import constants from './Constants';
-=======
-import constants from "./Constants";
 import { StageBackground } from "./StageBackground";
->>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -64,82 +60,12 @@ export default class GameScene extends Phaser.Scene {
 
     this.isKeys = true;
     this.isPingPong = true;
-<<<<<<< HEAD
-
-    this.gameMap = [
-      ['wall', 'wall', 'wall', 'wall', 'wall',],
-      ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'path', 'plgo', 'path', 'path',],
-      ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'path', 'pits', 'pits', 'path',],
-      ['path', 'path', 'pits', 'pits', 'path',],
-      ['path', 'path', 'pits', 'pits', 'path',],
-      ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'path', 'path', 'path', 'path',],
-      ['path', 'path', 'plsp', 'path', 'path',],
-      ['path', 'path', 'path', 'path', 'path',],
-    ];
-    this.totalHeight = this.gameMap.length;
-    this.totalWidth = this.gameMap[0].length;
-
-    this.obstacles = [];
-
-    const convert = {};
-    convert['pits'] = -1;
-    convert['plsp'] = 0;
-    convert['plgo'] = 14;
-    convert['path'] = 0;
-    convert['wall'] = 36;
-
-    const level = [];
-    for (let y = 0; y < this.gameMap.length; y ++) {
-      level.push([36, 0, 0, 0, 0, 0, 36]);
-      for (let x = 0; x < this.gameMap[0].length; x++) {
-        const tile = convert[this.gameMap[y][x]];
-        if (tile == null) {
-          level[y][x+1] = -1;
-        } 
-        else {
-          level[y][x+1] = tile;
-        }
-      }
-    }
-    level.push([36, 36, 36, 36, 36, 36, 36]);
-
-    // When loading from an array, make sure to specify the tileWidth and tileHeight
-    const map = this.make.tilemap({
-      data: level,
-      tileWidth: 16,
-      tileHeight: 16,
-    });
-    const tiles = map.addTilesetImage("tiles");
-    const layer = map.createLayer(0, tiles, 0, 0);
-    layer.scale = 32 / 16;
-    layer.originY = 0;
-    const layerHeight = layer.layer.heightInPixels * layer.scale;
-    this.floor = 10;
-    layer.y = -layerHeight + this.scale.gameSize.height - this.floor + 32;
-    layer.x =
-      this.scale.gameSize.width / 2 -
-      (layer.layer.widthInPixels * layer.scale) / 2;
-    this.layer = layer;
-
-    this.worldContainer = this.add.container(0, 0);
-    this.worldContainer.x += 32;
-    this.worldContainer.y += 6 - 32 * (this.gameMap.length - 10);
-    this.worldContainer.add(this.obstacles);
-=======
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
-    const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
-    this.positionAnything(enemy, 2, 2);
     this.worldContainer = this.add.container(0, 0);
-    this.worldContainer.x += 16;
-    this.worldContainer.y += 6;
-    this.worldContainer.add(enemy);
->>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
+    this.worldContainer.x += 32;
+    this.worldContainer.y += 6 - 32 * (this.stage.length - 10);
 
     const startingPoint = this.stage.getStartingPoint();
     this.characterY = startingPoint.y;
@@ -163,11 +89,12 @@ export default class GameScene extends Phaser.Scene {
       new Electricy(this, 0, 0, 0, 7, 0, 3),
       new Electricy(this, 0, 0, 1, 7, 0, 3),
 
-      new Pit(this, 0, 0, 2, 5, 0, 3),
-      new Pit(this, 0, 0, 3, 5, 0, 3),
-      new Pit(this, 0, 0, 2, 6, 0, 3),
-      new Pit(this, 0, 0, 3, 6, 0, 3),
+      new Pit(this, 0, 0, 2, 5),
+      new Pit(this, 0, 0, 3, 5),
+      new Pit(this, 0, 0, 2, 6),
+      new Pit(this, 0, 0, 3, 6),
     ];
+    this.obstacles = [];
     for(let obstacle of obstacles) {
       this.add.existing(obstacle);
       this.worldContainer.add(obstacle);
@@ -294,36 +221,9 @@ export default class GameScene extends Phaser.Scene {
   }
 
   positionCharacter(sprite, x, y) {
-    const position = new Phaser.Math.Vector2((x + 1) * 32, (8 - y + this.characterY) * 32);
+    const position = new Phaser.Math.Vector2((x) * 32, (8 - y + this.characterY) * 32);
     sprite.x = position.x;
     sprite.y = position.y;
-  }
-
-<<<<<<< HEAD
-  findOnGameMap(predicate) {
-    for(let y = 0; y < this.gameMap.length; y++) {
-      for (let x = 0; x < this.gameMap[y].length; x++) {
-        if (predicate(this.gameMap[y][x])) {
-          return new Phaser.Math.Vector2(x, y);
-        }
-      }
-    }
-    return new Phaser.Math.Vector2(-1, -1);
-  }
-
-  getTile(x, y) {
-    return this.gameMap[y][x];
-  }
-
-  getTileVector(vector) {
-    return this.gameMap[vector.y][vector.x];
-=======
-  getPositionOnScreen(x, y) {
-    return new Phaser.Math.Vector2(
-      (x - 1) * 32 + 32,
-      8 * 32 - (y - (this.characterY - 1)) * 32 + 32
-    );
->>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
   }
 
   calculateLanding() {
