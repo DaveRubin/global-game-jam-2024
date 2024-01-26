@@ -13,23 +13,41 @@ export class Character extends Phaser.GameObjects.Container {
     this.sprite.setScale(2);
 
     this.add(this.sprite);
-    // this.left();
     this.idle();
-    // this.right();
   }
 
   up() {
     this.sprite.play("side");
+    this.move(0, -64);
   }
   right() {
     this.sprite.play("side");
+    this.move(64);
   }
   left() {
     this.sprite.play("side");
     this.sprite.flipX = true;
+    this.move(-64);
   }
   idle() {
     this.sprite.play("front");
+  }
+
+  move(x = 0, y = 0) {
+    this.scene.tweens.add({
+      targets: this,
+      x: this.x + x,
+      y: this.y + y,
+      ease: "Power1",
+      duration: 800,
+
+      onStart: () => {
+        console.log("onStart");
+      },
+      onComplete: () => {
+        console.log("onComplete");
+      },
+    });
   }
 
   createAnimation(key, prefix, start, end, frameRate = 12) {
