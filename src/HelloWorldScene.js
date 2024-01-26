@@ -30,9 +30,12 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.load.image("red", "assets/particles/red.png");
 
     this.load.image("tiles", "assets/Tilemap.png");
+    this.load.audio("loop", "loop.mp3");
   }
 
   create() {
+    this.sound.play("loop", { loop: true });
+
     const level = [
       [0, 15, 0, 0, 0, 0, 0],
       [0, 0, 1, 2, 3, 0, 0],
