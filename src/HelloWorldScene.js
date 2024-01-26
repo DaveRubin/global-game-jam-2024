@@ -29,7 +29,6 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   create() {
 
-    this.add.existing(new Character(this, 0, 0));
 
     const level = [
       [0, 15, 0, 0, 0, 0, 0],
@@ -56,7 +55,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     });
     const tiles = map.addTilesetImage("tiles");
     const layer = map.createLayer(0, tiles, 0, 0);
-    layer.scale = 24 / 16;
+    layer.scale = 32 / 16;
     layer.originY = 0;
     const layerHeight = layer.layer.heightInPixels * layer.scale;
     layer.y = -layerHeight + this.scale.gameSize.height - 10;
@@ -65,6 +64,8 @@ export default class HelloWorldScene extends Phaser.Scene {
       (layer.layer.widthInPixels * layer.scale) / 2;
 
     new AudioView(this, 0, 0);
+
+    this.add.existing(new Character(this, 0, 0));
   }
 
   update(time, delta) {
