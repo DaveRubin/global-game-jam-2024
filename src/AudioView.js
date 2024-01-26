@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { instance } from "../audioCheck";
 import { Heartbeat } from "./HeartbeatService";
+import { AudioParticle } from "./AudioParticle";
 
 const DARK_COLOR = 0x220022;
 const LIGHT_COLOR = 0x440044;
@@ -34,7 +35,14 @@ export class AudioView extends Phaser.GameObjects.Container {
       this.moveBars(scene, time, delta);
     });
     this.createHidingGradients();
+    const particle = new AudioParticle(
+      scene,
+      this.scene.scale.gameSize.width / 2,
+      96 / 2
+    );
+    this.add(particle);
   }
+
   createBackground() {
     const background = this.scene.add.rectangle(
       this.scene.scale.gameSize.width / 2,

@@ -19,6 +19,11 @@ export default class HelloWorldScene extends Phaser.Scene {
       textureURL: "assets/character/character.png",
       atlasURL: "assets/character/character.json",
     });
+    this.load.atlas({
+      key: "flares",
+      textureURL: "public/assets/particles/flares.png",
+      atlasURL: "public/assets/particles/flares.json",
+    });
 
     this.load.image("sky", "assets/skies/space3.png");
     this.load.image("logo", "assets/Untitled.png");
