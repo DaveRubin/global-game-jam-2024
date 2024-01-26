@@ -3,27 +3,30 @@ import Phaser from "phaser";
 export class Character extends Phaser.GameObjects.Container {
   scene;
   sprite;
-  constructor(scene, x = 0, y = 0) {
+  isMoving = false;
+  constructor(scene, x = 0, y = 0, moveSpeed) {
     super(scene, x, y);
     this.scene = scene;
     this.createAnimation("front", "Front ", 1, 3, 2);
     this.createAnimation("side", "Side ", 1, 8);
     this.sprite = scene.add.sprite(32, 32);
+    this.moveSpeed = moveSpeed;
 
     this.add(this.sprite);
     this.idle();
   }
 
-  up() {
+  up(isStand) {
     this.sprite.play("side");
-    this.move(0, -32);
+    this.move(0, isStand ? 0 : -32);
   }
-  down() {
+  down(isStand) {
     this.sprite.play("side");
-    this.move(0, 32);
+    this.move(0, isStand ? 0 : 32);
   }
   right() {
     this.sprite.play("side");
+    this.sprite.flipX = false;
     this.move(32);
   }
   left() {
@@ -41,12 +44,14 @@ export class Character extends Phaser.GameObjects.Container {
       x: this.x + x,
       y: this.y + y,
       ease: "Power1",
-      duration: 150,
+      duration: this.moveSpeed,
 
       onStart: () => {
         console.log("onStart");
+        this.isMoving = true;
       },
       onComplete: () => {
+        this.isMoving = false;
         console.log("onComplete");
         this.sprite.play("front");
       },

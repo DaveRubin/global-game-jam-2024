@@ -1,8 +1,7 @@
 export default {
-    gameMap: {
-        nothing: 0,
-        playerStartingPoint: 1,
-        playerGoal: 2,
-        path: 3
-    }
+    pits: 'pits', 
+    playerStartingPoint: 'plsp', // player starting point
+    playerGoal: 'plgo', // player goal
+    path: 'path',
+    wall: 'wall',
 }

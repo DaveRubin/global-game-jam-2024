@@ -30,42 +30,47 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   create() {
 
+    this.moveSpeed = 100;
+    this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
+    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+    this.isKeys = true;
+    this.isPingPong = true;
+
     this.gameMap = [
-      [constants.nothing, constants.path, constants.playerGoal, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.path, constants.path, constants.path, constants.nothing,],
-      [constants.nothing, constants.nothing, constants.playerStartingPoint, constants.nothing, constants.nothing,],
+      ['wall', 'wall', 'wall', 'wall', 'wall',],
+      ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'path', 'plgo', 'path', 'path',],
+      ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'wall', 'wall', 'wall', 'path',],
+      ['path', 'path', 'wall', 'path', 'path',],
+      ['path', 'path', 'path', 'path', 'path',],
+      ['path', 'path', 'plsp', 'path', 'path',],
+      ['path', 'path', 'path', 'path', 'path',],
     ];
     this.totalHeight = this.gameMap.length;
     this.totalWidth = this.gameMap[0].length;
 
-
-    const level = [
-      [0, 15, 0, 0, 0, 0, 0],
-      [0, 0, 1, 2, 3, 0, 0],
-      [0, 0, 5, 6, 7, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 14, 13, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 14, 14, 14, 14],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 35, 36, 37, 0, 0, 0],
-      [0, 35, 36, 37, 0, 0, 0],
-      [0, 35, 36, 37, 0, 0, 0],
-      [0, 35, 36, 37, 0, 0, 0],
-      [0, 39, 39, 39, 39, 39, 39],
-    ];
+    const convert = {};
+    convert['pits'] = 16;
+    convert['plsp'] = 0;
+    convert['plgo'] = 14;
+    convert['path'] = 0;
+    convert['wall'] = 36;
+    
+    const level = [];
+    for (let y = 0; y < this.gameMap.length; y ++) {
+      level.push([36, 0, 0, 0, 0, 0, 36]);
+      for (let x = 0; x < this.gameMap[0].length; x++) {
+        level[y][x+1] = convert[this.gameMap[y][x]];
+      }
+    }
+    level.push([36, 36, 36, 36, 36, 36, 36]);
 
     // When loading from an array, make sure to specify the tileWidth and tileHeight
     const map = this.make.tilemap({
@@ -79,7 +84,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     layer.originY = 0;
     const layerHeight = layer.layer.heightInPixels * layer.scale;
     this.floor = 10;
-    layer.y = -layerHeight + this.scale.gameSize.height - this.floor;
+    layer.y = -layerHeight + this.scale.gameSize.height - this.floor + 32;
     layer.x =
       this.scale.gameSize.width / 2 -
       (layer.layer.widthInPixels * layer.scale) / 2;
@@ -90,9 +95,13 @@ export default class HelloWorldScene extends Phaser.Scene {
     this.worldContainer = this.add.container(0, 0, [layer]);
     this.worldContainer.add(enemy);
 
-    this.character = new Character(this, 0, 0);
+    const startingPoint = this.findOnGameMap(x => x === constants.playerStartingPoint);
+    this.characterY = startingPoint.y;
+    this.characterX = startingPoint.x;
+
+    this.character = new Character(this, 0, 0, this.moveSpeed);
     this.add.existing(this.character);
-    this.positionAnything(this.character, 2, 0);
+    this.positionAnything(this.character, startingPoint.x, startingPoint.y);
 
     new AudioView(this, 0, 0);
   }
@@ -100,26 +109,93 @@ export default class HelloWorldScene extends Phaser.Scene {
   update(time, delta) {
     Heartbeat.update(time);
 
-    if (Heartbeat.currentAction) {
-      if (Heartbeat.currentAction === 'up') {
-        this.character.up();
-        // this.worldContainer.y += 32;
-        // this.layer.y += 32;
+    if (this.character.isMoving) {
+      return;
+    }
+
+    if ((Phaser.Input.Keyboard.JustDown(this.upKey) && this.isKeys) || (Heartbeat.currentAction === 'up' && this.isPingPong)) {
+      if (this.tryMove(this.characterX, this.characterY-1)) {
+        this.moveVertical(1);
+        this.characterY -= 1;
       }
-      if (Heartbeat.currentAction === 'down') {
-        this.character.down();
+    }
+    if ((Phaser.Input.Keyboard.JustDown(this.downKey) && this.isKeys) || (Heartbeat.currentAction === 'down' && this.isPingPong)) {
+      if (this.tryMove(this.characterX, this.characterY+1)) {
+        this.moveVertical(-1);
+        this.characterY += 1;
       }
-      if (Heartbeat.currentAction === 'left') {
+    }
+    if ((Phaser.Input.Keyboard.JustDown(this.leftKey) && this.isKeys) || (Heartbeat.currentAction === 'left' && this.isPingPong)) {
+      if (this.tryMove(this.characterX-1, this.characterY)) {
         this.character.left();
+        this.characterX -= 1;
       }
-      if (Heartbeat.currentAction === 'right') {
+    }
+    if ((Phaser.Input.Keyboard.JustDown(this.rightKey) && this.isKeys) || (Heartbeat.currentAction === 'right' && this.isPingPong)) {
+      if (this.tryMove(this.characterX+1, this.characterY)) {
         this.character.right();
+        this.characterX += 1;
       }
     }
   }
 
   moveVertical(direction) {
-    
+    const top = 5;
+    const bottom = this.gameMap.length;
+    if (direction > 0) {
+      if (this.characterY > 5 && this.characterY < this.gameMap.length - 1) {
+        this.character.up(true);
+        this.moveScreen(this.worldContainer, 0, 32);
+        this.moveScreen(this.layer, 0, 32);
+      }
+      else {
+        this.character.up();
+      }
+    }
+    else {
+      console.log('top',5, 'bottom', this.gameMap.length - 2, 'characterY');
+      if (this.characterY > 4 && this.characterY < this.gameMap.length-2) {
+        this.character.down(true);
+        this.moveScreen(this.worldContainer, 0, -32);
+        this.moveScreen(this.layer, 0, -32);
+      }
+      else {
+        this.character.down();
+      }
+    }
+  }
+
+  tryMove(x, y) {
+    if (x > this.gameMap[0].length - 1) {
+      return false;
+    }
+    if (x < 0) {
+      return false;
+    }
+    if (y < 0) {
+      return false;
+    }
+    if (y > this.gameMap.length - 1) {
+      return false;
+    }
+    return this.gameMap[y][x] !== constants.wall;
+  }
+
+  moveScreen(target, x = 0, y = 0) {
+    this.tweens.add({
+      targets: target,
+      x: target.x + x,
+      y: target.y + y,
+      ease: "Power1",
+      duration: this.moveSpeed,
+
+      onStart: () => {
+        console.log("onStart");
+      },
+      onComplete: () => {
+        console.log("onComplete");
+      },
+    });
   }
 
   positionAnything(sprite, x, y) {
@@ -129,6 +205,17 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   getPositionOnScreen(x, y) {
-    return new Phaser.Math.Vector2(x * 32, 8 * 32 - y * 32);
+    return new Phaser.Math.Vector2(x * 32, 8 * 32 - (y-(this.characterY - 1)) * 32);
+  }
+
+  findOnGameMap(predicate) {
+    for(let y = 0; y < this.gameMap.length; y++) {
+      for (let x = 0; x < this.gameMap[y].length; x++) {
+        if (predicate(this.gameMap[y][x])) {
+          return new Phaser.Math.Vector2(x, y);
+        }
+      }
+    }
+    return new Phaser.Math.Vector2(-1, -1);
   }
 }
