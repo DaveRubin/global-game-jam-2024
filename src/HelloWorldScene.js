@@ -28,8 +28,6 @@ export default class HelloWorldScene extends Phaser.Scene {
   }
 
   create() {
-
-
     const level = [
       [0, 15, 0, 0, 0, 0, 0],
       [0, 0, 1, 2, 3, 0, 0],
@@ -65,7 +63,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     new AudioView(this, 0, 0);
 
-    this.add.existing(new Character(this, 0, 0));
+    this.add.existing(new Character(this, 100, 200));
   }
 
   update(time, delta) {

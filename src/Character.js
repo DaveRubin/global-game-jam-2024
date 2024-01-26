@@ -8,7 +8,7 @@ export class Character extends Phaser.GameObjects.Container {
     this.scene = scene;
     this.createAnimation("front", "Front ", 1, 3, 2);
     this.createAnimation("side", "Side ", 1, 8);
-    this.sprite = scene.add.sprite(32, 32);
+    this.sprite = scene.add.sprite(0, 0);
 
     this.add(this.sprite);
     this.idle();
