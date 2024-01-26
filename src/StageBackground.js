@@ -20,40 +20,22 @@ const nameToIndex = {
 };
 
 const gameMap = [
-  ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
-  ["floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "plgo", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor"],
-  ["floor", "hole", "hole", "hole", "floor"],
-  ["floor", "floor", "hole", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "plsp", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor"],
+  ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "plgo", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "hole", "hole", "hole", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "hole", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "plsp", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
 ];
 
-const TOP_WALL = ["floor", "floor", "floor", "floor", "floor"].map(
-  (x) => nameToIndex[x]
-);
-
-const BOTTOM_WALL = [
-  "wall-m",
-  "wall-m",
-  "wall-m",
-  "wall-m",
-  "wall-m",
-  "wall-m",
-  "wall-m",
-].map((x) => nameToIndex[x]);
-console.log("🚀 ~ BOTTOM_WALL:", BOTTOM_WALL);
-
-const preMadeLevel = [
-  TOP_WALL,
-  ...gameMap.map((row) => row.map((x) => nameToIndex[x])),
-  BOTTOM_WALL,
-];
+const preMadeLevel = gameMap.map((row) => row.map((x) => nameToIndex[x]));
 
 export class StageBackground extends Phaser.GameObjects.Container {
   scene;
@@ -66,28 +48,8 @@ export class StageBackground extends Phaser.GameObjects.Container {
     super(scene, x, y);
     this.scene = scene;
 
-    this.totalHeight = gameMap.length;
-    this.totalWidth = gameMap[0].length;
-
-    const level = [];
-    for (let y = 0; y < gameMap.length; y++) {
-      level.push([
-        nameToIndex["wall-l"],
-        ...TOP_WALL.map((x) => {
-          return gameMap[y][x];
-        }),
-        nameToIndex["wall-l"],
-      ]);
-
-      for (let x = 0; x < gameMap[0].length; x++) {
-        level[y][x + 1] = nameToIndex[gameMap[y][x]];
-      }
-    }
-    level.push(BOTTOM_WALL);
-
-    // When loading from an array, make sure to specify the tileWidth and tileHeight
     const map = scene.make.tilemap({
-      data: level,
+      data: preMadeLevel,
       tileWidth: 34,
       tileHeight: 34,
     });
@@ -106,8 +68,8 @@ export class StageBackground extends Phaser.GameObjects.Container {
   }
 
   findOnGameMap(predicate) {
-    for (let y = 0; y < gameMap.length; y++) {
-      for (let x = 0; x < gameMap[y].length; x++) {
+    for (let y = 1; y < gameMap.length; y++) {
+      for (let x = 1; x < gameMap[y].length; x++) {
         if (predicate(gameMap[y][x])) {
           return new Phaser.Math.Vector2(x, y);
         }

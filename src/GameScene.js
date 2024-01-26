@@ -152,16 +152,16 @@ export default class GameScene extends Phaser.Scene {
   }
 
   tryMove(x, y) {
-    if (x > this.stage.columns - 1) {
+    if (x > this.stage.columns - 2) {
       return false;
     }
-    if (x < 0) {
+    if (x < 1) {
       return false;
     }
-    if (y < 0) {
+    if (y < 1) {
       return false;
     }
-    if (y > this.stage.rows - 1) {
+    if (y > this.stage.rows - 2) {
       return false;
     }
     return this.stage.isWall(x, y);
@@ -185,7 +185,7 @@ export default class GameScene extends Phaser.Scene {
 
   getPositionOnScreen(x, y) {
     return new Phaser.Math.Vector2(
-      x * 32 + 32,
+      (x - 1) * 32 + 32,
       8 * 32 - (y - (this.characterY - 1)) * 32 + 32
     );
   }
