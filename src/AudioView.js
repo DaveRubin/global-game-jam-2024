@@ -1,6 +1,10 @@
 import Phaser from "phaser";
 import { instance } from "../audioCheck";
 import { Heartbeat } from "./HeartbeatService";
+import { AudioParticle } from "./AudioParticle";
+
+const DARK_COLOR = 0x220022;
+const LIGHT_COLOR = 0x440044;
 
 export class AudioView extends Phaser.GameObjects.Container {
   initialY = 0;
@@ -10,64 +14,101 @@ export class AudioView extends Phaser.GameObjects.Container {
   constructor(scene, x = 0, y = 0) {
     super(scene, x, y);
     this.initialY = y;
+    this.scene = scene;
 
     scene.add.existing(this);
     instance.init();
 
-    this.barDistance = 150;
-    this.barWidth = 30;
+    this.barDistance = 96;
+    this.barWidth = 2;
     this.barSpeed = this.barDistance / Heartbeat.beatTempo;
-
-    const wid = scene.scale.gameSize.width * 0.8;
-    this.topLine = scene.add.rectangle(
-      scene.scale.gameSize.width / 2,
-      this.initialY,
-      wid,
-      10,
-      0xffffff
-    );
-    this.middleLine = scene.add.rectangle(
-      scene.scale.gameSize.width / 2,
-      this.initialY + 40,
-      wid,
-      10,
-      0xffffff
-    );
-    this.bottomLine = scene.add.rectangle(
-      scene.scale.gameSize.width / 2,
-      this.initialY + 80,
-      wid,
-      10,
-      0xffffff
-    );
-
-    for (let i = 0; i < 100; i++) {
-      const bar = scene.add.rectangle(0, 0, this.barWidth, 150, 0xffffff);
+    this.createBackground();
+    Heartbeat.onSuccess = () => {
+      this.successOnCurrent();
+    };
+    for (let i = 0; i < 3; i++) {
+      const bar = scene.add.rectangle(0, 96 / 2, this.barWidth, 96, 0xffffff);
       bar.x = i * this.barDistance;
       this.add(bar);
       this.bars.push(bar);
     }
-    this.add([this.topLine, this.middleLine, this.bottomLine, ...this.bars]);
+    const particlesEngine = this.scene.add.particles("flares");
+
+    this.emitter = particlesEngine.createEmitter({
+      frame: "blue",
+      emitZone: {
+        source: new Phaser.Geom.Rectangle(0, -96 / 2, 2, 96),
+      },
+      x: 0,
+      y: 0,
+      quantity: 0,
+      lifespan: 500,
+      speed: { min: 10, max: 50 },
+      scale: { start: 0.4, end: 0 },
+      gravityY: 2,
+      blendMode: "ADD",
+      emitting: false,
+    });
 
     scene.events.on("update", (time, delta) => {
-      this.doParticles(scene);
       this.moveBars(scene, time, delta);
     });
+    this.createHidingGradients();
+    const particle = new AudioParticle(
+      scene,
+      this.scene.scale.gameSize.width / 2,
+      96 / 2
+    );
+    this.add(particle);
   }
-  moveBars(scene, time, delta) {
-    for (let bar of this.bars) {
-      bar.x -= delta * this.barSpeed;
 
-      const distance = Math.abs(bar.x) / 200;
-      const val = 1 - Math.max(0, Math.min(1, distance));
+  successOnCurrent() {
+    const bar = this.bars.find(
+      (bar) => Math.abs(this.scene.scale.gameSize.width / 2 - bar.x) < 32
+    );
+    if (bar) {
+      this.emitter.explode(100, bar.x, bar.y);
     }
+  }
 
-    const leftThreshold = -500;
-    if (this.bars[0].x < leftThreshold) {
+  createBackground() {
+    const background = this.scene.add.rectangle(
+      this.scene.scale.gameSize.width / 2,
+      96 / 2,
+      this.scene.scale.gameSize.width,
+      96,
+      DARK_COLOR
+    );
+    const background2 = this.scene.add.rectangle(
+      this.scene.scale.gameSize.width / 2,
+      96 / 2,
+      40,
+      96,
+      LIGHT_COLOR
+    );
+    this.add(background);
+    this.add(background2);
+  }
+
+  createHidingGradients = () => {
+    const graphics = this.scene.add.graphics();
+    const color = [DARK_COLOR, DARK_COLOR, DARK_COLOR, DARK_COLOR];
+    graphics.fillGradientStyle(...color, 1, 0, 1, 0);
+    graphics.fillRect(0, 0, 192 / 2, 96);
+    graphics.fillGradientStyle(...color, 0, 1, 0, 1);
+    graphics.fillRect(192 / 2, 0, 192 / 2, 96);
+    this.add(graphics);
+  };
+
+  moveBars(scene, time, delta) {
+    this.bars.forEach((bar) => {
+      bar.x -= delta * this.barSpeed;
+    });
+
+    if (this.bars[0].x < 0) {
       const replacedBar = this.bars.shift();
-      replacedBar.x = this.bars[this.bars.length - 1].x + this.barDistance;
+      replacedBar.x = this.bars.at(-1).x + this.barDistance;
       this.bars.push(replacedBar);
     }
   }
-  doParticles(scene) {}
 }
