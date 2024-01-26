@@ -1,19 +1,58 @@
 import Phaser from "phaser";
 import constants from "./Constants";
 
+const nameToIndex = {
+  floor: 0,
+  "wall-l": 1,
+  hole: 2,
+  plsp: 2,
+  "wall-ml": 3,
+  "wall-m": 4,
+  "wall-mr": 5,
+  "wall-mm": 6,
+  "wall-r": 7,
+  "wall-b": 8,
+  "wall-bl": 9,
+  "wall-tm": 10,
+  "wall-br": 11,
+  "wall-tl": 12,
+  "wall-tr": 13,
+};
+
 const gameMap = [
-  ["wall", "wall", "wall", "wall", "wall"],
-  ["path", "path", "path", "path", "path"],
-  ["path", "path", "plgo", "path", "path"],
-  ["path", "path", "path", "path", "path"],
-  ["path", "path", "path", "path", "path"],
-  ["path", "path", "path", "path", "path"],
-  ["path", "path", "path", "path", "path"],
-  ["path", "pits", "pits", "pits", "path"],
-  ["path", "path", "pits", "path", "path"],
-  ["path", "path", "path", "path", "path"],
-  ["path", "path", "plsp", "path", "path"],
-  ["path", "path", "path", "path", "path"],
+  ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
+  ["floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "plgo", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor"],
+  ["floor", "hole", "hole", "hole", "floor"],
+  ["floor", "floor", "hole", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "plsp", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor"],
+];
+
+const TOP_WALL = ["floor", "floor", "floor", "floor", "floor"].map(
+  (x) => nameToIndex[x]
+);
+
+const BOTTOM_WALL = [
+  "wall-m",
+  "wall-m",
+  "wall-m",
+  "wall-m",
+  "wall-m",
+  "wall-m",
+  "wall-m",
+].map((x) => nameToIndex[x]);
+console.log("🚀 ~ BOTTOM_WALL:", BOTTOM_WALL);
+
+const preMadeLevel = [
+  TOP_WALL,
+  ...gameMap.map((row) => row.map((x) => nameToIndex[x])),
+  BOTTOM_WALL,
 ];
 
 export class StageBackground extends Phaser.GameObjects.Container {
@@ -30,32 +69,32 @@ export class StageBackground extends Phaser.GameObjects.Container {
     this.totalHeight = gameMap.length;
     this.totalWidth = gameMap[0].length;
 
-    const convert = {};
-    convert["pits"] = 16;
-    convert["plsp"] = 0;
-    convert["plgo"] = 14;
-    convert["path"] = 0;
-    convert["wall"] = 36;
-
     const level = [];
     for (let y = 0; y < gameMap.length; y++) {
-      level.push([36, 0, 0, 0, 0, 0, 36]);
+      level.push([
+        nameToIndex["wall-l"],
+        ...TOP_WALL.map((x) => {
+          return gameMap[y][x];
+        }),
+        nameToIndex["wall-l"],
+      ]);
+
       for (let x = 0; x < gameMap[0].length; x++) {
-        level[y][x + 1] = convert[gameMap[y][x]];
+        level[y][x + 1] = nameToIndex[gameMap[y][x]];
       }
     }
-    level.push([36, 36, 36, 36, 36, 36, 36]);
+    level.push(BOTTOM_WALL);
 
     // When loading from an array, make sure to specify the tileWidth and tileHeight
     const map = scene.make.tilemap({
       data: level,
-      tileWidth: 16,
-      tileHeight: 16,
+      tileWidth: 34,
+      tileHeight: 34,
     });
-    const tiles = map.addTilesetImage("tiles");
+
+    const tiles = map.addTilesetImage("stage");
     const layer = map.createLayer(0, tiles, 0, 0);
-    layer.scale = 32 / 16;
-    layer.originY = 0;
+    layer.scale = 32 / 34;
     const layerHeight = layer.layer.heightInPixels * layer.scale;
     this.floor = 10;
     layer.y = -layerHeight + scene.scale.gameSize.height - this.floor + 32;
@@ -63,6 +102,7 @@ export class StageBackground extends Phaser.GameObjects.Container {
       scene.scale.gameSize.width / 2 -
       (layer.layer.widthInPixels * layer.scale) / 2;
     this.add(layer);
+    this.layer = layer;
   }
 
   findOnGameMap(predicate) {
@@ -85,6 +125,6 @@ export class StageBackground extends Phaser.GameObjects.Container {
   }
 
   getStartingPoint() {
-    return this.findOnGameMap((tile) => tile === constants.start);
+    return this.findOnGameMap((tile) => tile === constants.playerStartingPoint);
   }
 }

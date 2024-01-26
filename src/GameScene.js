@@ -59,10 +59,11 @@ export default class GameScene extends Phaser.Scene {
     this.isKeys = true;
     this.isPingPong = true;
     this.stage = new StageBackground(this);
+    this.add.existing(this.stage);
 
     const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
     this.positionAnything(enemy, 2, 2);
-    this.worldContainer = this.add.container(0, 0, [this.stage]);
+    this.worldContainer = this.add.container(0, 0);
     this.worldContainer.x += 16;
     this.worldContainer.y += 6;
     this.worldContainer.add(enemy);
@@ -134,7 +135,7 @@ export default class GameScene extends Phaser.Scene {
       if (this.characterY > 5 && this.characterY < this.stage.rows - 1) {
         this.character.up(true);
         this.moveScreen(this.worldContainer, 0, 32);
-        this.moveScreen(this.stage, 0, 32);
+        this.moveScreen(this.stage.layer, 0, 32);
       } else {
         this.character.up();
       }
@@ -143,7 +144,7 @@ export default class GameScene extends Phaser.Scene {
       if (this.characterY > 4 && this.characterY < this.stage.rows - 2) {
         this.character.down(true);
         this.moveScreen(this.worldContainer, 0, -32);
-        this.moveScreen(this.stage, 0, -32);
+        this.moveScreen(this.stage.layer, 0, -32);
       } else {
         this.character.down();
       }
