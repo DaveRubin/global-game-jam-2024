@@ -8,10 +8,11 @@ export class Character extends Phaser.GameObjects.Container {
     this.scene = scene;
     this.createAnimation("front", "Front ", 1, 3, 2);
     this.createAnimation("side", "Side ", 1, 8);
+    this.createAnimation("jump", "Jump ", 1, 5);
     this.sprite = scene.add.sprite(0, 0);
 
     this.add(this.sprite);
-    this.idle();
+    this.jump();
   }
 
   up() {
@@ -29,6 +30,11 @@ export class Character extends Phaser.GameObjects.Container {
   }
   idle() {
     this.sprite.play("front");
+  }
+
+  jump() {
+    this.sprite.play({ key: "jump", repeat: 0 });
+    this.sprite.chain(["front"]);
   }
 
   move(x = 0, y = 0) {
