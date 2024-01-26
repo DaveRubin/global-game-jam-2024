@@ -14,46 +14,44 @@ export class AudioView extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     instance.init();
 
-    const particles = scene.add.particles("logo");
+    this.barDistance = 150;
+    this.barWidth = 30;
+    this.barSpeed = this.barDistance / Heartbeat.beatTempo;
+    
+    const wid = scene.scale.gameSize.width * 0.8;
+    this.topLine = scene.add.rectangle(scene.scale.gameSize.width/2, this.initialY, wid, 10, 0xffffff);
+    this.middleLine = scene.add.rectangle(scene.scale.gameSize.width/2, this.initialY + 40, wid, 10, 0xffffff);
+    this.bottomLine = scene.add.rectangle(scene.scale.gameSize.width/2, this.initialY + 80, wid, 10, 0xffffff);
 
-    this.emitter = particles.createEmitter({
-      speed: 5,
-      gravityX: -700,
-      gravityY: 0,
-      scale: { start: 0.2, end: 0 },
-      blendMode: "ADD",
-    });
-
-    this.speed = 0.01;
-    this.amplitude = 1;
-
-    for (let i = 0; i < 10; i++) {
-      const bar = scene.add.rectangle(0, 0, 5, 60, 0xffffff);
-      bar.x = i * 20;
+    for (let i = 0; i < 100; i++) {
+      const bar = scene.add.rectangle(0, 0, this.barWidth, 150, 0xffffff);
+      bar.x = i * this.barDistance;
       this.add(bar);
       this.bars.push(bar);
     }
+    this.add([this.topLine, this.middleLine, this.bottomLine, ...this.bars]);
 
-    this.emitterContainer = scene.add.container(x, y);
-    this.add(this.emitterContainer);
-    this.emitter.startFollow(this.emitterContainer);
-
-    scene.events.on("update", () => {
+    scene.events.on("update", (time, delta) => {
       this.doParticles(scene);
+      this.moveBars(scene, time, delta);
     });
   }
-  doParticles(scene) {
-    if (instance.pitch) {
-      this.targetY = this.initialY + (instance.pitch - 200) * 2;
-    } else {
-      this.targetY = this.initialY;
+  moveBars(scene, time, delta) {
+    for(let bar of this.bars) {
+      bar.x -= delta * this.barSpeed;
+
+      const distance = Math.abs(bar.x) / 200;
+      const val = 1 - Math.max(0, Math.min(1, distance));
     }
-
-    this.emitter.setQuantity(Math.floor(instance.volume * 100));
-    this.emitter.setScale({ start: instance.volume * 3, end: 0 });
-
-    const delta = (this.emitterContainer.y - this.targetY) * 0.3;
-    const offsetX = Math.sin(scene.time.now * this.speed) * this.amplitude;
-    this.emitterContainer.y = this.initialY + delta + offsetX;
+    
+    const leftThreshold = -500;
+    if (this.bars[0].x < leftThreshold) {
+      const replacedBar = this.bars.shift();
+      replacedBar.x = this.bars[this.bars.length - 1].x + this.barDistance;
+      this.bars.push(replacedBar);
+    }
+  }
+  doParticles(scene) {
+    
   }
 }

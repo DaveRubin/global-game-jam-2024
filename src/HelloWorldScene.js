@@ -22,7 +22,7 @@ export default class HelloWorldScene extends Phaser.Scene {
   create() {
     this.add.image(400, 300, "sky");
 
-    new AudioView(this, 400, 200);
+    new AudioView(this, 0, 0);
 
 
     // const particles = this.add.particles("logo");
