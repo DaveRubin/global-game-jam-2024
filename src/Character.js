@@ -3,28 +3,41 @@ import Phaser from "phaser";
 export class Character extends Phaser.GameObjects.Container {
   scene;
   sprite;
-  constructor(scene, x = 0, y = 0) {
+  isMoving = false;
+  onMoveComplete;
+  constructor(scene, x = 0, y = 0, moveSpeed) {
     super(scene, x, y);
     this.scene = scene;
     this.createAnimation("front", "Front ", 1, 3, 2);
-    this.createAnimation("side", "Side ", 1, 8);
-    this.createAnimation("jump", "Jump ", 1, 5);
-    this.sprite = scene.add.sprite(0, 0);
+    this.createAnimation("side", "Side ", 1, 8, 50);
+    this.createAnimation("jump", "Jump ", 1, 5, 15);
+    this.sprite = scene.add.sprite(16, 16);
+    this.sprite.originY = this.sprite.originX = 1;
+    this.moveSpeed = moveSpeed;
 
     this.add(this.sprite);
     this.jump();
   }
 
-  up() {
-    this.sprite.play("side");
-    this.move(0, -32);
+  up(isStand) {
+    this.sprite.play({ key: "jump", repeat: 0, });
+    this.sprite.chain(["front"]);
+    this.move(0, isStand ? 0 : -32);
+  }
+  down(isStand) {
+    this.sprite.play({ key: "jump", repeat: 0, });
+    this.sprite.chain(["front"]);
+    this.move(0, isStand ? 0 : 32);
   }
   right() {
-    this.sprite.play("side");
+    this.sprite.play({ key: "side", repeat: 0, });
+    this.sprite.chain(["front"]);
+    this.sprite.flipX = false;
     this.move(32);
   }
   left() {
-    this.sprite.play("side");
+    this.sprite.play({ key: "side", repeat: 0, });
+    this.sprite.chain(["front"]);
     this.sprite.flipX = true;
     this.move(-32);
   }
@@ -37,19 +50,37 @@ export class Character extends Phaser.GameObjects.Container {
     this.sprite.chain(["front"]);
   }
 
+  fallOnPit(onComplete) {
+    this.sprite.play("front");
+    this.scene.tweens.add({
+      targets: this,
+      scale: 0,
+      ease: Phaser.Math.Easing.Back.In,
+      duration: 300,
+
+      onStart: () => {
+        this.isMoving = true;
+      },
+      onComplete: () => {
+        onComplete?.();
+      },
+    });
+  }
+
   move(x = 0, y = 0) {
     this.scene.tweens.add({
       targets: this,
       x: this.x + x,
       y: this.y + y,
       ease: "Power1",
-      duration: 800,
+      duration: this.moveSpeed,
 
       onStart: () => {
-        console.log("onStart");
+        this.isMoving = true;
       },
       onComplete: () => {
-        console.log("onComplete");
+        this.isMoving = false;
+        this.onMoveComplete?.();
       },
     });
   }
