@@ -2,9 +2,14 @@ import Phaser from "phaser";
 import { AudioView } from "./AudioView";
 import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
+<<<<<<< HEAD
 import { Electricy } from "./Electricy";
 import { Pit } from "./Pit";
 import constants from './Constants';
+=======
+import constants from "./Constants";
+import { StageBackground } from "./StageBackground";
+>>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -28,6 +33,12 @@ export default class GameScene extends Phaser.Scene {
       atlasURL: "public/assets/particles/flares.json",
     });
 
+    this.load.atlas({
+      key: "stage",
+      textureURL: "public/assets/stage.png",
+      atlasURL: "public/assets/stage.json",
+    });
+
     this.load.image("sky", "assets/skies/space3.png");
     this.load.image("logo", "assets/Untitled.png");
     this.load.image("red", "assets/particles/red.png");
@@ -41,12 +52,19 @@ export default class GameScene extends Phaser.Scene {
 
     this.moveSpeed = 100;
     this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-    this.downKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-    this.leftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-    this.rightKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    this.downKey = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.DOWN
+    );
+    this.leftKey = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.LEFT
+    );
+    this.rightKey = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.RIGHT
+    );
 
     this.isKeys = true;
     this.isPingPong = true;
+<<<<<<< HEAD
 
     this.gameMap = [
       ['wall', 'wall', 'wall', 'wall', 'wall',],
@@ -111,8 +129,19 @@ export default class GameScene extends Phaser.Scene {
     this.worldContainer.x += 32;
     this.worldContainer.y += 6 - 32 * (this.gameMap.length - 10);
     this.worldContainer.add(this.obstacles);
+=======
+    this.stage = new StageBackground(this);
+    this.add.existing(this.stage);
 
-    const startingPoint = this.findOnGameMap(x => x === constants.playerStartingPoint);
+    const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
+    this.positionAnything(enemy, 2, 2);
+    this.worldContainer = this.add.container(0, 0);
+    this.worldContainer.x += 16;
+    this.worldContainer.y += 6;
+    this.worldContainer.add(enemy);
+>>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
+
+    const startingPoint = this.stage.getStartingPoint();
     this.characterY = startingPoint.y;
     this.characterX = startingPoint.x;
 
@@ -164,26 +193,38 @@ export default class GameScene extends Phaser.Scene {
       return;
     }
 
-    if ((Phaser.Input.Keyboard.JustDown(this.upKey) && this.isKeys) || (Heartbeat.currentAction === 'up' && this.isPingPong)) {
-      if (this.tryMove(this.characterX, this.characterY-1)) {
+    if (
+      (Phaser.Input.Keyboard.JustDown(this.upKey) && this.isKeys) ||
+      (Heartbeat.currentAction === "up" && this.isPingPong)
+    ) {
+      if (this.tryMove(this.characterX, this.characterY - 1)) {
         this.moveVertical(1);
         this.characterY -= 1;
       }
     }
-    if ((Phaser.Input.Keyboard.JustDown(this.downKey) && this.isKeys) || (Heartbeat.currentAction === 'down' && this.isPingPong)) {
-      if (this.tryMove(this.characterX, this.characterY+1)) {
+    if (
+      (Phaser.Input.Keyboard.JustDown(this.downKey) && this.isKeys) ||
+      (Heartbeat.currentAction === "down" && this.isPingPong)
+    ) {
+      if (this.tryMove(this.characterX, this.characterY + 1)) {
         this.moveVertical(-1);
         this.characterY += 1;
       }
     }
-    if ((Phaser.Input.Keyboard.JustDown(this.leftKey) && this.isKeys) || (Heartbeat.currentAction === 'left' && this.isPingPong)) {
-      if (this.tryMove(this.characterX-1, this.characterY)) {
+    if (
+      (Phaser.Input.Keyboard.JustDown(this.leftKey) && this.isKeys) ||
+      (Heartbeat.currentAction === "left" && this.isPingPong)
+    ) {
+      if (this.tryMove(this.characterX - 1, this.characterY)) {
         this.character.left();
         this.characterX -= 1;
       }
     }
-    if ((Phaser.Input.Keyboard.JustDown(this.rightKey) && this.isKeys) || (Heartbeat.currentAction === 'right' && this.isPingPong)) {
-      if (this.tryMove(this.characterX+1, this.characterY)) {
+    if (
+      (Phaser.Input.Keyboard.JustDown(this.rightKey) && this.isKeys) ||
+      (Heartbeat.currentAction === "right" && this.isPingPong)
+    ) {
+      if (this.tryMove(this.characterX + 1, this.characterY)) {
         this.character.right();
         this.characterX += 1;
       }
@@ -207,42 +248,39 @@ export default class GameScene extends Phaser.Scene {
 
   moveVertical(direction) {
     if (direction > 0) {
-      if (this.characterY > 5 && this.characterY < this.gameMap.length - 1) {
+      if (this.characterY > 5 && this.characterY < this.stage.rows - 1) {
         this.character.up(true);
         this.moveScreen(this.worldContainer, 0, 32);
-        this.moveScreen(this.layer, 0, 32);
-      }
-      else {
+        this.moveScreen(this.stage.layer, 0, 32);
+      } else {
         this.character.up();
       }
-    }
-    else {
-      console.log('top',5, 'bottom', this.gameMap.length - 2, 'characterY');
-      if (this.characterY > 4 && this.characterY < this.gameMap.length-2) {
+    } else {
+      console.log("top", 5, "bottom", this.stage.rows - 2, "characterY");
+      if (this.characterY > 4 && this.characterY < this.stage.rows - 2) {
         this.character.down(true);
         this.moveScreen(this.worldContainer, 0, -32);
-        this.moveScreen(this.layer, 0, -32);
-      }
-      else {
+        this.moveScreen(this.stage.layer, 0, -32);
+      } else {
         this.character.down();
       }
     }
   }
 
   tryMove(x, y) {
-    if (x > this.gameMap[0].length - 1) {
+    if (x > this.stage.columns - 2) {
       return false;
     }
-    if (x < 0) {
+    if (x < 1) {
       return false;
     }
-    if (y < 0) {
+    if (y < 1) {
       return false;
     }
-    if (y > this.gameMap.length - 1) {
+    if (y > this.stage.rows - 2) {
       return false;
     }
-    return this.gameMap[y][x] !== constants.wall;
+    return this.stage.isWall(x, y);
   }
 
   moveScreen(target, x = 0, y = 0) {
@@ -261,6 +299,7 @@ export default class GameScene extends Phaser.Scene {
     sprite.y = position.y;
   }
 
+<<<<<<< HEAD
   findOnGameMap(predicate) {
     for(let y = 0; y < this.gameMap.length; y++) {
       for (let x = 0; x < this.gameMap[y].length; x++) {
@@ -278,13 +317,20 @@ export default class GameScene extends Phaser.Scene {
 
   getTileVector(vector) {
     return this.gameMap[vector.y][vector.x];
+=======
+  getPositionOnScreen(x, y) {
+    return new Phaser.Math.Vector2(
+      (x - 1) * 32 + 32,
+      8 * 32 - (y - (this.characterY - 1)) * 32 + 32
+    );
+>>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
   }
 
   calculateLanding() {
-    const tile = this.getTile(this.characterX, this.characterY);
+    const tile = this.stage.getTile(this.characterX, this.characterY);
 
-    switch(tile) {
-      case constants.pits: 
+    switch (tile) {
+      case constants.pits:
         this.handleLandingOnPit();
         return;
     }
@@ -295,6 +341,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   goToYouLose() {
-    this.time.delayedCall(1000, () => this.scene.start('you-lose'));
+    this.time.delayedCall(1000, () => this.scene.start("you-lose"));
   }
 }

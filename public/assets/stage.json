@@ -10,7 +10,7 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "floor.png",
+					"filename": "floor",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -31,7 +31,7 @@
 					}
 				},
 				{
-					"filename": "wall-l.png",
+					"filename": "wall-l",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -52,7 +52,7 @@
 					}
 				},
 				{
-					"filename": "hole.png",
+					"filename": "hole",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -73,7 +73,7 @@
 					}
 				},
 				{
-					"filename": "wall-ml.png",
+					"filename": "wall-ml",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -94,7 +94,7 @@
 					}
 				},
 				{
-					"filename": "wall-m.png",
+					"filename": "wall-m",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -115,7 +115,7 @@
 					}
 				},
 				{
-					"filename": "wall-mr.png",
+					"filename": "wall-mr",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -136,7 +136,7 @@
 					}
 				},
 				{
-					"filename": "wall-mm.png",
+					"filename": "wall-mm",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -157,7 +157,7 @@
 					}
 				},
 				{
-					"filename": "wall-r.png",
+					"filename": "wall-r",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -178,7 +178,7 @@
 					}
 				},
 				{
-					"filename": "wall-b.png",
+					"filename": "wall-b",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -199,7 +199,7 @@
 					}
 				},
 				{
-					"filename": "wall-bl.png",
+					"filename": "wall-bl",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -220,7 +220,7 @@
 					}
 				},
 				{
-					"filename": "wall-tm.png",
+					"filename": "wall-tm",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -241,7 +241,7 @@
 					}
 				},
 				{
-					"filename": "wall-br.png",
+					"filename": "wall-br",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -262,7 +262,7 @@
 					}
 				},
 				{
-					"filename": "wall-tl.png",
+					"filename": "wall-tl",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -283,7 +283,7 @@
 					}
 				},
 				{
-					"filename": "wall-tr.png",
+					"filename": "wall-tr",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -309,6 +309,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:92b8a8da2ed3299058d971e1c1b36d34:bc85aa81562e93ab232f2b9706ed61d6:dcc063df6f3815610360c9b4df6dd69d$"
+		"smartupdate": "$TexturePacker:SmartUpdate:eb7aa834b0f3ac4898a190eea01ea42e:bc85aa81562e93ab232f2b9706ed61d6:dcc063df6f3815610360c9b4df6dd69d$"
 	}
 }
