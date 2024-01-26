@@ -17,11 +17,29 @@ export class AudioView extends Phaser.GameObjects.Container {
     this.barDistance = 150;
     this.barWidth = 30;
     this.barSpeed = this.barDistance / Heartbeat.beatTempo;
-    
+
     const wid = scene.scale.gameSize.width * 0.8;
-    this.topLine = scene.add.rectangle(scene.scale.gameSize.width/2, this.initialY, wid, 10, 0xffffff);
-    this.middleLine = scene.add.rectangle(scene.scale.gameSize.width/2, this.initialY + 40, wid, 10, 0xffffff);
-    this.bottomLine = scene.add.rectangle(scene.scale.gameSize.width/2, this.initialY + 80, wid, 10, 0xffffff);
+    this.topLine = scene.add.rectangle(
+      scene.scale.gameSize.width / 2,
+      this.initialY,
+      wid,
+      10,
+      0xffffff
+    );
+    this.middleLine = scene.add.rectangle(
+      scene.scale.gameSize.width / 2,
+      this.initialY + 40,
+      wid,
+      10,
+      0xffffff
+    );
+    this.bottomLine = scene.add.rectangle(
+      scene.scale.gameSize.width / 2,
+      this.initialY + 80,
+      wid,
+      10,
+      0xffffff
+    );
 
     for (let i = 0; i < 100; i++) {
       const bar = scene.add.rectangle(0, 0, this.barWidth, 150, 0xffffff);
@@ -37,13 +55,13 @@ export class AudioView extends Phaser.GameObjects.Container {
     });
   }
   moveBars(scene, time, delta) {
-    for(let bar of this.bars) {
+    for (let bar of this.bars) {
       bar.x -= delta * this.barSpeed;
 
       const distance = Math.abs(bar.x) / 200;
       const val = 1 - Math.max(0, Math.min(1, distance));
     }
-    
+
     const leftThreshold = -500;
     if (this.bars[0].x < leftThreshold) {
       const replacedBar = this.bars.shift();
@@ -51,7 +69,5 @@ export class AudioView extends Phaser.GameObjects.Container {
       this.bars.push(replacedBar);
     }
   }
-  doParticles(scene) {
-    
-  }
+  doParticles(scene) {}
 }

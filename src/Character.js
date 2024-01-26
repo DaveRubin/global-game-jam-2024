@@ -8,9 +8,7 @@ export class Character extends Phaser.GameObjects.Container {
     this.scene = scene;
     this.createAnimation("front", "Front ", 1, 3, 2);
     this.createAnimation("side", "Side ", 1, 8);
-
     this.sprite = scene.add.sprite(32, 32);
-    this.sprite.setScale(2);
 
     this.add(this.sprite);
     this.idle();
@@ -18,16 +16,16 @@ export class Character extends Phaser.GameObjects.Container {
 
   up() {
     this.sprite.play("side");
-    this.move(0, -64);
+    this.move(0, -32);
   }
   right() {
     this.sprite.play("side");
-    this.move(64);
+    this.move(32);
   }
   left() {
     this.sprite.play("side");
     this.sprite.flipX = true;
-    this.move(-64);
+    this.move(-32);
   }
   idle() {
     this.sprite.play("front");
