@@ -85,7 +85,6 @@ class AudioManager {
 
       if (newOn !== that.on) {
         that.on = newOn;
-        console.log("AAAA", newOn);
       }
 
       const pitchData = getYinPitch(inputData, audioContext.sampleRate);

@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { AudioView } from "./AudioView";
+import {Heartbeat} from './HeartbeatService';
 
 export default class HelloWorldScene extends Phaser.Scene {
   constructor() {
@@ -23,6 +24,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     new AudioView(this, 400, 200);
 
+
     // const particles = this.add.particles("logo");
     // const emitter = particles.createEmitter({
     //   speed: 100,
@@ -42,5 +44,9 @@ export default class HelloWorldScene extends Phaser.Scene {
     // logo.setCollideWorldBounds(true);
 
     // emitter.startFollow(logo);
+  }
+
+  update(time, delta) {
+    Heartbeat.update(time);
   }
 }
