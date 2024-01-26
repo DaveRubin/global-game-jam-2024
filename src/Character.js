@@ -18,6 +18,10 @@ export class Character extends Phaser.GameObjects.Container {
     this.sprite.play("side");
     this.move(0, -32);
   }
+  down() {
+    this.sprite.play("side");
+    this.move(0, 32);
+  }
   right() {
     this.sprite.play("side");
     this.move(32);
@@ -37,13 +41,14 @@ export class Character extends Phaser.GameObjects.Container {
       x: this.x + x,
       y: this.y + y,
       ease: "Power1",
-      duration: 800,
+      duration: 150,
 
       onStart: () => {
         console.log("onStart");
       },
       onComplete: () => {
         console.log("onComplete");
+        this.sprite.play("front");
       },
     });
   }
