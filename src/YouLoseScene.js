@@ -8,6 +8,9 @@ export default class YouLoseScene extends Phaser.Scene {
 
     create() {
 
+        this.sound.get('loop').stop();
+        this.sound.play('lose', { volume: 0.5 });
+
         const baseY = this.scale.gameSize.height / 2;
         const container = this.add.container(this.scale.gameSize.width / 2, baseY);
         const donny = this.add.sprite(0, 0, "character", "Ending-1");
@@ -33,6 +36,16 @@ export default class YouLoseScene extends Phaser.Scene {
 
         const buttonContainer = this.add.container(this.scale.gameSize.width / 2, this.scale.gameSize.height / 2 + 16);
         const button = this.add.sprite(0, 0, "character", "button");
+
+        button.alpha = 0;
+        this.tweens.add({
+            targets: button,
+            alpha: 1,
+            ease: Phaser.Math.Easing.Sine.InOut,
+            duration: 300,
+            delay: 2000
+        });
+
         const pressed = this.add.sprite(0, 0, "character", "button_pressed");
         pressed.alpha = 0;
         pressed.setInteractive().on('pointerup', () => {

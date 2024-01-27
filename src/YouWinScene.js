@@ -8,11 +8,24 @@ export default class YouWinScene extends Phaser.Scene {
 
     create() {
 
+        this.sound.get('loop').stop();
+        this.sound.play('win', { volume: 0.5 });
+
         const baseY = this.scale.gameSize.height / 2;
         const container = this.add.container(this.scale.gameSize.width / 2, baseY + 16);
         const donny = this.add.sprite(0, 0, "character", "win");
         const button = this.add.sprite(0, 0, "character", "button");
         const pressed = this.add.sprite(0, 0, "character", "button_pressed");
+
+        button.alpha = 0;
+        this.tweens.add({
+            targets: button,
+            alpha: 1,
+            ease: Phaser.Math.Easing.Sine.InOut,
+            duration: 300,
+            delay: 4000
+        });
+
         pressed.alpha = 0;
         pressed.setInteractive().on('pointerup', () => {
             pressed.alpha = 0;

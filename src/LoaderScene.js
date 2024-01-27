@@ -45,11 +45,13 @@ export default class LoaderScene extends Phaser.Scene {
     this.load.audio("death-pit", "Mono/Fall into pit.wav");
     this.load.audio("death-electric", "Mono/electric zap.wav");
     this.load.audio("glow", "Mono/top glow shimmer.wav");
+    this.load.audio("lose", "Mono/Lose.wav");
+    this.load.audio("win", "Mono/Win.wav");
   }
 
   create() {
-    this.scene.start('start');
-    //this.scene.start("game");
+    //this.scene.start('start');
+    this.scene.start("game");
     //this.scene.start("calibrate");
   }
 }
