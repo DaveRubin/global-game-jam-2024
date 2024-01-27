@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import constants from "./Constants";
+import { gameMap, above } from './maps'
 // @ts-ignore
 import stage from "../public/assets/stage.json";
 const nameToIndex = {};
@@ -7,91 +7,7 @@ Object.entries(stage.textures[0].frames).forEach(([key, value]) => {
   nameToIndex[value.filename] = Number(key);
 });
 
-const gameMap = [
-  ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "plgo", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
-];
 
-const above = [
-  ["wall-l", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
-  ["wall-l", "wall-tl", "wall-tm", "wall-tr", "plgo", "wall-tl", "wall-tm", "wall-tr", "wall-r"],
-  ["wall-l", "wall-l", "wall-m", "wall-r", "arrow", "wall-l", "wall-m", "wall-r", "wall-r"],
-  ["wall-l", "wall-bl", "wall-b", "wall-br", "floor", "wall-bl", "wall-b", "wall-br", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "wall-tm", "wall-tr", "floor", "floor", "floor", "wall-tl", "wall-tm", "wall-r"],
-  ["wall-l", "wall-m", "wall-r", "floor", "floor", "floor", "wall-l", "wall-m", "wall-r"],
-  ["wall-l", "wall-m", "wall-r", "floor", "floor", "floor", "wall-l", "wall-m", "wall-r"],
-  ["wall-l", "wall-b", "wall-br", "floor", "floor", "floor", "wall-bl", "wall-b", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "wall-tl", "wall-tm", "wall-tr", "floor", "floor", "wall-r"],
-  ["wall-l", "arrow", "arrow", "wall-l", "wall-m", "wall-r", "arrow", "arrow", "wall-r"],
-  ["wall-l", "floor", "floor", "wall-l", "wall-m", "wall-r", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "wall-bl", "wall-b", "wall-br", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "plsp", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
-];
 
 const preMadeLevel = gameMap.map((row) => row.map((x) => nameToIndex[x]));
 
