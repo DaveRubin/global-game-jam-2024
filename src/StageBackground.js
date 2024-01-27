@@ -53,8 +53,8 @@ const gameMap = [
 const above = [
   ["wall-l", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
   ["wall-l", "wall-tl", "wall-tm", "wall-tr", "plgo", "wall-tl", "wall-tm", "wall-tr", "wall-r"],
-  ["wall-l", "wall-l", "wall-m", "wall-r", "arrow", "wall-l", "wall-m", "wall-r", "wall-r"],
-  ["wall-l", "wall-bl", "wall-b", "wall-br", "floor", "wall-bl", "wall-b", "wall-br", "wall-r"],
+  ["wall-l", "wall-l", "wall-m", "wall-r", "floor", "wall-l", "wall-m", "wall-r", "wall-r"],
+  ["wall-l", "wall-bl", "wall-b", "wall-br", "arrow", "wall-bl", "wall-b", "wall-br", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
@@ -68,11 +68,11 @@ const above = [
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
+  ["wall-l", "floor", "wall-tl", "wall-tr", "floor", "floor", "floor", "floor", "wall-r"],
+  ["wall-l", "floor", "wall-bl", "wall-br", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
+  ["wall-l", "floor", "floor", "floor", "floor", "wall-tl", "wall-tr", "floor", "wall-r"],
+  ["wall-l", "floor", "floor", "floor", "floor", "wall-bl", "wall-br", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "wall-tm", "wall-tr", "floor", "floor", "floor", "wall-tl", "wall-tm", "wall-r"],
@@ -170,6 +170,6 @@ export class StageBackground extends Phaser.GameObjects.Container {
   }
 
   getStartingPoint() {
-    return new Phaser.Math.Vector2(4, this.rows - 3);
+    return new Phaser.Math.Vector2(4, this.rows - 21);
   }
 }
