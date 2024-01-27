@@ -14,7 +14,7 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatTempo = 1000;
+    this.beatTempo = 750;
     this.offset = 0.35;
 
     this.actions = [

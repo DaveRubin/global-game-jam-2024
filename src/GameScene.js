@@ -2,7 +2,8 @@ import Phaser from "phaser";
 import { AudioView } from "./AudioView";
 import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
-import constants from "./Constants";
+import { Electricy } from "./Electricy";
+import { Pit } from "./Pit";
 import { StageBackground } from "./StageBackground";
 
 export default class GameScene extends Phaser.Scene {
@@ -61,33 +62,59 @@ export default class GameScene extends Phaser.Scene {
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
-    const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
-    this.positionAnything(enemy, 2, 2);
     this.worldContainer = this.add.container(0, 0);
-    this.worldContainer.x += 16;
-    this.worldContainer.y += 6;
-    this.worldContainer.add(enemy);
+    this.worldContainer.y += 6 - 32 * (this.stage.rows - 11);
 
     const startingPoint = this.stage.getStartingPoint();
     this.characterY = startingPoint.y;
     this.characterX = startingPoint.x;
 
     this.character = new Character(this, 0, 0, this.moveSpeed);
-    this.character.onMoveComplete = () => this.calculateLanding();
     this.add.existing(this.character);
-    this.positionAnything(this.character, startingPoint.x, startingPoint.y);
+    this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
     new AudioView(this, 0, 0);
 
     this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
     this.beatDebugRect.alpha = 0;
+
+    const obstacles = [
+      new Electricy(this, 0, 0, 1, 6, 1, 4),
+      new Electricy(this, 0, 0, 2, 6, 1, 4),
+      new Electricy(this, 0, 0, 1, 7, 2, 4),
+      new Electricy(this, 0, 0, 2, 7, 2, 4),
+      new Electricy(this, 0, 0, 1, 8, 3, 4),
+      new Electricy(this, 0, 0, 2, 8, 3, 4),
+
+      new Pit(this, 0, 0, 3, 6),
+      new Pit(this, 0, 0, 4, 6),
+      new Pit(this, 0, 0, 3, 7),
+      new Pit(this, 0, 0, 4, 7),
+      new Pit(this, 0, 0, 3, 8),
+      new Pit(this, 0, 0, 4, 8),
+    ];
+    this.obstacles = [];
+    for(let obstacle of obstacles) {
+      this.add.existing(obstacle);
+      this.worldContainer.add(obstacle);
+      obstacle.x = 32 * obstacle.worldX;
+      obstacle.y = 32 * obstacle.worldY;
+      this.obstacles.push(obstacle);
+    }
   }
 
   update(time, delta) {
+    if (!this.character.isAlive) {
+      return;
+    }
     Heartbeat.update(time);
 
     this.beatDebugRect.fillColor = Heartbeat.isBeat ? 0xff0000 : 0xffffff;
+    this.obstacleMovement();
+    this.characterMovement();
+  }
 
+  characterMovement() {
     if (this.character.isMoving) {
       return;
     }
@@ -126,6 +153,21 @@ export default class GameScene extends Phaser.Scene {
       if (this.tryMove(this.characterX + 1, this.characterY)) {
         this.character.right();
         this.characterX += 1;
+      }
+    }
+  }
+
+  obstacleMovement() {
+    for(let obstacle of this.obstacles) {
+      obstacle.beat?.(Heartbeat.beatCount);
+      
+      if (!this.character.isAlive) {
+        return;
+      }
+      if (obstacle.kill) {
+        if (obstacle.worldX === this.characterX && obstacle.worldY === this.characterY) {
+          this.handleLandingOnPit();
+        }
       }
     }
   }
@@ -180,27 +222,10 @@ export default class GameScene extends Phaser.Scene {
     });
   }
 
-  positionAnything(sprite, x, y) {
-    const position = this.getPositionOnScreen(x, y);
+  positionCharacter(sprite, x, y) {
+    const position = new Phaser.Math.Vector2((x) * 32, (8 - y + this.characterY) * 32);
     sprite.x = position.x;
     sprite.y = position.y;
-  }
-
-  getPositionOnScreen(x, y) {
-    return new Phaser.Math.Vector2(
-      (x - 1) * 32 + 32,
-      8 * 32 - (y - (this.characterY - 1)) * 32 + 32
-    );
-  }
-
-  calculateLanding() {
-    const tile = this.stage.getTile(this.characterX, this.characterY);
-
-    switch (tile) {
-      case constants.pits:
-        this.handleLandingOnPit();
-        return;
-    }
   }
 
   handleLandingOnPit() {
