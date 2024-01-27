@@ -4,7 +4,6 @@ import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
 import { Electricy } from "./Electricy";
 import { Pit } from "./Pit";
-import constants from './Constants';
 import { StageBackground } from "./StageBackground";
 
 export default class GameScene extends Phaser.Scene {
@@ -64,23 +63,13 @@ export default class GameScene extends Phaser.Scene {
     this.add.existing(this.stage);
 
     this.worldContainer = this.add.container(0, 0);
-    this.worldContainer.x += 32;
-    this.worldContainer.y += 6 - 32 * (this.stage.length - 10);
-
-    const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
-    this.positionAnything(enemy, 2, 2);
-    this.worldContainer = this.add.container(0, 0);
-    this.worldContainer.x += 16;
-    this.worldContainer.y += 6;
-    this.worldContainer.add(enemy);
->>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
+    this.worldContainer.y += 6 - 32 * (this.stage.rows - 11);
 
     const startingPoint = this.stage.getStartingPoint();
     this.characterY = startingPoint.y;
     this.characterX = startingPoint.x;
 
     this.character = new Character(this, 0, 0, this.moveSpeed);
-    this.character.onMoveComplete = () => this.calculateLanding();
     this.add.existing(this.character);
     this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
@@ -90,17 +79,19 @@ export default class GameScene extends Phaser.Scene {
     this.beatDebugRect.alpha = 0;
 
     const obstacles = [
-      new Electricy(this, 0, 0, 0, 5, 1, 3),
-      new Electricy(this, 0, 0, 1, 5, 1, 3),
-      new Electricy(this, 0, 0, 0, 6, 2, 3),
-      new Electricy(this, 0, 0, 1, 6, 2, 3),
-      new Electricy(this, 0, 0, 0, 7, 0, 3),
-      new Electricy(this, 0, 0, 1, 7, 0, 3),
+      new Electricy(this, 0, 0, 1, 6, 1, 4),
+      new Electricy(this, 0, 0, 2, 6, 1, 4),
+      new Electricy(this, 0, 0, 1, 7, 2, 4),
+      new Electricy(this, 0, 0, 2, 7, 2, 4),
+      new Electricy(this, 0, 0, 1, 8, 3, 4),
+      new Electricy(this, 0, 0, 2, 8, 3, 4),
 
-      new Pit(this, 0, 0, 2, 5),
-      new Pit(this, 0, 0, 3, 5),
-      new Pit(this, 0, 0, 2, 6),
       new Pit(this, 0, 0, 3, 6),
+      new Pit(this, 0, 0, 4, 6),
+      new Pit(this, 0, 0, 3, 7),
+      new Pit(this, 0, 0, 4, 7),
+      new Pit(this, 0, 0, 3, 8),
+      new Pit(this, 0, 0, 4, 8),
     ];
     this.obstacles = [];
     for(let obstacle of obstacles) {
@@ -232,16 +223,6 @@ export default class GameScene extends Phaser.Scene {
     const position = new Phaser.Math.Vector2((x) * 32, (8 - y + this.characterY) * 32);
     sprite.x = position.x;
     sprite.y = position.y;
-  }
-
-  calculateLanding() {
-    const tile = this.stage.getTile(this.characterX, this.characterY);
-
-    switch (tile) {
-      case constants.pits:
-        this.handleLandingOnPit();
-        return;
-    }
   }
 
   handleLandingOnPit() {
