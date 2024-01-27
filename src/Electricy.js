@@ -114,7 +114,7 @@ export class Electricy extends Phaser.GameObjects.Container {
         this.sprite.alpha = 0;
       }
     }
-    this.kill = newWasHot;
+    this.kill = newWasHot ? "ELEC" : false;
   }
 
   electrocute() {
