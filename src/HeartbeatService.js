@@ -24,11 +24,25 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatTempo = 900;
-    this.startOffset = 0.35;
-    this.endOffset = 0.35;
+    this.beatTempo = 800;
+    this.startOffset = 0.4;
+    this.endOffset = 0.4;
 
-    this.actions = [{"name":"left","window":{"x":0,"y":51.76910971401293}},{"name":"right","window":{"x":51.76910971401293,"y":63.732644862303005}},{"name":"up","window":{"x":63.732644862303005,"y":1000}}]
+    const minHex = 45;
+    const maxHex = 75;
+    const range = maxHex - minHex;
+    const part = range / 10;
+
+    const low = new Phaser.Math.Vector2(minHex, minHex + part * 2);
+    const mid = new Phaser.Math.Vector2(low.y, low.y + part * 4);
+    const high = new Phaser.Math.Vector2(mid.y, mid.y + part * 4);
+
+    this.actions = [
+      { name: 'up', window: mid },
+      { name: 'left', window: high },
+      { name: 'right', window: low },
+    ];
+    console.log('ok', JSON.stringify(this.actions));
   }
 
   update(now) {
@@ -89,14 +103,6 @@ class HeartbeatService {
   getCurrentAction() {
     if (instance.volume < 0.075) {
       return null;
-    }
-
-    if (this.isCalibrating) {
-      if (instance.pitch) {
-        return "calibrate";
-      } else {
-        return null;
-      }
     }
 
     for (let action of this.actions) {

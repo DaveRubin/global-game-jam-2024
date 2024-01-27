@@ -25,7 +25,7 @@ export default class CalibrateScene extends Phaser.Scene {
             'right'
         ];
 
-        this.pitchBuffer = 2.5;
+        this.pitchBuffer = 2;
 
         this.audioView = new AudioView(this, 0, 0, this.scale.gameSize.height, false);
         this.audioView.scaleX = 1.5;
@@ -46,7 +46,7 @@ export default class CalibrateScene extends Phaser.Scene {
         this.character.onMoveComplete = () => this.onCharacterMoveComplete();
         this.pitches = [];
 
-        Heartbeat.onSuccessCalibrate = () => this.onHeartbeatCalibrateSuccess();
+        Heartbeat.onSuccessCalibrate = (action) => this.onHeartbeatCalibrateSuccess(action);
 
         this.getNextStage();
     }
@@ -108,21 +108,11 @@ export default class CalibrateScene extends Phaser.Scene {
         Heartbeat.update(time);
     }
 
-    workOnPitches() {
-        const ordered = this.pitches.sort((a, b) => a.window.x - b.window.x);
-        ordered[0].window.x = 0;
-        ordered[1].window.x = ordered[0].window.y;
-        ordered[1].window.y = ordered[2].window.x;
-        ordered[2].window.y = 1000;
-        console.log('workon', JSON.stringify(ordered));
-        return ordered;
-    }
-
     getNextStage() {
         this.stage = this.stages.shift();
         if (this.stage == null) {
 
-            Heartbeat.finishCalibrate(this.workOnPitches());
+            Heartbeat.finishCalibrate(Heartbeat.actions);
             this.character.destroy();
             this.time.delayedCall(1000, () => {
                 this.scene.start('game');
@@ -134,20 +124,14 @@ export default class CalibrateScene extends Phaser.Scene {
         this.waitingForPitch = true;
     }
 
-    onHeartbeatCalibrateSuccess() {
+    onHeartbeatCalibrateSuccess(action) {
         if (!this.waitingForPitch) {
             return;
         }
-        console.log('registered', instance.pitch, instance.volume, JSON.stringify(this.pitches));
-        const window = new Phaser.Math.Vector2(instance.pitch - this.pitchBuffer, instance.pitch + this.pitchBuffer);
-        for (let pitch of this.pitches) {
-            if ((window.x < pitch.window.x && window.y > pitch.window.x) ||
-                (window.x < pitch.window.y && window.y > pitch.window.y)) {
-                this.waitingForPitch = true;
-                Object.values(this.signs).forEach(s => s.visible = false);
-                this.signs.try_again.visible = true;
-                return;
-            }
+        if (action !== this.stage) {
+            Object.values(this.signs).forEach(s => s.visible = false);
+            this.signs.try_again.visible = true;
+            return;
         }
 
         this.createArrowOnPitch(this.stage, instance.pitch);
