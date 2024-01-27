@@ -7,7 +7,7 @@ import YouLoseScene from "./YouLoseScene";
 const config = {
   type: Phaser.AUTO,
   parent: "app",
-  width: 192,
+  width: 256,
   height: 320,
   physics: {
     default: "arcade",

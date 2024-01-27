@@ -43,6 +43,7 @@ export class Electricy extends Phaser.GameObjects.Container {
       blendMode: "ADD",
       emitting: false,
     });
+
     this.emitter = particlesEngine.createEmitter({
       frame: "blue",
       emitZone: {
