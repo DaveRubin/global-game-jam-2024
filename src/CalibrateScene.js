@@ -9,7 +9,7 @@ export default class CalibrateScene extends Phaser.Scene {
 
     arrowAngles = {
         'up': 90,
-        'left': 0,
+        'lefft': 0,
         'right': 180,
     }
 
@@ -21,20 +21,26 @@ export default class CalibrateScene extends Phaser.Scene {
 
         this.stages = [
             'up',
-            'left',
+            'lefft',
             'right'
         ];
 
         this.pitchBuffer = 2.5;
 
         this.audioView = new AudioView(this, 0, 0, this.scale.gameSize.height);
+        this.audioView.scaleX = 1.5;
+        this.audioView.x = -this.scale.gameSize.width / 2;
         Heartbeat.startCalibrate();
 
-        this.add.text(0, 100, 'this is little donny');
+
+        this.loadDonnie();
+        this.loadSigns();
+
+
         this.instructionText = this.add.text(0, 125, '');
 
         this.characterYPosition = this.scale.gameSize.height - 60;
-        this.character = new Character(this, this.scale.gameSize.width / 2, this.characterYPosition, 100);
+        this.character = new Character(this, this.scale.gameSize.width * 0.25, this.characterYPosition, 100);
         this.add.existing(this.character);
         this.character.jump();
         this.character.onMoveComplete = () => this.onCharacterMoveComplete();
@@ -43,6 +49,58 @@ export default class CalibrateScene extends Phaser.Scene {
         Heartbeat.onSuccessCalibrate = () => this.onHeartbeatCalibrateSuccess();
 
         this.getNextStage();
+    }
+
+    loadDonnie() {
+        const baseY = this.scale.gameSize.height / 2;
+        const container = this.add.container(this.scale.gameSize.width / 2, baseY);
+        const donny = this.add.sprite(0, 0, "character", "intro_donnie");
+        const donny2 = this.add.sprite(0, 0, "character", "intro_donnie2");
+        donny2.visible = false;
+        container.add(donny);
+        container.add(donny2);
+
+        this.time.addEvent({
+            delay: 1200,
+            callback: () => {
+                donny.visible = !donny.visible;
+                donny2.visible = !donny2.visible;
+            },
+            loop: true
+        });
+
+        this.time.addEvent({
+            delay: 10,
+            callback: () => {
+                container.y = (baseY + 10) + 10 * Math.sin(this.time.now / 200);
+            },
+            loop: true
+        });
+
+
+    }
+    loadSigns() {
+        const baseY = this.scale.gameSize.height / 2;
+        const baseX = this.scale.gameSize.width / 2;
+
+        const hello = this.add.sprite(baseX, baseY, "character", "intro_hello");
+        const lefft = this.add.sprite(baseX, baseY, "character", "intro_lefft");
+        const up = this.add.sprite(baseX, baseY, "character", "intro_up");
+        const right = this.add.sprite(baseX, baseY, "character", "intro_right");
+        const great = this.add.sprite(baseX, baseY, "character", "intro_great");
+        const try_again = this.add.sprite(baseX, baseY, "character", "intry_try_again");
+
+        this.signs = {
+            hello,
+            lefft,
+            up,
+            right,
+            great,
+            try_again,
+        }
+
+        Object.values(this.signs).forEach(s => s.visible = false);
+        this.signs.hello.visible = true;
     }
 
     update(time, delta) {
@@ -62,7 +120,7 @@ export default class CalibrateScene extends Phaser.Scene {
     getNextStage() {
         this.stage = this.stages.shift();
         if (this.stage == null) {
-            
+
             Heartbeat.finishCalibrate(this.workOnPitches());
             this.character.destroy();
             this.time.delayedCall(1000, () => {
@@ -70,7 +128,8 @@ export default class CalibrateScene extends Phaser.Scene {
             })
             return;
         }
-        this.instructionText.text = 'Tell him to go ' + this.stage + '!';
+        Object.values(this.signs).forEach(s => s.visible = false);
+        this.signs[this.stage].visible = true;
         this.waitingForPitch = true;
     }
 
@@ -79,12 +138,13 @@ export default class CalibrateScene extends Phaser.Scene {
             return;
         }
         console.log('registered', instance.pitch, instance.volume, JSON.stringify(this.pitches));
-        const window = new Phaser.Math.Vector2(instance.pitch-this.pitchBuffer, instance.pitch+this.pitchBuffer);
-        for(let pitch of this.pitches) {
-            if ((window.x < pitch.window.x && window.y > pitch.window.x) || 
+        const window = new Phaser.Math.Vector2(instance.pitch - this.pitchBuffer, instance.pitch + this.pitchBuffer);
+        for (let pitch of this.pitches) {
+            if ((window.x < pitch.window.x && window.y > pitch.window.x) ||
                 (window.x < pitch.window.y && window.y > pitch.window.y)) {
                 this.waitingForPitch = true;
-                this.instructionText.text = 'too similar, try again';
+                Object.values(this.signs).forEach(s => s.visible = false);
+                this.signs.try_again.visible = true;
                 return;
             }
         }
@@ -94,7 +154,7 @@ export default class CalibrateScene extends Phaser.Scene {
         if (this.stage === 'up') {
             this.character.up();
         }
-        else if (this.stage === 'left') {
+        else if (this.stage === 'lefft') {
             this.character.left();
         }
         else {
@@ -104,10 +164,11 @@ export default class CalibrateScene extends Phaser.Scene {
     }
 
     onCharacterMoveComplete() {
-        this.instructionText.text = 'Great!';
+        Object.values(this.signs).forEach(s => s.visible = false);
+        this.signs.great.visible = true;
 
         this.time.delayedCall(500, () => {
-            this.character.x = this.scale.gameSize.width / 2;
+            this.character.x = this.scale.gameSize.width * 0.25;
             this.character.y = this.characterYPosition;
             this.waitingForPitch = true;
             this.getNextStage();
