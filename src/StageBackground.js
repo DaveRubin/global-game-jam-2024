@@ -10,7 +10,7 @@ Object.entries(stage.textures[0].frames).forEach(([key, value]) => {
 const gameMap = [
   ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
   ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "plgo", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
   ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
   ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
   ["floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor"],
@@ -82,8 +82,8 @@ const above = [
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "wall-tl", "wall-tm", "wall-tr", "floor", "floor", "wall-r"],
-  ["wall-l", "arrow", "arrow", "wall-l", "wall-m", "wall-r", "arrow", "arrow", "wall-r"],
   ["wall-l", "floor", "floor", "wall-l", "wall-m", "wall-r", "floor", "floor", "wall-r"],
+  ["wall-l", "arrow", "arrow", "wall-l", "wall-m", "wall-r", "arrow", "arrow", "wall-r"],
   ["wall-l", "floor", "floor", "wall-bl", "wall-b", "wall-br", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
@@ -123,7 +123,8 @@ export class StageBackground extends Phaser.GameObjects.Container {
           return;
         }
         //create a sprite with name from 'stage' atlas ,at x*32,y * 32
-        const sprite = scene.add.sprite(x * 32, y * 32, "stage", name);
+        const sprite = name === 'arrow' ? scene.add.sprite(x * 32, y * 32, "character", name)
+          : scene.add.sprite(x * 32, y * 32, "stage", name);
         //add the sprite to the container
         container.add(sprite);
       });
