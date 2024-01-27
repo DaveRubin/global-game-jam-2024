@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 import { gameMap, above } from './maps'
-// @ts-ignore
-import stage from "../public/assets/stage.json";
+import { aaa as stage } from "./copyKayer";
+
+
+
 const nameToIndex = {};
 Object.entries(stage.textures[0].frames).forEach(([key, value]) => {
   nameToIndex[value.filename] = Number(key);
