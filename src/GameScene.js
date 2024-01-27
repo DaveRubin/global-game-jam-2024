@@ -15,7 +15,7 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     if (!this.sound.getAll('loop').length) {
-      this.sound.play("loop", { loop: true, volume: 0.1,  });
+      this.sound.play("loop", { loop: true, volume: 0.1, });
     }
     const loops = this.sound.getAll('loop');
     loops[0].play();
@@ -33,7 +33,7 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.isKeys = true;
-    this.isPingPong = true;
+    // this.isPingPong = true;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
@@ -154,7 +154,7 @@ export default class GameScene extends Phaser.Scene {
       new Pit(this, 0, 0, 1, this.invertWorldY(18)),
       new Pit(this, 0, 0, 7, this.invertWorldY(17)),
       new Pit(this, 0, 0, 1, this.invertWorldY(17)),
-      
+
       new Coin(this, 0, 0, 4, this.invertWorldY(35)),
       new Coin(this, 0, 0, 2, this.invertWorldY(33)),
       new Coin(this, 0, 0, 2, this.invertWorldY(31)),
