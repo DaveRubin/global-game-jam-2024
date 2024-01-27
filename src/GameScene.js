@@ -6,6 +6,7 @@ import { Electricy } from "./Electricy";
 import { Pit } from "./Pit";
 import { Coin } from "./Coin";
 import { StageBackground } from "./StageBackground";
+import { Foreground } from "./Foreground";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -13,16 +14,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-
     this.load.spritesheet({
-      key: 'coin',
-      url: 'assets/coins/coins.png',
+      key: "coin",
+      url: "assets/coins/coins.png",
       frameConfig: {
-          frameWidth: 16,
-          frameHeight: 16,
-          startFrame: 0,
-          endFrame: 20
-      }
+        frameWidth: 16,
+        frameHeight: 16,
+        startFrame: 0,
+        endFrame: 20,
+      },
     });
 
     this.load.atlas({
@@ -71,7 +71,7 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.isKeys = true;
-    this.isPingPong = true;
+    this.isPingPong = false;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
@@ -83,14 +83,16 @@ export default class GameScene extends Phaser.Scene {
     this.characterX = startingPoint.x;
 
     this.character = new Character(this, 0, 0, this.moveSpeed);
-    this.add.existing(this.character);
+
     this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
     new AudioView(this, 0, 0);
 
     this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
     this.beatDebugRect.alpha = 0;
+    const foreground = new Foreground(this, 0, 0);
 
+    this.worldContainer.add(foreground);
     const obstacles = [
       new Electricy(this, 0, 0, 1, 6, 1, 4),
       new Electricy(this, 0, 0, 2, 6, 1, 4),
@@ -117,6 +119,8 @@ export default class GameScene extends Phaser.Scene {
       obstacle.y = 32 * obstacle.worldY;
       this.obstacles.push(obstacle);
     }
+
+    this.add.existing(this.character);
   }
 
   update(time, delta) {
@@ -180,11 +184,13 @@ export default class GameScene extends Phaser.Scene {
       if (!this.character.isAlive) {
         return;
       }
-      if (obstacle.worldX === this.characterX && obstacle.worldY === this.characterY) {
+      if (
+        obstacle.worldX === this.characterX &&
+        obstacle.worldY === this.characterY
+      ) {
         if (obstacle instanceof Coin) {
           obstacle.collect();
-        }
-        else {
+        } else {
           if (obstacle.kill) {
             this.handleLandingOnPit();
           }
@@ -192,7 +198,6 @@ export default class GameScene extends Phaser.Scene {
       }
     }
   }
-
 
   moveVertical(direction) {
     if (direction > 0) {
