@@ -96,6 +96,12 @@ export class Electricy extends Phaser.GameObjects.Container {
   }
 
   beat(beatCount) {
+    if (this.isHot()) {
+      this.electrocute();
+    } else {
+      this.sprite.alpha = 0;
+    }
+
     const count = (beatCount + this.beatOrder) % this.beatTotal;
     if (this.currentCount === count) {
       return;
@@ -105,27 +111,26 @@ export class Electricy extends Phaser.GameObjects.Container {
     this.currentCount = count;
     const newWasHot = this.isHot();
 
-    if (wasHot !== newWasHot) {
-      if (newWasHot) {
-        this.sprite.alpha = 1;
-        this.exploder.explode(50, -16, -16);
-        this.electrocute();
-      } else {
-        this.sprite.alpha = 0;
-      }
-    }
     this.kill = newWasHot ? "ELEC" : false;
   }
 
   electrocute() {
+    return;
+    if (this.isAnimatingLightning) {
+      return;
+    }
     this.tweenStep = 0;
-
+    this.sprite.alpha = 1;
+    this.exploder.explode(50, -16, -16);
+    this.isAnimatingLightning = true;
     this.scene.tweens.add({
       targets: this,
       tweenStep: 30,
       onUpdate: () => (this.sprite.alpha = this.tweenStep % 10 > 5 ? 1 : 0),
       duration: 250,
-      yoyo: false,
+      onComplete: () => {
+        this.isAnimatingLightning = false;
+      }
     });
   }
 }
