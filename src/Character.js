@@ -50,8 +50,8 @@ export class Character extends Phaser.GameObjects.Container {
     this.sprite.play("front");
   }
 
-  jump() {
-    this.sprite.play({ key: "jump", repeat: 0 });
+  jump(repeat = 0) {
+    this.sprite.play({ key: "jump", repeat: repeat });
     this.sprite.chain(["front"]);
   }
 
@@ -71,6 +71,7 @@ export class Character extends Phaser.GameObjects.Container {
     });
   }
   electrocute(onComplete) {
+    this.scene.cameras.main.shake(500);
     this.isAlive = false;
     this.isMoving = true;
     this.sprite.play("deathElectric");

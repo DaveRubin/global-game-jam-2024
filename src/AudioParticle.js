@@ -1,7 +1,5 @@
 import Phaser from "phaser";
 import { instance } from "../audioCheck";
-import { Heartbeat } from "./HeartbeatService";
-
 
 export class AudioParticle extends Phaser.GameObjects.Container {
   constructor(scene, x = 0, y = 0, totalHeight) {
@@ -12,7 +10,7 @@ export class AudioParticle extends Phaser.GameObjects.Container {
     this.add(this.sprite);
 
     scene.events.on("update", () => {
-      this.sprite.scale = instance.volume * 2.5;
+      this.sprite.scale = instance.volume * 3;
 
       if (instance.pitch) {
         this.sprite.y = (0.5-this.normalizePitch(instance.pitch)) * totalHeight;
@@ -33,7 +31,6 @@ export class AudioParticle extends Phaser.GameObjects.Container {
     rect.setAngle(angle[action]);
     rect.x = x;
     rect.y = Math.max(rect.y, rect.height * 0.5);
-    console.log(action,'arrow', rect.x, rect.y);
 
     this.scene.tweens.add({
       targets: rect,

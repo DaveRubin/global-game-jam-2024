@@ -27,7 +27,7 @@ export default class GameScene extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.RIGHT
     );
 
-    this.isKeys = false;
+    this.isKeys = true;
     this.isPingPong = true;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
@@ -78,11 +78,11 @@ export default class GameScene extends Phaser.Scene {
       new Electricy(this, 0, 0, 4, this.invertWorldY(27), 0, 4),
       new Electricy(this, 0, 0, 5, this.invertWorldY(27), 0, 4),
       new Electricy(this, 0, 0, 6, this.invertWorldY(27), 0, 4),
-      new Electricy(this, 0, 0, 2, this.invertWorldY(26), 0, 4),
-      new Electricy(this, 0, 0, 3, this.invertWorldY(26), 0, 4),
-      new Electricy(this, 0, 0, 4, this.invertWorldY(26), 0, 4),
-      new Electricy(this, 0, 0, 5, this.invertWorldY(26), 0, 4),
-      new Electricy(this, 0, 0, 6, this.invertWorldY(26), 0, 4),
+      new Electricy(this, 0, 0, 2, this.invertWorldY(25), 0, 4),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(25), 0, 4),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(25), 0, 4),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(25), 0, 4),
+      new Electricy(this, 0, 0, 6, this.invertWorldY(25), 0, 4),
 
       new Pit(this, 0, 0, 1, this.invertWorldY(36)),
       new Pit(this, 0, 0, 2, this.invertWorldY(36)),
@@ -150,8 +150,6 @@ export default class GameScene extends Phaser.Scene {
       new Pit(this, 0, 0, 7, this.invertWorldY(17)),
       new Pit(this, 0, 0, 1, this.invertWorldY(17)),
       
-      new Coin(this, 0, 0, 4, this.invertWorldY(37)),
-      new Coin(this, 0, 0, 4, this.invertWorldY(36)),
       new Coin(this, 0, 0, 4, this.invertWorldY(35)),
       new Coin(this, 0, 0, 2, this.invertWorldY(33)),
       new Coin(this, 0, 0, 2, this.invertWorldY(31)),
@@ -241,6 +239,14 @@ export default class GameScene extends Phaser.Scene {
         this.character.right();
         this.characterX += 1;
       }
+    }
+
+    if (this.stage.isWin(this.characterX, this.characterY)) {
+      this.character.isAlive = false;
+      this.time.delayedCall(2000, () => {
+        this.scene.start('you-win');
+      });
+      this.character.jump(-1)
     }
     //console.log('moved to ', this.characterX, this.invertWorldY(this.characterY));
   }

@@ -78,9 +78,14 @@ export class AudioView extends Phaser.GameObjects.Container {
   }
 
   getCurrentBar() {
-    return this.bars.find(
-      (bar) => Math.abs(this.scene.scale.gameSize.width / 2 - bar.x) < 32
-    );
+    return this.bars.reduce((lowest, current) => {
+      // If the current item has a lower value than the lowest found so far, update lowest
+      if (Math.abs(this.scene.scale.gameSize.width / 2 - current.x) < Math.abs(this.scene.scale.gameSize.width / 2 - lowest.x)) {
+          return current;
+      } else {
+          return lowest;
+      }
+    }, this.bars[0]);
   }
 
   createBackground() {
