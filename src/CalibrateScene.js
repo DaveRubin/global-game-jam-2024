@@ -62,7 +62,7 @@ export default class CalibrateScene extends Phaser.Scene {
     getNextStage() {
         this.stage = this.stages.shift();
         if (this.stage == null) {
-            
+
             Heartbeat.finishCalibrate(this.workOnPitches());
             this.character.destroy();
             this.time.delayedCall(1000, () => {
@@ -79,9 +79,9 @@ export default class CalibrateScene extends Phaser.Scene {
             return;
         }
         console.log('registered', instance.pitch, instance.volume, JSON.stringify(this.pitches));
-        const window = new Phaser.Math.Vector2(instance.pitch-this.pitchBuffer, instance.pitch+this.pitchBuffer);
-        for(let pitch of this.pitches) {
-            if ((window.x < pitch.window.x && window.y > pitch.window.x) || 
+        const window = new Phaser.Math.Vector2(instance.pitch - this.pitchBuffer, instance.pitch + this.pitchBuffer);
+        for (let pitch of this.pitches) {
+            if ((window.x < pitch.window.x && window.y > pitch.window.x) ||
                 (window.x < pitch.window.y && window.y > pitch.window.y)) {
                 this.waitingForPitch = true;
                 this.instructionText.text = 'too similar, try again';
