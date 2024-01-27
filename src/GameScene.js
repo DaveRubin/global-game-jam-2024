@@ -67,6 +67,14 @@ export default class GameScene extends Phaser.Scene {
     this.worldContainer.x += 32;
     this.worldContainer.y += 6 - 32 * (this.stage.length - 10);
 
+    const enemy = this.add.rectangle(0, 0, 32, 32, 0xff0000);
+    this.positionAnything(enemy, 2, 2);
+    this.worldContainer = this.add.container(0, 0);
+    this.worldContainer.x += 16;
+    this.worldContainer.y += 6;
+    this.worldContainer.add(enemy);
+>>>>>>> 1a4f096035b5d8b9ade21fad9d97828c7b5638c5
+
     const startingPoint = this.stage.getStartingPoint();
     this.characterY = startingPoint.y;
     this.characterX = startingPoint.x;
