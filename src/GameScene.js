@@ -47,9 +47,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
     this.beatDebugRect.alpha = 0;
-    const foreground = new Foreground(this, 0, 0);
 
-    this.worldContainer.add(foreground);
     const obstacles = [
       new Electricy(this, 0, 0, 1, 6, 1, 4),
       new Electricy(this, 0, 0, 2, 6, 1, 4),
@@ -77,6 +75,9 @@ export default class GameScene extends Phaser.Scene {
       this.obstacles.push(obstacle);
     }
     this.character.jump();
+    const foreground = new Foreground(this, 0, 0);
+
+    this.worldContainer.add(foreground);
   }
 
   update(time, delta) {
