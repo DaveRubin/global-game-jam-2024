@@ -9,40 +9,61 @@ export default class YouWinScene extends Phaser.Scene {
     create() {
 
         const baseY = this.scale.gameSize.height / 2;
-        const container = this.add.container(this.scale.gameSize.width / 2, baseY);
-        const donny = this.add.sprite(0, 0, "character", "Ending-1");
-        const loser = this.add.sprite(0, 0, "character", "Ending-2");
+        const container = this.add.container(this.scale.gameSize.width / 2, baseY + 16);
+        const donny = this.add.sprite(0, 0, "character", "win");
+        const button = this.add.sprite(0, 0, "character", "button");
+        const pressed = this.add.sprite(0, 0, "character", "button_pressed");
+        pressed.alpha = 0;
+        pressed.setInteractive().on('pointerup', () => {
+            pressed.alpha = 0;
+            button.alpha = 1;
+            this.scene.start('game');
+        });
+        button.setInteractive().on('pointerdown', () => {
+
+            pressed.alpha = 1;
+            button.alpha = 0;
+        }).on('pointerup', () => {
+
+
+            pressed.alpha = 0;
+            button.alpha = 1;
+            this.scene.start('game');
+        })
         container.add(donny);
-        container.add(loser);
+        container.add(button);
+        container.add(pressed);
+        // container.add(loser);
         this.time.addEvent({
             delay: 10,
             callback: () => {
-                donny.x = (2) + 2 * Math.sin(this.time.now / 100);
-                donny.y = (2) + 2 * Math.sin((this.time.now + 200) / 100);
+                donny.x = (2) + 2 * Math.sin(this.time.now / 200);
+                donny.y = (2) + 2 * Math.sin((this.time.now + 200) / 200);
 
-                loser.y = (20) + 20 * Math.sin((this.time.now + 200) / 500);
-                loser.angle = 10 * Math.sin((this.time.now + 700) / 500);
             },
             loop: true
         });
 
-        // const loseText = this.add.text(0, 0, 'LOSER!', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-        // loseText.originX = loseText.originY = 0.5;
-        // loseText.x = this.scale.gameSize.width / 2 - loseText.width / 2;
-        // loseText.y = 50;
+        const particlesEngine = this.add.particles("character");
 
-        const buttonContainer = this.add.container(this.scale.gameSize.width / 2, this.scale.gameSize.height / 2);
-        const buttonRect = this.add.rectangle(0, 0, 100, 50, 0xaa00bb);
-        const buttonText = this.add.text(0, 0, 'Try again', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-
-        buttonContainer.add([buttonRect, buttonText]);
-        buttonText.x -= buttonText.width / 2;
-        buttonText.y -= buttonText.height / 2;
-
-        buttonRect.setInteractive();
-
-        buttonRect.on('pointerdown', () => {
-            this.scene.start('game');
+        this.emitter = particlesEngine.createEmitter({
+            frame: "dollar",
+            emitZone: {
+                //  create new Phaser.Geom.Rectangle ref here and make it wide as the screen
+                source: new Phaser.Geom.Rectangle(0, -200, this.scale.gameSize.width, 200),
+            },
+            x: 0,
+            y: 0,
+            quantity: 1,
+            frequency: 100,
+            lifespan: 2000,
+            angle: { min: 0, max: 180 },
+            speed: { min: 10, max: 10 },
+            scale: { start: 0.5, end: 0.5 },
+            opacity: { start: 1, end: 1 },
+            rotate: { start: 0, end: -180 },
+            gravityY: 200,
+            // blendMode: "ADD",
         });
     }
 

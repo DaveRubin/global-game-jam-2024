@@ -31,19 +31,40 @@ export default class YouLoseScene extends Phaser.Scene {
         // loseText.x = this.scale.gameSize.width / 2 - loseText.width / 2;
         // loseText.y = 50;
 
-        const buttonContainer = this.add.container(this.scale.gameSize.width / 2, this.scale.gameSize.height / 2);
-        const buttonRect = this.add.rectangle(0, 0, 100, 50, 0xaa00bb);
-        const buttonText = this.add.text(0, 0, 'Try again', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-
-        buttonContainer.add([buttonRect, buttonText]);
-        buttonText.x -= buttonText.width / 2;
-        buttonText.y -= buttonText.height / 2;
-
-        buttonRect.setInteractive();
-
-        buttonRect.on('pointerdown', () => {
+        const buttonContainer = this.add.container(this.scale.gameSize.width / 2, this.scale.gameSize.height / 2 + 16);
+        const button = this.add.sprite(0, 0, "character", "button");
+        const pressed = this.add.sprite(0, 0, "character", "button_pressed");
+        pressed.alpha = 0;
+        pressed.setInteractive().on('pointerup', () => {
+            pressed.alpha = 0;
+            button.alpha = 1;
             this.scene.start('game');
         });
+        button.setInteractive().on('pointerdown', () => {
+
+            pressed.alpha = 1;
+            button.alpha = 0;
+        }).on('pointerup', () => {
+
+
+            pressed.alpha = 0;
+            button.alpha = 1;
+            this.scene.start('game');
+        })
+        buttonContainer.add(button);
+        buttonContainer.add(pressed);
+        // const buttonRect = this.add.rectangle(0, 0, 100, 50, 0xaa00bb);
+        // const buttonText = this.add.text(0, 0, 'Try again', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+
+        // buttonContainer.add([buttonRect, buttonText]);
+        // buttonText.x -= buttonText.width / 2;
+        // buttonText.y -= buttonText.height / 2;
+
+        // buttonRect.setInteractive();
+
+        // buttonRect.on('pointerdown', () => {
+        //     this.scene.start('game');
+        // });
     }
 
 }
