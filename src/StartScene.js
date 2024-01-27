@@ -19,7 +19,7 @@ export default class StartScene extends Phaser.Scene {
         this.startButton.x = this.scale.gameSize.width/2;
         this.startButton.y = 200;
         this.startButton.setInteractive();
-        this.startButton.on('pointerdown', () => {
+        this.startButton.on('pointerup', () => {
             if (!this.isClick) {
                 return;
             }

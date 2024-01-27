@@ -20,8 +20,8 @@ export default class CalibrateScene extends Phaser.Scene {
     create() {
 
         this.stages = [
-            'up',
             'left',
+            'up',
             'right'
         ];
 
@@ -128,11 +128,11 @@ export default class CalibrateScene extends Phaser.Scene {
         if (!this.waitingForPitch) {
             return;
         }
-        if (action !== this.stage) {
-            Object.values(this.signs).forEach(s => s.visible = false);
-            this.signs.try_again.visible = true;
-            return;
-        }
+        // if (action !== this.stage) {
+        //     Object.values(this.signs).forEach(s => s.visible = false);
+        //     this.signs.try_again.visible = true;
+        //     return;
+        // }
 
         this.createArrowOnPitch(this.stage, instance.pitch);
         this.cameras.main.shake(450);
