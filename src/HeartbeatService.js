@@ -10,7 +10,10 @@ class EventEmitter extends EventTarget {
 class HeartbeatService {
   total;
   onSuccess;
+
   eventEmitter = new EventEmitter();
+  onSuccessCalibrate;
+
   isCalibrating = false;
 
   constructor() {
@@ -68,6 +71,7 @@ class HeartbeatService {
         } else if (this.inputAction) {
           this.currentAction = this.inputAction;
           this.onSuccess?.(this.currentAction);
+          this.onSuccessCalibrate?.();
           this.skipBeat = true;
         }
       }
@@ -91,8 +95,11 @@ class HeartbeatService {
     }
 
     if (this.isCalibrating) {
-      this.calibrate();
-      return null;
+      if (instance.pitch) {
+        return "calibrate";
+      } else {
+        return null;
+      }
     }
 
     for (let action of this.actions) {
@@ -105,30 +112,14 @@ class HeartbeatService {
     }
     return null;
   }
-  calibrate() {
-    if (this.latestCalibratedBeat === this.beatCount) {
-      return;
-    }
-    if (!instance.pitch) {
-      return;
-    }
-    this.latestCalibratedBeat = this.beatCount;
-    const list = ["up", "left", "right"];
-    for (let action of list) {
-      if (this.actions.map((x) => x.name).includes(action)) {
-        continue;
-      }
-      this.actions.push({
-        name: action,
-        window: new Phaser.Math.Vector2(
-          instance.pitch - 100,
-          instance.pitch + 100
-        ),
-      });
-      break;
-    }
-    console.log("calibrating", JSON.stringify(this.actions));
-    this.isCalibrating = list.length !== this.actions.length;
+  startCalibrate() {
+    Heartbeat.isCalibrating = true;
+  }
+  finishCalibrate(actions) {
+    this.actions = actions;
+    Heartbeat.isCalibrating = false;
+    Heartbeat.onSuccessCalibrate = null;
+    console.log("finished calibrating", JSON.stringify(actions));
   }
 }
 

@@ -3,6 +3,8 @@ import Phaser from "phaser";
 import GameScene from "./GameScene";
 import MainMenuScene from "./MainMenuScene";
 import YouLoseScene from "./YouLoseScene";
+import CalibrateScene from "./CalibrateScene";
+import LoaderScene from "./LoaderScene";
 
 const config = {
   type: Phaser.AUTO,
@@ -15,7 +17,7 @@ const config = {
       gravity: { y: 200 },
     },
   },
-  scene: [GameScene, YouLoseScene, MainMenuScene],
+  scene: [LoaderScene, CalibrateScene, MainMenuScene, GameScene, YouLoseScene],
 };
 
 export default new Phaser.Game(config);
