@@ -7,7 +7,7 @@ const normalizePitch = (pitch) => {
 };
 
 export class AudioParticle extends Phaser.GameObjects.Container {
-  constructor(scene, x = 0, y = 0) {
+  constructor(scene, x = 0, y = 0, totalHeight) {
     super(scene, x, y);
 
     const sprite = scene.add.sprite(0, 0, "flares", "red");
@@ -18,7 +18,7 @@ export class AudioParticle extends Phaser.GameObjects.Container {
       sprite.scale = instance.volume * 2;
 
       if (instance.pitch) {
-        sprite.y = (0.5-normalizePitch(instance.pitch)) * 75;
+        sprite.y = (0.5-normalizePitch(instance.pitch)) * totalHeight;
       }
     });
   }

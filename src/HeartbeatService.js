@@ -16,7 +16,8 @@ class HeartbeatService {
     this.lastInputAction = null;
 
     this.beatTempo = 750;
-    this.offset = 0.35;
+    this.startOffset = 0.35;
+    this.endOffset = 0.35;
 
     this.actions = [
       { window: new Phaser.Math.Vector2(0, 200), name: "up" },
@@ -71,8 +72,9 @@ class HeartbeatService {
   }
   calculateBeat(now) {
     this.module = now % this.beatTempo;
-    const isWithinBeatWindow = this.normalizedModule < this.offset || this.normalizedModule > 1-this.offset;
     this.normalizedModule = this.module / this.beatTempo;
+    console.log('normnalized', this.normalizedModule, 'now', now, 'module', this.module);
+    const isWithinBeatWindow = this.normalizedModule > (1 - this.startOffset) || this.normalizedModule < this.endOffset;
 
     return isWithinBeatWindow;
   }
