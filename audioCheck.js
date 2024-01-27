@@ -1,3 +1,30 @@
+function getNoteFromFrequency(frequency) {
+  const A4 = 440;
+  const A4_NOTE_NUMBER = 69; // MIDI note number for A4
+  const noteNumber = 12 * Math.log2(frequency / A4) + A4_NOTE_NUMBER;
+
+  const octave = Math.floor(noteNumber / 12) - 1;
+  const noteNames = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
+  const noteName = noteNames[noteNumber % 12];
+  const fullNoteName = noteName + octave;
+  return { fullNoteName, noteNumber };
+}
+
+// Example usage:
+
 const getVolume = (audioData) => {
   let sum = 0;
   for (let i = 0; i < audioData.length; i++) {
@@ -88,7 +115,9 @@ class AudioManager {
       }
 
       const pitchData = getYinPitch(inputData, audioContext.sampleRate);
-      that.pitch = pitchData.probability ? pitchData.pitch : null;
+      that.pitch = pitchData.probability
+        ? getNoteFromFrequency(pitchData.pitch).noteNumber
+        : null;
     };
   }
 }
