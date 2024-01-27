@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import constants from "./Constants";
+import { DARK_COLOR } from "./colors";
 
 const nameToIndex = {
   floor: 0,
@@ -31,11 +32,30 @@ const gameMap = [
   ["wall-l", "floor", "floor", "hole", "floor", "floor", "wall-l"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
   ["wall-l", "floor", "floor", "plsp", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-l", "floor", "wall-r", "floor", "floor", "floor", "wall-l"],
+  ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
+];
+
+const above = [
+  ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
+  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
   ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
 ];
 
 const preMadeLevel = gameMap.map((row) => row.map((x) => nameToIndex[x]));
+const elements = above.map((row) =>
+  row.map((x) => (x === "floor" ? undefined : nameToIndex[x]))
+);
 
 export class StageBackground extends Phaser.GameObjects.Container {
   scene;
@@ -48,8 +68,38 @@ export class StageBackground extends Phaser.GameObjects.Container {
     super(scene, x, y);
     this.scene = scene;
 
+    const layer = this.createLayer(scene, "base", preMadeLevel);
+    const layer2 = this.createLayer(scene, "base2", elements);
+
+    this.layer = layer;
+    this.layer2 = layer2;
+
+    const rect = scene.add.rectangle(
+      scene.scale.gameSize.width / 2,
+      scene.scale.gameSize.height / 2,
+      scene.scale.gameSize.width,
+      scene.scale.gameSize.height,
+      DARK_COLOR
+    );
+    rect.alpha = 0.6;
+    rect.blendMode = Phaser.BlendModes.MULTIPLY;
+
+    const sprite = scene.add.sprite(
+      0,
+      scene.scale.gameSize.height / 2,
+      "flares",
+      "red"
+    );
+    sprite.scale = 3;
+    sprite.alpha = 0.4;
+    sprite.blendMode = Phaser.BlendModes.ADD;
+    this.add(sprite);
+    // keep it always
+    // this.add(rect);
+  }
+  createLayer(scene, name, data) {
     const map = scene.make.tilemap({
-      data: preMadeLevel,
+      data,
       tileWidth: 34,
       tileHeight: 34,
     });
@@ -57,14 +107,14 @@ export class StageBackground extends Phaser.GameObjects.Container {
     const tiles = map.addTilesetImage("stage");
     const layer = map.createLayer(0, tiles, 0, 0);
     layer.scale = 32 / 34;
-    const layerHeight = layer.layer.heightInPixels * layer.scale;
     this.floor = 10;
+    const layerHeight = layer.layer.heightInPixels * layer.scale;
     layer.y = -layerHeight + scene.scale.gameSize.height - this.floor + 32;
     layer.x =
       scene.scale.gameSize.width / 2 -
       (layer.layer.widthInPixels * layer.scale) / 2;
-    this.add(layer);
-    this.layer = layer;
+    console.log("🚀 ~ StageBackground ~ createLayer ~ layer:", layer.width);
+    return layer;
   }
 
   findOnGameMap(predicate) {

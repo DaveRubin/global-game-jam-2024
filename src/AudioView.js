@@ -2,9 +2,7 @@ import Phaser from "phaser";
 import { instance } from "../audioCheck";
 import { Heartbeat } from "./HeartbeatService";
 import { AudioParticle } from "./AudioParticle";
-
-const DARK_COLOR = 0x220022;
-const LIGHT_COLOR = 0x440044;
+import { DARK_COLOR, LIGHT_COLOR } from "./colors";
 
 export class AudioView extends Phaser.GameObjects.Container {
   initialY = 0;
@@ -103,7 +101,7 @@ export class AudioView extends Phaser.GameObjects.Container {
   moveBars(scene, time, delta) {
     this.bars.forEach((bar, i) => {
       const targetX = 0 + this.barDistance * i;
-      const startX = this.barDistance * (i+1);
+      const startX = this.barDistance * (i + 1);
       bar.x = Phaser.Math.Linear(startX, targetX, Heartbeat.normalizedModule);
     });
   }

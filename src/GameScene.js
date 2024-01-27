@@ -135,16 +135,19 @@ export default class GameScene extends Phaser.Scene {
       if (this.characterY > 5 && this.characterY < this.stage.rows - 1) {
         this.character.up(true);
         this.moveScreen(this.worldContainer, 0, 32);
+        this.moveScreen(this.stage, 0, 32);
         this.moveScreen(this.stage.layer, 0, 32);
+        this.moveScreen(this.stage.layer2, 0, 32);
       } else {
         this.character.up();
       }
     } else {
-      console.log("top", 5, "bottom", this.stage.rows - 2, "characterY");
       if (this.characterY > 4 && this.characterY < this.stage.rows - 2) {
         this.character.down(true);
         this.moveScreen(this.worldContainer, 0, -32);
+        this.moveScreen(this.stage, 0, -32);
         this.moveScreen(this.stage.layer, 0, -32);
+        this.moveScreen(this.stage.layer2, 0, -32);
       } else {
         this.character.down();
       }
