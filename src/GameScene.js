@@ -14,10 +14,12 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const loops = this.sound.getAll('loop');
-    if (!loops.length) {
+    if (!this.sound.getAll('loop').length) {
       this.sound.play("loop", { loop: true, volume: 0.1,  });
     }
+    const loops = this.sound.getAll('loop');
+    loops[0].play();
+    loops[0].volume = 0.1;
 
     this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.downKey = this.input.keyboard.addKey(

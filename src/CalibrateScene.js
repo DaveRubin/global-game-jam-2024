@@ -152,7 +152,7 @@ export default class CalibrateScene extends Phaser.Scene {
         Object.values(this.signs).forEach(s => s.visible = false);
         this.signs.great.visible = true;
 
-        this.time.delayedCall(500, () => {
+        this.time.delayedCall(1500, () => {
             this.character.x = this.scale.gameSize.width * 0.25;
             this.character.y = this.characterYPosition;
             this.waitingForPitch = true;
@@ -161,13 +161,36 @@ export default class CalibrateScene extends Phaser.Scene {
     }
 
     createArrowOnPitch(stage, pitch) {
-        const arrow = this.add.sprite(0, 0, 'arrow');
-        arrow.setAngle(this.arrowAngles[stage]);
-        arrow.x = this.scale.gameSize.width / 2 - arrow.width / 2 + this.random(-10, 10);
-
+        const rect = this.add.sprite(0, 0, 'arrow');
+        rect.x = this.scale.gameSize.width / 2 - rect.width / 2 + this.random(-10, 10) - 45;
         const normalized = this.audioView.audioParticles.normalizePitch(pitch);
-        arrow.y = this.scale.gameSize.height * (1 - normalized);
-    }
+        rect.y = 140;
+        rect.alpha = 0.9;
+        rect.scale = 0;
+        rect.blendMode = "ADD";
+        const angle = {
+          'up': 90,
+          'left': 0,
+          'right': 180,
+        };
+        rect.setAngle(angle[stage]);
+    
+        this.tweens.add({
+          targets: rect,
+          scale: 1.75,
+          ease: Phaser.Math.Easing.Bounce.Out,
+          duration: 400,
+        });
+        this.time.delayedCall(1500, () => {
+          this.tweens.add({
+            targets: rect,
+            scale: 0,
+            ease: Phaser.Math.Easing.Sine.InOut,
+            duration: 300,
+            onComplete: () => rect.destroy()
+          });
+        });
+      }
 
     random(min, max) {
         return Math.floor(Math.random() * max) + min;
