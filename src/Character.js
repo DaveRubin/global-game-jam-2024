@@ -12,6 +12,7 @@ export class Character extends Phaser.GameObjects.Container {
     this.createAnimation("front", "Front ", 1, 3, 2);
     this.createAnimation("side", "Side ", 1, 8, 50);
     this.createAnimation("jump", "Jump ", 1, 5, 15);
+    this.createAnimation("deathElectric", "DeathElectric ", 1, 4, 12);
 
     this.sprite = scene.add.sprite(16, 16);
     this.sprite.originY = this.sprite.originX = 1;
@@ -20,8 +21,7 @@ export class Character extends Phaser.GameObjects.Container {
     this.add(this.sprite);
     this.isAlive = true;
 
-    this.scene.events.on('update', () => {
-    });
+    this.scene.events.on("update", () => {});
   }
 
   up(isStand) {
@@ -67,10 +67,16 @@ export class Character extends Phaser.GameObjects.Container {
       onStart: () => {
         this.isMoving = true;
       },
-      onComplete: () => {
-        onComplete?.();
-      },
+      onComplete,
     });
+  }
+  electrocute(onComplete) {
+    this.isAlive = false;
+    this.isMoving = true;
+    this.sprite.play("deathElectric");
+    setTimeout(() => {
+      onComplete();
+    }, 2000);
   }
 
   move(x = 0, y = 0) {

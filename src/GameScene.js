@@ -28,7 +28,7 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.isKeys = true;
-    this.isPingPong = true;
+    // this.isPingPong = true;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
@@ -148,7 +148,7 @@ export default class GameScene extends Phaser.Scene {
           obstacle.collect();
         } else {
           if (obstacle.kill) {
-            this.handleLandingOnPit();
+            this.handleLandingOnPit(obstacle.kill);
           }
         }
       }
@@ -212,8 +212,13 @@ export default class GameScene extends Phaser.Scene {
     sprite.y = position.y;
   }
 
-  handleLandingOnPit() {
-    this.character.fallOnPit(() => this.goToYouLose());
+  handleLandingOnPit(kind) {
+    if (kind === "PIT") {
+      this.character.fallOnPit(() => this.goToYouLose());
+      return;
+    } else {
+      this.character.electrocute(() => this.goToYouLose());
+    }
   }
 
   goToYouLose() {

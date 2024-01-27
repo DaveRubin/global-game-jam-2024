@@ -1,9 +1,17 @@
 import Phaser from "phaser";
 import { instance } from "../audioCheck";
 
+class EventEmitter extends EventTarget {
+  dispatch(eventName, additionalData = {}) {
+    this.dispatchEvent(new CustomEvent(eventName, { detail: additionalData }));
+  }
+}
+
 class HeartbeatService {
   total;
   onSuccess;
+
+  eventEmitter = new EventEmitter();
   onSuccessCalibrate;
 
   isCalibrating = false;
@@ -34,6 +42,9 @@ class HeartbeatService {
 
     if (!this.hadBeat && this.isBeat) {
       this.beatCount++;
+      this.eventEmitter.dispatch("beat", { beatCount: this.beatCount });
+      // create an event emitter and emit an event
+      // this.events.emit("beat", this.beatCount);
     }
 
     this.inputAction = this.getCurrentAction();
@@ -84,13 +95,12 @@ class HeartbeatService {
 
     if (this.isCalibrating) {
       if (instance.pitch) {
-        return 'calibrate';
-      }
-      else {
+        return "calibrate";
+      } else {
         return null;
       }
     }
-    
+
     for (let action of this.actions) {
       if (
         action.window.x < instance.pitch &&
@@ -108,7 +118,7 @@ class HeartbeatService {
     this.actions = actions;
     Heartbeat.isCalibrating = false;
     Heartbeat.onSuccessCalibrate = null;
-    console.log('finished calibrating', JSON.stringify(actions));
+    console.log("finished calibrating", JSON.stringify(actions));
   }
 }
 
