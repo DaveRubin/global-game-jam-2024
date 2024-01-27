@@ -23,7 +23,7 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatTempo = 1000;
+    this.beatTempo = 900;
     this.startOffset = 0.35;
     this.endOffset = 0.35;
 
@@ -89,7 +89,7 @@ class HeartbeatService {
     return isWithinBeatWindow;
   }
   getCurrentAction() {
-    if (instance.volume < 0.03) {
+    if (instance.volume < 0.075) {
       return null;
     }
 

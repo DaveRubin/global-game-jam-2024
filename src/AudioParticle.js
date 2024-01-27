@@ -11,7 +11,7 @@ export class AudioParticle extends Phaser.GameObjects.Container {
     this.add(sprite);
 
     scene.events.on("update", () => {
-      sprite.scale = instance.volume * 2;
+      sprite.scale = instance.volume * 2.5;
 
       if (instance.pitch) {
         sprite.y = (0.5-this.normalizePitch(instance.pitch)) * totalHeight;

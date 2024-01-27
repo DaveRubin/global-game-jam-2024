@@ -27,8 +27,8 @@ export default class GameScene extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.RIGHT
     );
 
-    this.isKeys = true;
-    this.isPingPong = false;
+    this.isKeys = false;
+    this.isPingPong = true;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 

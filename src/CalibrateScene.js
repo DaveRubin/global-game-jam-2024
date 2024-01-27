@@ -9,7 +9,7 @@ export default class CalibrateScene extends Phaser.Scene {
 
     arrowAngles = {
         'up': 90,
-        'lefft': 0,
+        'left': 0,
         'right': 180,
     }
 
@@ -21,7 +21,7 @@ export default class CalibrateScene extends Phaser.Scene {
 
         this.stages = [
             'up',
-            'lefft',
+            'left',
             'right'
         ];
 
@@ -85,7 +85,7 @@ export default class CalibrateScene extends Phaser.Scene {
         const baseX = this.scale.gameSize.width / 2;
 
         const hello = this.add.sprite(baseX, baseY, "character", "intro_hello");
-        const lefft = this.add.sprite(baseX, baseY, "character", "intro_lefft");
+        const left = this.add.sprite(baseX, baseY, "character", "intro_lefft");
         const up = this.add.sprite(baseX, baseY, "character", "intro_up");
         const right = this.add.sprite(baseX, baseY, "character", "intro_right");
         const great = this.add.sprite(baseX, baseY, "character", "intro_great");
@@ -93,7 +93,7 @@ export default class CalibrateScene extends Phaser.Scene {
 
         this.signs = {
             hello,
-            lefft,
+            left,
             up,
             right,
             great,
@@ -155,7 +155,7 @@ export default class CalibrateScene extends Phaser.Scene {
         if (this.stage === 'up') {
             this.character.up();
         }
-        else if (this.stage === 'lefft') {
+        else if (this.stage === 'left') {
             this.character.left();
         }
         else {

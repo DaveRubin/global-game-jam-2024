@@ -131,7 +131,7 @@ class AudioManager {
           interpolator.clear();
           that.pitch = null;
         }
-        if (that.volume > 0.03) {
+        if (that.volume > 0.075) {
           //console.log('pitch', that.pitch, 'volumn', that.volume);
         }
     };

@@ -39,7 +39,8 @@ export class StageBackground extends Phaser.GameObjects.Container {
           return;
         }
         //create a sprite with name from 'stage' atlas ,at x*32,y * 32
-        const sprite = scene.add.sprite(x * 32, y * 32, "stage", name);
+        const sprite = name === 'arrow' ? scene.add.sprite(x * 32, y * 32, "character", name)
+          : scene.add.sprite(x * 32, y * 32, "stage", name);
         //add the sprite to the container
         container.add(sprite);
       });
@@ -85,6 +86,6 @@ export class StageBackground extends Phaser.GameObjects.Container {
   }
 
   getStartingPoint() {
-    return new Phaser.Math.Vector2(4, this.rows - 3);
+    return new Phaser.Math.Vector2(4, this.rows - 21);
   }
 }
