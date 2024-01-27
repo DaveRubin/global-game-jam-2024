@@ -38,7 +38,7 @@ export default class CalibrateScene extends Phaser.Scene {
         this.instructionText = this.add.text(0, 125, '');
 
         this.characterYPosition = this.scale.gameSize.height - 60;
-        this.character = new Character(this, this.scale.gameSize.width / 2, this.characterYPosition, 100);
+        this.character = new Character(this, this.scale.gameSize.width * 0.25, this.characterYPosition, 100);
         this.add.existing(this.character);
         this.character.jump();
         this.character.onMoveComplete = () => this.onCharacterMoveComplete();
@@ -152,7 +152,7 @@ export default class CalibrateScene extends Phaser.Scene {
         if (this.stage === 'up') {
             this.character.up();
         }
-        else if (this.stage === 'left') {
+        else if (this.stage === 'lefft') {
             this.character.left();
         }
         else {
@@ -166,7 +166,7 @@ export default class CalibrateScene extends Phaser.Scene {
         this.signs.great.visible = true;
 
         this.time.delayedCall(500, () => {
-            this.character.x = this.scale.gameSize.width / 2;
+            this.character.x = this.scale.gameSize.width * 0.25;
             this.character.y = this.characterYPosition;
             this.waitingForPitch = true;
             this.getNextStage();
