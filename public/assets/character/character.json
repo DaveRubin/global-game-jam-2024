@@ -661,27 +661,6 @@
 					}
 				},
 				{
-					"filename": "chair",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 32,
-						"h": 32
-					},
-					"spriteSourceSize": {
-						"x": 5,
-						"y": 0,
-						"w": 24,
-						"h": 28
-					},
-					"frame": {
-						"x": 477,
-						"y": 562,
-						"w": 24,
-						"h": 28
-					}
-				},
-				{
 					"filename": "lamp",
 					"rotated": false,
 					"trimmed": true,
@@ -697,7 +676,7 @@
 					},
 					"frame": {
 						"x": 477,
-						"y": 592,
+						"y": 562,
 						"w": 23,
 						"h": 28
 					}
@@ -766,6 +745,27 @@
 					}
 				},
 				{
+					"filename": "chair",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 0,
+						"w": 26,
+						"h": 30
+					},
+					"frame": {
+						"x": 210,
+						"y": 493,
+						"w": 26,
+						"h": 30
+					}
+				},
+				{
 					"filename": "Front 1",
 					"rotated": false,
 					"trimmed": true,
@@ -781,7 +781,7 @@
 					},
 					"frame": {
 						"x": 210,
-						"y": 493,
+						"y": 525,
 						"w": 25,
 						"h": 31
 					}
@@ -802,28 +802,7 @@
 					},
 					"frame": {
 						"x": 210,
-						"y": 493,
-						"w": 25,
-						"h": 31
-					}
-				},
-				{
-					"filename": "Front 2",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 32,
-						"h": 32
-					},
-					"spriteSourceSize": {
-						"x": 4,
-						"y": 1,
-						"w": 25,
-						"h": 31
-					},
-					"frame": {
-						"x": 210,
-						"y": 526,
+						"y": 525,
 						"w": 25,
 						"h": 31
 					}
@@ -850,7 +829,7 @@
 					}
 				},
 				{
-					"filename": "Side 1",
+					"filename": "Front 2",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -865,7 +844,28 @@
 					},
 					"frame": {
 						"x": 194,
-						"y": 559,
+						"y": 558,
+						"w": 25,
+						"h": 31
+					}
+				},
+				{
+					"filename": "Side 1",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 1,
+						"w": 25,
+						"h": 31
+					},
+					"frame": {
+						"x": 221,
+						"y": 558,
 						"w": 25,
 						"h": 31
 					}
@@ -885,8 +885,8 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 194,
-						"y": 559,
+						"x": 221,
+						"y": 558,
 						"w": 25,
 						"h": 31
 					}
@@ -906,8 +906,8 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 194,
-						"y": 559,
+						"x": 221,
+						"y": 558,
 						"w": 25,
 						"h": 31
 					}
@@ -927,8 +927,8 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 221,
-						"y": 559,
+						"x": 194,
+						"y": 591,
 						"w": 25,
 						"h": 31
 					}
@@ -948,31 +948,10 @@
 						"h": 31
 					},
 					"frame": {
-						"x": 194,
-						"y": 592,
+						"x": 221,
+						"y": 591,
 						"w": 25,
 						"h": 31
-					}
-				},
-				{
-					"filename": "Front 3",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 32,
-						"h": 32
-					},
-					"spriteSourceSize": {
-						"x": 4,
-						"y": 2,
-						"w": 25,
-						"h": 30
-					},
-					"frame": {
-						"x": 221,
-						"y": 592,
-						"w": 25,
-						"h": 30
 					}
 				},
 				{
@@ -994,6 +973,27 @@
 						"y": 600,
 						"w": 191,
 						"h": 88
+					}
+				},
+				{
+					"filename": "Front 3",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 2,
+						"w": 25,
+						"h": 30
+					},
+					"frame": {
+						"x": 194,
+						"y": 624,
+						"w": 25,
+						"h": 30
 					}
 				},
 				{
@@ -1170,6 +1170,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:d9969fad09a41e7dc2a5a976b8d56f19:189f2a4213069acc6fd6ae1e78707c91:42e475aa4a03af306bdc7acb5ff91d19$"
+		"smartupdate": "$TexturePacker:SmartUpdate:42d71f5867faecfc0e50591edbec65d8:8b1cf1b5a0f244e04fc2e8e5a8ebfb1d:42e475aa4a03af306bdc7acb5ff91d19$"
 	}
 }
