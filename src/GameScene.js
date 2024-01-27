@@ -4,6 +4,7 @@ import { Heartbeat } from "./HeartbeatService";
 import { Character } from "./Character";
 import { Electricy } from "./Electricy";
 import { Pit } from "./Pit";
+import { Coin } from "./Coin";
 import { StageBackground } from "./StageBackground";
 
 export default class GameScene extends Phaser.Scene {
@@ -12,6 +13,18 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
+
+    this.load.spritesheet({
+      key: 'coin',
+      url: 'assets/coins/coins.png',
+      frameConfig: {
+          frameWidth: 16,
+          frameHeight: 16,
+          startFrame: 0,
+          endFrame: 20
+      }
+    });
+
     this.load.atlas({
       key: "temp",
       textureURL: "assets/spriteMap/Legends_Level_A.png",
@@ -92,6 +105,9 @@ export default class GameScene extends Phaser.Scene {
       new Pit(this, 0, 0, 4, 7),
       new Pit(this, 0, 0, 3, 8),
       new Pit(this, 0, 0, 4, 8),
+
+      new Coin(this, 0, 0, 1, 9),
+      new Coin(this, 0, 0, 2, 7),
     ];
     this.obstacles = [];
     for(let obstacle of obstacles) {
@@ -164,13 +180,19 @@ export default class GameScene extends Phaser.Scene {
       if (!this.character.isAlive) {
         return;
       }
-      if (obstacle.kill) {
-        if (obstacle.worldX === this.characterX && obstacle.worldY === this.characterY) {
-          this.handleLandingOnPit();
+      if (obstacle.worldX === this.characterX && obstacle.worldY === this.characterY) {
+        if (obstacle instanceof Coin) {
+          obstacle.collect();
+        }
+        else {
+          if (obstacle.kill) {
+            this.handleLandingOnPit();
+          }
         }
       }
     }
   }
+
 
   moveVertical(direction) {
     if (direction > 0) {

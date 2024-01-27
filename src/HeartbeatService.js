@@ -5,7 +5,7 @@ class HeartbeatService {
   total;
   onSuccess;
 
-  isCalibrating = true;
+  isCalibrating = false;
 
   constructor() {
     this.beatCount = 0;
