@@ -110,7 +110,7 @@ export default class GameScene extends Phaser.Scene {
       new Coin(this, 0, 0, 2, 7),
     ];
     this.obstacles = [];
-    for(let obstacle of obstacles) {
+    for (let obstacle of obstacles) {
       this.add.existing(obstacle);
       this.worldContainer.add(obstacle);
       obstacle.x = 32 * obstacle.worldX;
@@ -174,9 +174,9 @@ export default class GameScene extends Phaser.Scene {
   }
 
   obstacleMovement() {
-    for(let obstacle of this.obstacles) {
+    for (let obstacle of this.obstacles) {
       obstacle.beat?.(Heartbeat.beatCount);
-      
+
       if (!this.character.isAlive) {
         return;
       }
@@ -199,15 +199,16 @@ export default class GameScene extends Phaser.Scene {
       if (this.characterY > 5 && this.characterY < this.stage.rows - 1) {
         this.character.up(true);
         this.moveScreen(this.worldContainer, 0, 32);
+        this.moveScreen(this.stage, 0, 32);
         this.moveScreen(this.stage.layer, 0, 32);
       } else {
         this.character.up();
       }
     } else {
-      console.log("top", 5, "bottom", this.stage.rows - 2, "characterY");
       if (this.characterY > 4 && this.characterY < this.stage.rows - 2) {
         this.character.down(true);
         this.moveScreen(this.worldContainer, 0, -32);
+        this.moveScreen(this.stage, 0, -32);
         this.moveScreen(this.stage.layer, 0, -32);
       } else {
         this.character.down();
@@ -242,7 +243,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   positionCharacter(sprite, x, y) {
-    const position = new Phaser.Math.Vector2((x) * 32, (8 - y + this.characterY) * 32);
+    const position = new Phaser.Math.Vector2(
+      x * 32,
+      (8 - y + this.characterY) * 32
+    );
     sprite.x = position.x;
     sprite.y = position.y;
   }
