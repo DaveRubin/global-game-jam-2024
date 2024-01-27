@@ -44,6 +44,6 @@ export default class LoaderScene extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start('game');
+        this.scene.start('calibrate');
     }
 }

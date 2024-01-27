@@ -43,7 +43,7 @@ export default class GameScene extends Phaser.Scene {
     this.add.existing(this.character);
     this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
-    new AudioView(this, 0, 0);
+    new AudioView(this, 0, 0, 32 * 3);
 
     this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
     this.beatDebugRect.alpha = 0;

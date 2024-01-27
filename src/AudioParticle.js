@@ -1,10 +1,6 @@
 import Phaser from "phaser";
 import { instance } from "../audioCheck";
 
-const normalizePitch = (pitch) => {
-  const clampedValue = Math.min(Math.max(pitch, 45), 65);
-  return (clampedValue - 45) / 20;
-};
 
 export class AudioParticle extends Phaser.GameObjects.Container {
   constructor(scene, x = 0, y = 0, totalHeight) {
@@ -18,8 +14,16 @@ export class AudioParticle extends Phaser.GameObjects.Container {
       sprite.scale = instance.volume * 2;
 
       if (instance.pitch) {
-        sprite.y = (0.5-normalizePitch(instance.pitch)) * totalHeight;
+        sprite.y = (0.5-this.normalizePitch(instance.pitch)) * totalHeight;
       }
     });
   }
+
+  normalizePitch = (pitch) => {
+    const min = 45;
+    const max = 75;
+    const range = max - min;
+    const clampedValue = Math.min(Math.max(pitch, min), max);
+    return (clampedValue - min) / range;
+  };
 }

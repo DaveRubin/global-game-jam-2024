@@ -9,7 +9,7 @@ export class AudioView extends Phaser.GameObjects.Container {
   targetY = 0;
   bars = [];
 
-  constructor(scene, x = 0, y = 0) {
+  constructor(scene, x = 0, y = 0, height) {
     super(scene, x, y);
     this.initialY = y;
     this.scene = scene;
@@ -17,7 +17,7 @@ export class AudioView extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     instance.init();
 
-    this.height = 96;//this.scene.scale.gameSize.height;
+    this.height = height;
     this.particalHeight = this.height * 0.9;
     this.barDistance = this.height;
     this.barWidth = 2;
@@ -54,13 +54,13 @@ export class AudioView extends Phaser.GameObjects.Container {
       this.moveBars(scene, time, delta);
     });
     this.createHidingGradients();
-    const particle = new AudioParticle(
+    this.audioParticles = new AudioParticle(
       scene,
       this.scene.scale.gameSize.width / 2,
       this.height / 2,
       this.particalHeight
     );
-    this.add(particle);
+    this.add(this.audioParticles);
   }
 
   successOnCurrent() {
@@ -102,6 +102,9 @@ export class AudioView extends Phaser.GameObjects.Container {
   };
 
   moveBars(scene, time, delta) {
+    if (!this.scene) {
+      return;
+    }
     this.bars.forEach((bar, i) => {
       const targetX = 0 + this.barDistance * (i - 2) + this.scene.scale.gameSize.width/2;
       const startX = this.barDistance * (i - 1) + this.scene.scale.gameSize.width/2;

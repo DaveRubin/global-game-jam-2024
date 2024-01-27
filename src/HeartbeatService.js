@@ -56,7 +56,7 @@ class HeartbeatService {
       if (this.skipBeat) {
         this.currentAction = null;
       } else {
-        if (this.lastInputAction) {
+        if (!this.isCalibrating && this.lastInputAction) {
           this.skipBeat = true;
         } else if (this.inputAction) {
           this.currentAction = this.inputAction;
@@ -73,13 +73,12 @@ class HeartbeatService {
   calculateBeat(now) {
     this.module = now % this.beatTempo;
     this.normalizedModule = this.module / this.beatTempo;
-    console.log('normnalized', this.normalizedModule, 'now', now, 'module', this.module);
     const isWithinBeatWindow = this.normalizedModule > (1 - this.startOffset) || this.normalizedModule < this.endOffset;
 
     return isWithinBeatWindow;
   }
   getCurrentAction() {
-    if (instance.volume < 0.1) {
+    if (instance.volume < 0.03) {
       return null;
     }
 

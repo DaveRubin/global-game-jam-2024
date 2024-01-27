@@ -1,6 +1,6 @@
 import { SmoothInterpolator } from './src/SmoothInterpolator.js'
 
-const interpolator = new SmoothInterpolator(20);
+const interpolator = new SmoothInterpolator(15);
 
 function getNoteFromFrequency(frequency) {
   const A4 = 440;
@@ -131,7 +131,7 @@ class AudioManager {
           interpolator.clear();
           that.pitch = null;
         }
-        if (that.volume > 0.1) {
+        if (that.volume > 0.03) {
           console.log('pitch', that.pitch, 'volumn', that.volume);
         }
     };
