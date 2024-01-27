@@ -10,6 +10,7 @@ class EventEmitter extends EventTarget {
 class HeartbeatService {
   total;
   onSuccess;
+  onSuccessLine;
 
   eventEmitter = new EventEmitter();
   onSuccessCalibrate;
@@ -27,11 +28,7 @@ class HeartbeatService {
     this.startOffset = 0.35;
     this.endOffset = 0.35;
 
-    this.actions = [
-      { window: new Phaser.Math.Vector2(0, 200), name: "up" },
-      { window: new Phaser.Math.Vector2(200, 400), name: "left" },
-      { window: new Phaser.Math.Vector2(400, 600), name: "right" },
-    ];
+    this.actions = [{"name":"left","window":{"x":0,"y":51.76910971401293}},{"name":"right","window":{"x":51.76910971401293,"y":63.732644862303005}},{"name":"up","window":{"x":63.732644862303005,"y":1000}}]
   }
 
   update(now) {
@@ -72,7 +69,8 @@ class HeartbeatService {
         } else if (this.inputAction) {
           this.currentAction = this.inputAction;
           this.onSuccess?.(this.currentAction);
-          this.onSuccessCalibrate?.();
+          this.onSuccessLine?.(this.currentAction);
+          this.onSuccessCalibrate?.(this.currentAction);
           this.skipBeat = true;
         }
       }
