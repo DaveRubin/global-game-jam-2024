@@ -118,6 +118,10 @@ class AudioManager {
       that.pitch = pitchData.probability
         ? getNoteFromFrequency(pitchData.pitch).noteNumber
         : null;
+
+        if (that.volume > 0.1) {
+          console.log('pitch', that.pitch, 'volumn', that.volume);
+        }
     };
   }
 }

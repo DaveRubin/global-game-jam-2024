@@ -15,7 +15,7 @@ export default class LoaderScene extends Phaser.Scene {
             endFrame: 20
         }
       });
-  
+
       this.load.atlas({
         key: "temp",
         textureURL: "assets/spriteMap/Legends_Level_A.png",
@@ -38,11 +38,8 @@ export default class LoaderScene extends Phaser.Scene {
         atlasURL: "public/assets/stage.json",
       });
   
-      this.load.image("sky", "assets/skies/space3.png");
-      this.load.image("logo", "assets/Untitled.png");
-      this.load.image("red", "assets/particles/red.png");
-  
       this.load.image("tiles", "assets/Tilemap.png");
+      this.load.image("arrow", "assets/arrow.png");
       this.load.audio("loop", "loop.mp3");
     }
 

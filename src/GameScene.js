@@ -13,48 +13,6 @@ export default class GameScene extends Phaser.Scene {
     super("game");
   }
 
-  preload() {
-    this.load.spritesheet({
-      key: "coin",
-      url: "assets/coins/coins.png",
-      frameConfig: {
-        frameWidth: 16,
-        frameHeight: 16,
-        startFrame: 0,
-        endFrame: 20,
-      },
-    });
-
-    this.load.atlas({
-      key: "temp",
-      textureURL: "assets/spriteMap/Legends_Level_A.png",
-      atlasURL: "assets/spriteMap/Legends_Level_A.json",
-    });
-    this.load.atlas({
-      key: "character",
-      textureURL: "assets/character/character.png",
-      atlasURL: "assets/character/character.json",
-    });
-    this.load.atlas({
-      key: "flares",
-      textureURL: "public/assets/particles/flares.png",
-      atlasURL: "public/assets/particles/flares.json",
-    });
-
-    this.load.atlas({
-      key: "stage",
-      textureURL: "public/assets/stage.png",
-      atlasURL: "public/assets/stage.json",
-    });
-
-    this.load.image("sky", "assets/skies/space3.png");
-    this.load.image("logo", "assets/Untitled.png");
-    this.load.image("red", "assets/particles/red.png");
-
-    this.load.image("tiles", "assets/Tilemap.png");
-    this.load.audio("loop", "loop.mp3");
-  }
-
   create() {
     this.sound.play("loop", { loop: true });
 
@@ -70,7 +28,7 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.isKeys = true;
-    this.isPingPong = false;
+    this.isPingPong = true;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
@@ -82,6 +40,7 @@ export default class GameScene extends Phaser.Scene {
     this.characterX = startingPoint.x;
 
     this.character = new Character(this, 0, 0, 100);
+    this.add.existing(this.character);
     this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
     new AudioView(this, 0, 0);
