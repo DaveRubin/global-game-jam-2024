@@ -55,6 +55,7 @@ export default class CalibrateScene extends Phaser.Scene {
         const baseY = this.scale.gameSize.height / 2;
         const container = this.add.container(this.scale.gameSize.width / 2, baseY);
         const donny = this.add.sprite(0, 0, "character", "intro_donnie");
+
         const donny2 = this.add.sprite(0, 0, "character", "intro_donnie2");
         donny2.visible = false;
         container.add(donny);
