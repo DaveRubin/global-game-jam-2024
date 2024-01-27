@@ -28,6 +28,8 @@ export default class CalibrateScene extends Phaser.Scene {
         this.pitchBuffer = 2.5;
 
         this.audioView = new AudioView(this, 0, 0, this.scale.gameSize.height);
+        this.audioView.scaleX = 1.5;
+        this.audioView.x = -this.scale.gameSize.width / 2;
         Heartbeat.startCalibrate();
 
 
