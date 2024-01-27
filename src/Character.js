@@ -18,8 +18,10 @@ export class Character extends Phaser.GameObjects.Container {
     this.moveSpeed = moveSpeed;
 
     this.add(this.sprite);
-    this.jump();
     this.isAlive = true;
+
+    this.scene.events.on('update', () => {
+    });
   }
 
   up(isStand) {

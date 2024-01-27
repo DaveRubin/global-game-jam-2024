@@ -80,8 +80,7 @@ class HeartbeatService {
     }
 
     if (this.isCalibrating) {
-      this.calibrate();
-      return null;
+      return 'calibrate';
     }
     
     for (let action of this.actions) {

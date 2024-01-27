@@ -18,7 +18,7 @@ export class AudioParticle extends Phaser.GameObjects.Container {
       sprite.scale = instance.volume * 2;
 
       if (instance.pitch) {
-        sprite.y = normalizePitch(instance.pitch) * -96 + 96 / 2;
+        sprite.y = (0.5-normalizePitch(instance.pitch)) * 75;
       }
     });
   }

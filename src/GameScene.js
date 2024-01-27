@@ -58,7 +58,6 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.sound.play("loop", { loop: true });
 
-    this.moveSpeed = 100;
     this.upKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.downKey = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.DOWN
@@ -82,7 +81,7 @@ export default class GameScene extends Phaser.Scene {
     this.characterY = startingPoint.y;
     this.characterX = startingPoint.x;
 
-    this.character = new Character(this, 0, 0, this.moveSpeed);
+    this.character = new Character(this, 0, 0, 100);
     this.add.existing(this.character);
     this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
@@ -117,6 +116,7 @@ export default class GameScene extends Phaser.Scene {
       obstacle.y = 32 * obstacle.worldY;
       this.obstacles.push(obstacle);
     }
+    this.character.jump();
   }
 
   update(time, delta) {
@@ -238,7 +238,7 @@ export default class GameScene extends Phaser.Scene {
       x: target.x + x,
       y: target.y + y,
       ease: "Power1",
-      duration: this.moveSpeed,
+      duration: this.character.moveSpeed,
     });
   }
 
