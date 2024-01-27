@@ -1,10 +1,16 @@
 import Phaser from "phaser";
 import { instance } from "../audioCheck";
 
+class EventEmitter extends EventTarget {
+  dispatch(eventName, additionalData = {}) {
+    this.dispatchEvent(new CustomEvent(eventName, { detail: additionalData }));
+  }
+}
+
 class HeartbeatService {
   total;
   onSuccess;
-
+  eventEmitter = new EventEmitter();
   isCalibrating = false;
 
   constructor() {
@@ -32,6 +38,9 @@ class HeartbeatService {
 
     if (!this.hadBeat && this.isBeat) {
       this.beatCount++;
+      this.eventEmitter.dispatch("beat", { beatCount: this.beatCount });
+      // create an event emitter and emit an event
+      // this.events.emit("beat", this.beatCount);
     }
 
     this.inputAction = this.getCurrentAction();
@@ -69,7 +78,9 @@ class HeartbeatService {
   }
   calculateBeat(now) {
     this.module = now % this.beatTempo;
-    const isWithinBeatWindow = this.normalizedModule < this.offset || this.normalizedModule > 1-this.offset;
+    const isWithinBeatWindow =
+      this.normalizedModule < this.offset ||
+      this.normalizedModule > 1 - this.offset;
     this.normalizedModule = this.module / this.beatTempo;
 
     return isWithinBeatWindow;
@@ -83,7 +94,7 @@ class HeartbeatService {
       this.calibrate();
       return null;
     }
-    
+
     for (let action of this.actions) {
       if (
         action.window.x < instance.pitch &&
@@ -102,15 +113,21 @@ class HeartbeatService {
       return;
     }
     this.latestCalibratedBeat = this.beatCount;
-    const list = ['up', 'left', 'right'];
-    for(let action of list) {
-      if (this.actions.map(x => x.name).includes(action)) {
+    const list = ["up", "left", "right"];
+    for (let action of list) {
+      if (this.actions.map((x) => x.name).includes(action)) {
         continue;
       }
-      this.actions.push({name: action, window: new Phaser.Math.Vector2(instance.pitch - 100, instance.pitch + 100)})
+      this.actions.push({
+        name: action,
+        window: new Phaser.Math.Vector2(
+          instance.pitch - 100,
+          instance.pitch + 100
+        ),
+      });
       break;
     }
-    console.log('calibrating', JSON.stringify(this.actions));
+    console.log("calibrating", JSON.stringify(this.actions));
     this.isCalibrating = list.length !== this.actions.length;
   }
 }
