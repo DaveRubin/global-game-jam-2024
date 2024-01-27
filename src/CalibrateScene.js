@@ -7,6 +7,12 @@ import { instance } from "../audioCheck";
 
 export default class CalibrateScene extends Phaser.Scene {
 
+    arrowAngles = {
+        'up': 90,
+        'left': 0,
+        'right': 180,
+    }
+
     constructor() {
         super('calibrate');
     }
@@ -19,9 +25,9 @@ export default class CalibrateScene extends Phaser.Scene {
             'right'
         ];
 
-        this.pitchBuffer = 2;
+        this.pitchBuffer = 2.5;
 
-        new AudioView(this, 0, 0);
+        this.audioView = new AudioView(this, 0, 0, this.scale.gameSize.height);
         Heartbeat.startCalibrate();
 
         this.add.text(0, 100, 'this is little donny');
@@ -37,11 +43,6 @@ export default class CalibrateScene extends Phaser.Scene {
         Heartbeat.onSuccessCalibrate = () => this.onHeartbeatCalibrateSuccess();
 
         this.getNextStage();
-
-        const arrow = this.add.sprite(0, 0, 'arrow');
-        arrow.rotation = 0;
-        arrow.x = this.scale.gameSize.width / 2 - arrow.width / 2;
-        arrow.y = 20;
     }
 
     update(time, delta) {
@@ -88,6 +89,7 @@ export default class CalibrateScene extends Phaser.Scene {
             }
         }
 
+        this.createArrowOnPitch(this.stage, instance.pitch);
         this.pitches.push({ name: this.stage, window: window });
         if (this.stage === 'up') {
             this.character.up();
@@ -110,6 +112,19 @@ export default class CalibrateScene extends Phaser.Scene {
             this.waitingForPitch = true;
             this.getNextStage();
         });
+    }
+
+    createArrowOnPitch(stage, pitch) {
+        const arrow = this.add.sprite(0, 0, 'arrow');
+        arrow.setAngle(this.arrowAngles[stage]);
+        arrow.x = this.scale.gameSize.width / 2 - arrow.width / 2 + this.random(-10, 10);
+
+        const normalized = this.audioView.audioParticles.normalizePitch(pitch);
+        arrow.y = this.scale.gameSize.height * (1 - normalized);
+    }
+
+    random(min, max) {
+        return Math.floor(Math.random() * max) + min;
     }
 
 }

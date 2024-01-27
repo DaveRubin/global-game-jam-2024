@@ -1,3 +1,7 @@
+import { SmoothInterpolator } from './src/SmoothInterpolator.js'
+
+const interpolator = new SmoothInterpolator(15);
+
 function getNoteFromFrequency(frequency) {
   const A4 = 440;
   const A4_NOTE_NUMBER = 69; // MIDI note number for A4
@@ -115,11 +119,19 @@ class AudioManager {
       }
 
       const pitchData = getYinPitch(inputData, audioContext.sampleRate);
-      that.pitch = pitchData.probability
+      const pitch = pitchData.probability
         ? getNoteFromFrequency(pitchData.pitch).noteNumber
         : null;
 
-        if (that.volume > 0.1) {
+        if (pitch != null) {
+
+          interpolator.addPitchValue(pitch);
+          that.pitch = interpolator.smoothInterpolate();
+        } else {
+          interpolator.clear();
+          that.pitch = null;
+        }
+        if (that.volume > 0.03) {
           console.log('pitch', that.pitch, 'volumn', that.volume);
         }
     };
