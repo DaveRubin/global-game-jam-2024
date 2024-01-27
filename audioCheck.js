@@ -132,7 +132,7 @@ class AudioManager {
           that.pitch = null;
         }
         if (that.volume > 0.03) {
-          console.log('pitch', that.pitch, 'volumn', that.volume);
+          //console.log('pitch', that.pitch, 'volumn', that.volume);
         }
     };
   }

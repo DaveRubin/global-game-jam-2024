@@ -18,7 +18,7 @@ export default class LoaderScene extends Phaser.Scene {
     this.load.atlas({
       key: "temp",
       textureURL: "assets/spriteMap/Legends_Level_A.png",
-      atlasURL: "assets/spriteMap/Legends_Level_A.json",
+      atlasURL: "assets/spriteMap/Legends__A.json",
     });
     this.load.atlas({
       key: "character",

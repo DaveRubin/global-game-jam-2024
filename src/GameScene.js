@@ -28,7 +28,7 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.isKeys = true;
-    // this.isPingPong = true;
+    this.isPingPong = false;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
 
@@ -49,22 +49,122 @@ export default class GameScene extends Phaser.Scene {
     this.beatDebugRect.alpha = 0;
 
     const obstacles = [
-      new Electricy(this, 0, 0, 1, 6, 1, 4),
-      new Electricy(this, 0, 0, 2, 6, 1, 4),
-      new Electricy(this, 0, 0, 1, 7, 2, 4),
-      new Electricy(this, 0, 0, 2, 7, 2, 4),
-      new Electricy(this, 0, 0, 1, 8, 3, 4),
-      new Electricy(this, 0, 0, 2, 8, 3, 4),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(16), 0, 5),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(16), 0, 5),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(16), 0, 5),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(15), 1, 5),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(15), 1, 5),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(15), 1, 5),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(14), 2, 5),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(14), 2, 5),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(14), 2, 5),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(13), 3, 5),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(13), 3, 5),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(13), 3, 5),
 
-      new Pit(this, 0, 0, 3, 6),
-      new Pit(this, 0, 0, 4, 6),
-      new Pit(this, 0, 0, 3, 7),
-      new Pit(this, 0, 0, 4, 7),
-      new Pit(this, 0, 0, 3, 8),
-      new Pit(this, 0, 0, 4, 8),
+      new Electricy(this, 0, 0, 2, this.invertWorldY(29), 2, 4),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(29), 2, 4),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(29), 2, 4),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(29), 2, 4),
+      new Electricy(this, 0, 0, 6, this.invertWorldY(29), 2, 4),
+      new Electricy(this, 0, 0, 2, this.invertWorldY(30), 2, 4),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(30), 2, 4),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(30), 2, 4),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(30), 2, 4),
+      new Electricy(this, 0, 0, 6, this.invertWorldY(30), 2, 4),
 
-      new Coin(this, 0, 0, 1, 9),
-      new Coin(this, 0, 0, 2, 7),
+      new Electricy(this, 0, 0, 2, this.invertWorldY(27), 0, 4),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(27), 0, 4),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(27), 0, 4),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(27), 0, 4),
+      new Electricy(this, 0, 0, 6, this.invertWorldY(27), 0, 4),
+      new Electricy(this, 0, 0, 2, this.invertWorldY(26), 0, 4),
+      new Electricy(this, 0, 0, 3, this.invertWorldY(26), 0, 4),
+      new Electricy(this, 0, 0, 4, this.invertWorldY(26), 0, 4),
+      new Electricy(this, 0, 0, 5, this.invertWorldY(26), 0, 4),
+      new Electricy(this, 0, 0, 6, this.invertWorldY(26), 0, 4),
+
+      new Pit(this, 0, 0, 1, this.invertWorldY(36)),
+      new Pit(this, 0, 0, 2, this.invertWorldY(36)),
+      new Pit(this, 0, 0, 3, this.invertWorldY(36)),
+      new Pit(this, 0, 0, 5, this.invertWorldY(36)),
+      new Pit(this, 0, 0, 6, this.invertWorldY(36)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(36)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(35)),
+      new Pit(this, 0, 0, 2, this.invertWorldY(35)),
+      new Pit(this, 0, 0, 3, this.invertWorldY(35)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(34)),
+      new Pit(this, 0, 0, 2, this.invertWorldY(34)),
+      new Pit(this, 0, 0, 3, this.invertWorldY(34)),
+      new Pit(this, 0, 0, 4, this.invertWorldY(34)),
+      new Pit(this, 0, 0, 5, this.invertWorldY(34)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(33)),
+      new Pit(this, 0, 0, 6, this.invertWorldY(32)),
+      new Pit(this, 0, 0, 5, this.invertWorldY(32)),
+      new Pit(this, 0, 0, 4, this.invertWorldY(32)),
+      new Pit(this, 0, 0, 2, this.invertWorldY(32)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(32)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(35)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(34)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(33)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(32)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(31)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(30)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(29)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(28)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(31)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(30)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(29)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(28)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(26)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(27)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(26)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(27)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(25)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(24)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(25)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(24)),
+      new Pit(this, 0, 0, 4, this.invertWorldY(23)),
+      new Pit(this, 0, 0, 4, this.invertWorldY(22)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(23)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(22)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(23)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(22)),
+      new Coin(this, 0, 0, 6, this.invertWorldY(23)),
+      new Coin(this, 0, 0, 5, this.invertWorldY(22)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(21)),
+      new Coin(this, 0, 0, 3, this.invertWorldY(20)),
+      new Coin(this, 0, 0, 2, this.invertWorldY(19)),
+      new Coin(this, 0, 0, 1, this.invertWorldY(18)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(21)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(21)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(20)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(20)),
+      new Pit(this, 0, 0, 4, this.invertWorldY(20)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(19)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(19)),
+      new Pit(this, 0, 0, 4, this.invertWorldY(19)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(19)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(18)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(18)),
+      new Pit(this, 0, 0, 7, this.invertWorldY(17)),
+      new Pit(this, 0, 0, 1, this.invertWorldY(17)),
+      
+      new Coin(this, 0, 0, 4, this.invertWorldY(37)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(36)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(35)),
+      new Coin(this, 0, 0, 2, this.invertWorldY(33)),
+      new Coin(this, 0, 0, 2, this.invertWorldY(31)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(28)),
+      new Coin(this, 0, 0, 6, this.invertWorldY(26)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(16)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(15)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(14)),
+      new Coin(this, 0, 0, 4, this.invertWorldY(13)),
+      new Coin(this, 0, 0, 2, this.invertWorldY(10)),
+      new Coin(this, 0, 0, 1, this.invertWorldY(9)),
+      new Coin(this, 0, 0, 1, this.invertWorldY(7)),
+      new Coin(this, 0, 0, 2, this.invertWorldY(6)),
     ];
     this.obstacles = [];
     for (let obstacle of obstacles) {
@@ -78,16 +178,26 @@ export default class GameScene extends Phaser.Scene {
     const foreground = new Foreground(this, 0, 0);
 
     this.worldContainer.add(foreground);
+
+    const target = this.characterY + 3;
+    this.worldContainer.y += 32 * this.invertWorldY(target);
+    this.stage.layer.y += 32 * this.invertWorldY(target);
+    this.stage.y += 32 * this.invertWorldY(target);
+  }
+
+  invertWorldY(y) {
+    return this.stage.rows - y;
   }
 
   update(time, delta) {
+    Heartbeat.update(time);
+    this.beatDebugRect.fillColor = Heartbeat.isBeat ? 0xff0000 : 0xffffff;
+    this.obstacleMovement();
+
     if (!this.character.isAlive) {
       return;
     }
-    Heartbeat.update(time);
 
-    this.beatDebugRect.fillColor = Heartbeat.isBeat ? 0xff0000 : 0xffffff;
-    this.obstacleMovement();
     this.characterMovement();
   }
 
@@ -132,6 +242,7 @@ export default class GameScene extends Phaser.Scene {
         this.characterX += 1;
       }
     }
+    console.log('moved to ', this.characterX, this.invertWorldY(this.characterY));
   }
 
   obstacleMovement() {
@@ -139,7 +250,7 @@ export default class GameScene extends Phaser.Scene {
       obstacle.beat?.(Heartbeat.beatCount);
 
       if (!this.character.isAlive) {
-        return;
+        continue;
       }
       if (
         obstacle.worldX === this.characterX &&
@@ -191,7 +302,7 @@ export default class GameScene extends Phaser.Scene {
     if (y > this.stage.rows - 2) {
       return false;
     }
-    return this.stage.isWall(x, y);
+    return !this.stage.isWall(x, y);
   }
 
   moveScreen(target, x = 0, y = 0) {
