@@ -1,24 +1,12 @@
 import Phaser from "phaser";
 import constants from "./Constants";
 import { DARK_COLOR } from "./colors";
-
-const nameToIndex = {
-  floor: 0,
-  "wall-l": 1,
-  hole: 2,
-  plsp: 2,
-  "wall-ml": 3,
-  "wall-m": 4,
-  "wall-mr": 5,
-  "wall-mm": 6,
-  "wall-r": 7,
-  "wall-b": 8,
-  "wall-bl": 9,
-  "wall-tm": 10,
-  "wall-br": 11,
-  "wall-tl": 12,
-  "wall-tr": 13,
-};
+// @ts-ignore
+import stage from "../public/assets/stage.json";
+const nameToIndex = {};
+Object.entries(stage.textures[0].frames).forEach(([key, value]) => {
+  nameToIndex[value.filename] = Number(key);
+});
 
 const gameMap = [
   ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
@@ -30,7 +18,7 @@ const gameMap = [
   ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
   ["floor", "floor", "hole", "hole", "hole", "floor", "floor"],
   ["floor", "floor", "floor", "hole", "floor", "floor", "floor"],
-  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "metal", "floor", "floor", "floor", "floor"],
   ["floor", "floor", "floor", "plsp", "floor", "floor", "floor"],
   ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
   ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
