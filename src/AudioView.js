@@ -9,12 +9,13 @@ export class AudioView extends Phaser.GameObjects.Container {
   targetY = 0;
   bars = [];
 
-  constructor(scene, x = 0, y = 0, height) {
+  constructor(scene, x = 0, y = 0, height, isShowBoom = true) {
     super(scene, x, y);
     this.initialY = y;
     this.scene = scene;
 
     scene.add.existing(this);
+    this.isShowBoom = isShowBoom;
     instance.init();
 
     this.height = height;
@@ -23,8 +24,14 @@ export class AudioView extends Phaser.GameObjects.Container {
     this.barWidth = 2;
     this.barSpeed = this.barDistance / Heartbeat.beatTempo;
     this.createBackground();
-    Heartbeat.onSuccess = () => {
+    Heartbeat.onSuccess = (action) => {
+      if (!this.isShowBoom) {
+        return;
+      }
       this.successOnCurrent();
+      const bar = this.getCurrentBar();
+      const targetX = bar ? bar.x : 0;
+      this.audioParticles.showArrow(action, targetX);
     };
     for (let i = 0; i < 3; i++) {
       const bar = scene.add.rectangle(0, this.height / 2, this.barWidth, this.height, 0xffffff);
@@ -64,12 +71,16 @@ export class AudioView extends Phaser.GameObjects.Container {
   }
 
   successOnCurrent() {
-    const bar = this.bars.find(
+    const bar = this.getCurrentBar();
+    if (bar) {
+      this.emitter.explode(7, bar.x, bar.y);
+    }
+  }
+
+  getCurrentBar() {
+    return this.bars.find(
       (bar) => Math.abs(this.scene.scale.gameSize.width / 2 - bar.x) < 32
     );
-    if (bar) {
-      this.emitter.explode(100, bar.x, bar.y);
-    }
   }
 
   createBackground() {

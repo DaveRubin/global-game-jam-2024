@@ -242,7 +242,7 @@ export default class GameScene extends Phaser.Scene {
         this.characterX += 1;
       }
     }
-    console.log('moved to ', this.characterX, this.invertWorldY(this.characterY));
+    //console.log('moved to ', this.characterX, this.invertWorldY(this.characterY));
   }
 
   obstacleMovement() {
