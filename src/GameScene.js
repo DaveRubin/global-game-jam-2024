@@ -94,7 +94,7 @@ export default class GameScene extends Phaser.Scene {
       new Pit(this, 0, 0, 4, 8),
     ];
     this.obstacles = [];
-    for(let obstacle of obstacles) {
+    for (let obstacle of obstacles) {
       this.add.existing(obstacle);
       this.worldContainer.add(obstacle);
       obstacle.x = 32 * obstacle.worldX;
@@ -158,14 +158,17 @@ export default class GameScene extends Phaser.Scene {
   }
 
   obstacleMovement() {
-    for(let obstacle of this.obstacles) {
+    for (let obstacle of this.obstacles) {
       obstacle.beat?.(Heartbeat.beatCount);
-      
+
       if (!this.character.isAlive) {
         return;
       }
       if (obstacle.kill) {
-        if (obstacle.worldX === this.characterX && obstacle.worldY === this.characterY) {
+        if (
+          obstacle.worldX === this.characterX &&
+          obstacle.worldY === this.characterY
+        ) {
           this.handleLandingOnPit();
         }
       }
@@ -179,7 +182,6 @@ export default class GameScene extends Phaser.Scene {
         this.moveScreen(this.worldContainer, 0, 32);
         this.moveScreen(this.stage, 0, 32);
         this.moveScreen(this.stage.layer, 0, 32);
-        this.moveScreen(this.stage.layer2, 0, 32);
       } else {
         this.character.up();
       }
@@ -189,7 +191,6 @@ export default class GameScene extends Phaser.Scene {
         this.moveScreen(this.worldContainer, 0, -32);
         this.moveScreen(this.stage, 0, -32);
         this.moveScreen(this.stage.layer, 0, -32);
-        this.moveScreen(this.stage.layer2, 0, -32);
       } else {
         this.character.down();
       }
@@ -223,7 +224,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   positionCharacter(sprite, x, y) {
-    const position = new Phaser.Math.Vector2((x) * 32, (8 - y + this.characterY) * 32);
+    const position = new Phaser.Math.Vector2(
+      x * 32,
+      (8 - y + this.characterY) * 32
+    );
     sprite.x = position.x;
     sprite.y = position.y;
   }

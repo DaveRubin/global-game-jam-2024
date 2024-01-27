@@ -22,40 +22,37 @@ const nameToIndex = {
 
 const gameMap = [
   ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "plgo", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "hole", "hole", "hole", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "hole", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "floor", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "floor", "plsp", "floor", "floor", "wall-l"],
-  ["wall-l", "floor", "wall-r", "floor", "floor", "floor", "wall-l"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "plgo", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "hole", "hole", "hole", "floor", "floor"],
+  ["floor", "floor", "floor", "hole", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "plsp", "floor", "floor", "floor"],
+  ["floor", "floor", "floor", "floor", "floor", "floor", "floor"],
   ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
 ];
 
 const above = [
   ["wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-r", "wall-l"],
-  ["wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-r", "floor", "floor", "floor", "floor", "floor", "wall-l"],
+  ["wall-b", "wall-b", "wall-b", "wall-b", "wall-b", "wall-b", "wall-b"],
 ];
 
 const preMadeLevel = gameMap.map((row) => row.map((x) => nameToIndex[x]));
-const elements = above.map((row) =>
-  row.map((x) => (x === "floor" ? undefined : nameToIndex[x]))
-);
 
 export class StageBackground extends Phaser.GameObjects.Container {
   scene;
@@ -69,16 +66,16 @@ export class StageBackground extends Phaser.GameObjects.Container {
     this.scene = scene;
 
     const layer = this.createLayer(scene, "base", preMadeLevel);
-    const layer2 = this.createLayer(scene, "base2", elements);
 
     this.layer = layer;
-    this.layer2 = layer2;
-
+    const container = this.createContainer(scene);
+    this.add(container);
+    container.y = -64;
     const rect = scene.add.rectangle(
       scene.scale.gameSize.width / 2,
       scene.scale.gameSize.height / 2,
       scene.scale.gameSize.width,
-      scene.scale.gameSize.height,
+      scene.scale.gameSize.height * 2,
       DARK_COLOR
     );
     rect.alpha = 0.6;
@@ -93,9 +90,25 @@ export class StageBackground extends Phaser.GameObjects.Container {
     sprite.scale = 3;
     sprite.alpha = 0.4;
     sprite.blendMode = Phaser.BlendModes.ADD;
+
     this.add(sprite);
-    // keep it always
-    // this.add(rect);
+
+    this.add(rect);
+  }
+  createContainer(scene) {
+    const container = scene.add.container(0, 0);
+    above.forEach((row, y) => {
+      row.forEach((name, x) => {
+        if (name === "floor") {
+          return;
+        }
+        //create a sprite with name from 'stage' atlas ,at x*32,y * 32
+        const sprite = scene.add.sprite(x * 32, y * 32, "stage", name);
+        //add the sprite to the container
+        container.add(sprite);
+      });
+    });
+    return container;
   }
   createLayer(scene, name, data) {
     const map = scene.make.tilemap({
@@ -113,7 +126,6 @@ export class StageBackground extends Phaser.GameObjects.Container {
     layer.x =
       scene.scale.gameSize.width / 2 -
       (layer.layer.widthInPixels * layer.scale) / 2;
-    console.log("🚀 ~ StageBackground ~ createLayer ~ layer:", layer.width);
     return layer;
   }
 
