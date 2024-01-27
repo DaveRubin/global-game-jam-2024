@@ -52,8 +52,8 @@ const gameMap = [
 
 const above = [
   ["wall-l", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m", "wall-m"],
-  ["wall-l", "wall-tl", "wall-tm", "wall-tr", "floor", "wall-tl", "wall-tm", "wall-tr", "wall-r"],
-  ["wall-l", "wall-l", "wall-m", "wall-r", "plgo", "wall-l", "wall-m", "wall-r", "wall-r"],
+  ["wall-l", "wall-tl", "wall-tm", "wall-tr", "plgo", "wall-tl", "wall-tm", "wall-tr", "wall-r"],
+  ["wall-l", "wall-l", "wall-m", "wall-r", "arrow", "wall-l", "wall-m", "wall-r", "wall-r"],
   ["wall-l", "wall-bl", "wall-b", "wall-br", "floor", "wall-bl", "wall-b", "wall-br", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
@@ -82,7 +82,7 @@ const above = [
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "wall-tl", "wall-tm", "wall-tr", "floor", "floor", "wall-r"],
-  ["wall-l", "floor", "floor", "wall-l", "wall-m", "wall-r", "floor", "floor", "wall-r"],
+  ["wall-l", "arrow", "arrow", "wall-l", "wall-m", "wall-r", "arrow", "arrow", "wall-r"],
   ["wall-l", "floor", "floor", "wall-l", "wall-m", "wall-r", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "wall-bl", "wall-b", "wall-br", "floor", "floor", "wall-r"],
   ["wall-l", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall-r"],

@@ -115,7 +115,10 @@ export class Electricy extends Phaser.GameObjects.Container {
   }
 
   electrocute() {
-    return;
+    const distanceFromPlayer = Math.abs(this.worldY - this.scene.characterY);
+    if (distanceFromPlayer > 7) {
+      return;
+    }
     if (this.isAnimatingLightning) {
       return;
     }
