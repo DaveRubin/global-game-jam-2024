@@ -135,6 +135,7 @@ export default class CalibrateScene extends Phaser.Scene {
         }
 
         this.createArrowOnPitch(this.stage, instance.pitch);
+        this.cameras.main.shake(450);
         this.pitches.push({ name: this.stage, window: window });
         if (this.stage === 'up') {
             this.character.up();

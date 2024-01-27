@@ -49,6 +49,15 @@ export default class StartScene extends Phaser.Scene {
             this.loop = loops[0];
 
             this.tweens.add({
+                targets: this.logo,
+                y: this.logo.y + 20,
+                ease: Phaser.Math.Easing.Sine.InOut,
+                duration: 2000,
+                repeat: -1,
+                yoyo: true
+            });
+
+            this.tweens.add({
                 targets: this.startButton,
                 alpha: 1,
                 ease: Phaser.Math.Easing.Sine.InOut,
