@@ -173,9 +173,33 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">DeathElectric 1.png</key>
+            <key type="filename">DeathElectric 2.png</key>
+            <key type="filename">DeathElectric 3.png</key>
+            <key type="filename">DeathElectric 4.png</key>
+            <key type="filename">Electric1 1.png</key>
+            <key type="filename">Electric1 2.png</key>
+            <key type="filename">Electric1 3.png</key>
+            <key type="filename">Electric1 4.png</key>
+            <key type="filename">Electric1 5.png</key>
+            <key type="filename">Electric1 6.png</key>
+            <key type="filename">Electric1 7.png</key>
+            <key type="filename">Electric1 8.png</key>
+            <key type="filename">Electric2 1.png</key>
+            <key type="filename">Electric2 2.png</key>
+            <key type="filename">Electric2 3.png</key>
+            <key type="filename">Electric2 4.png</key>
+            <key type="filename">Electric2 5.png</key>
+            <key type="filename">Electric2 6.png</key>
+            <key type="filename">Electric2 7.png</key>
             <key type="filename">Front 1.png</key>
             <key type="filename">Front 2.png</key>
             <key type="filename">Front 3.png</key>
+            <key type="filename">Jump 1.png</key>
+            <key type="filename">Jump 2.png</key>
+            <key type="filename">Jump 3.png</key>
+            <key type="filename">Jump 4.png</key>
+            <key type="filename">Jump 5.png</key>
             <key type="filename">Side 1.png</key>
             <key type="filename">Side 2.png</key>
             <key type="filename">Side 3.png</key>
@@ -216,6 +240,30 @@
                     <filename>Side 6.png</filename>
                     <filename>Side 7.png</filename>
                     <filename>Side 8.png</filename>
+                    <filename>Jump 1.png</filename>
+                    <filename>Jump 2.png</filename>
+                    <filename>Jump 3.png</filename>
+                    <filename>Jump 4.png</filename>
+                    <filename>Jump 5.png</filename>
+                    <filename>Electric1 1.png</filename>
+                    <filename>Electric1 2.png</filename>
+                    <filename>Electric1 3.png</filename>
+                    <filename>Electric1 4.png</filename>
+                    <filename>Electric1 5.png</filename>
+                    <filename>Electric1 6.png</filename>
+                    <filename>Electric1 7.png</filename>
+                    <filename>Electric1 8.png</filename>
+                    <filename>Electric2 1.png</filename>
+                    <filename>Electric2 2.png</filename>
+                    <filename>Electric2 3.png</filename>
+                    <filename>Electric2 4.png</filename>
+                    <filename>Electric2 5.png</filename>
+                    <filename>Electric2 6.png</filename>
+                    <filename>Electric2 7.png</filename>
+                    <filename>DeathElectric 1.png</filename>
+                    <filename>DeathElectric 2.png</filename>
+                    <filename>DeathElectric 3.png</filename>
+                    <filename>DeathElectric 4.png</filename>
                 </array>
             </struct>
         </map>
