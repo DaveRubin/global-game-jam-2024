@@ -1,6 +1,5 @@
 import Phaser from "phaser";
 import constants from "./Constants";
-import { DARK_COLOR } from "./colors";
 // @ts-ignore
 import stage from "../public/assets/stage.json";
 const nameToIndex = {};
@@ -59,29 +58,6 @@ export class StageBackground extends Phaser.GameObjects.Container {
     const container = this.createContainer(scene);
     this.add(container);
     container.y = -64;
-    const rect = scene.add.rectangle(
-      scene.scale.gameSize.width / 2,
-      scene.scale.gameSize.height / 2,
-      scene.scale.gameSize.width,
-      scene.scale.gameSize.height * 2,
-      DARK_COLOR
-    );
-    rect.alpha = 0.6;
-    rect.blendMode = Phaser.BlendModes.MULTIPLY;
-
-    const sprite = scene.add.sprite(
-      0,
-      scene.scale.gameSize.height / 2,
-      "flares",
-      "red"
-    );
-    sprite.scale = 3;
-    sprite.alpha = 0.4;
-    sprite.blendMode = Phaser.BlendModes.ADD;
-
-    this.add(sprite);
-
-    this.add(rect);
   }
   createContainer(scene) {
     const container = scene.add.container(0, 0);
