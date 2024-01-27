@@ -39,7 +39,12 @@ export default class LoaderScene extends Phaser.Scene {
 
     this.load.image("tiles", "assets/Tilemap.png");
     this.load.image("arrow", "assets/arrow.png");
-    this.load.audio("loop", "loop.mp3");
+
+    this.load.audio("loop", "Mono/Monoschtrugel music loop.wav");
+    this.load.audio("coin-collect", "Mono/coin collect.wav");
+    this.load.audio("death-pit", "Mono/Fall into pit.wav");
+    this.load.audio("death-electric", "Mono/electric zap.wav");
+    this.load.audio("glow", "Mono/top glow shimmer.wav");
   }
 
   create() {

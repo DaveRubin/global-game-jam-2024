@@ -28,6 +28,7 @@ export class AudioView extends Phaser.GameObjects.Container {
       if (!this.isShowBoom) {
         return;
       }
+      this.scene.sound.play('glow', { volume: 0.05 });
       this.successOnCurrent();
       const bar = this.getCurrentBar();
       const targetX = bar ? bar.x : 0;

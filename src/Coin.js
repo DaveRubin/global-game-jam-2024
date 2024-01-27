@@ -30,6 +30,7 @@ export class Coin extends Phaser.GameObjects.Container {
         if (this.collected) {
             return;
         }
+        this.scene.sound.play('coin-collect', { volume: 0.05 });
         this.collected = true;
 
         this.scene.tweens.add({

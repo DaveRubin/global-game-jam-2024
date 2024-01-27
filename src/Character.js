@@ -57,6 +57,7 @@ export class Character extends Phaser.GameObjects.Container {
 
   fallOnPit(onComplete) {
     this.isAlive = false;
+    this.scene.sound.play('death-pit', { volume: 0.1 });
     this.sprite.play("front");
     this.scene.tweens.add({
       targets: this,
@@ -73,6 +74,7 @@ export class Character extends Phaser.GameObjects.Container {
   electrocute(onComplete) {
     this.scene.cameras.main.shake(500);
     this.isAlive = false;
+    this.scene.sound.play('death-electric', { volume: 0.1 });
     this.isMoving = true;
     this.sprite.play("deathElectric");
     setTimeout(() => {
