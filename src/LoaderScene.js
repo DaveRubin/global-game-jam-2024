@@ -27,14 +27,14 @@ export default class LoaderScene extends Phaser.Scene {
     });
     this.load.atlas({
       key: "flares",
-      textureURL: "public/assets/particles/flares.png",
-      atlasURL: "public/assets/particles/flares.json",
+      textureURL: "assets/particles/flares.png",
+      atlasURL: "assets/particles/flares.json",
     });
 
     this.load.atlas({
       key: "stage",
-      textureURL: "public/assets/stage.png",
-      atlasURL: "public/assets/stage.json", 
+      textureURL: "assets/stage.png",
+      atlasURL: "assets/stage.json",
     });
 
     this.load.image("tiles", "assets/Tilemap.png");

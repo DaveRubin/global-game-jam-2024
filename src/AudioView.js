@@ -61,6 +61,11 @@ export class AudioView extends Phaser.GameObjects.Container {
     scene.events.on("update", (time, delta) => {
       this.moveBars(scene, time, delta);
     });
+    const graphics = this.scene.add.graphics();
+    const color = [DARK_COLOR, DARK_COLOR, DARK_COLOR, DARK_COLOR];
+    graphics.fillGradientStyle(...color, 1, 1, 0, 0);
+    graphics.fillRect(0, 96, 256, 16);
+    this.add(graphics);
     this.createHidingGradients();
     this.audioParticles = new AudioParticle(
       scene,
@@ -82,9 +87,9 @@ export class AudioView extends Phaser.GameObjects.Container {
     return this.bars.reduce((lowest, current) => {
       // If the current item has a lower value than the lowest found so far, update lowest
       if (Math.abs(this.scene.scale.gameSize.width / 2 - current.x) < Math.abs(this.scene.scale.gameSize.width / 2 - lowest.x)) {
-          return current;
+        return current;
       } else {
-          return lowest;
+        return lowest;
       }
     }, this.bars[0]);
   }
@@ -123,8 +128,8 @@ export class AudioView extends Phaser.GameObjects.Container {
       return;
     }
     this.bars.forEach((bar, i) => {
-      const targetX = 0 + this.barDistance * (i - 2) + this.scene.scale.gameSize.width/2;
-      const startX = this.barDistance * (i - 1) + this.scene.scale.gameSize.width/2;
+      const targetX = 0 + this.barDistance * (i - 2) + this.scene.scale.gameSize.width / 2;
+      const startX = this.barDistance * (i - 1) + this.scene.scale.gameSize.width / 2;
       bar.x = Phaser.Math.Linear(startX, targetX, Heartbeat.normalizedModule);
     });
   }
