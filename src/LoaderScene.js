@@ -34,11 +34,17 @@ export default class LoaderScene extends Phaser.Scene {
     this.load.atlas({
       key: "stage",
       textureURL: "public/assets/stage.png",
-      atlasURL: "public/assets/stage.json",
+      atlasURL: "public/assets/stage.json", 
     });
 
     this.load.image("tiles", "assets/Tilemap.png");
     this.load.image("arrow", "assets/arrow.png");
+    this.load.image("helper-text", "assets/help-text.png");
+
+    this.load.image("end-clock", "assets/end/clock.png");
+    this.load.image("end-coins", "assets/end/coins.png");
+    this.load.image("end-steps", "assets/end/steps.png");
+
 
     this.load.audio("loop", "Mono/Monoschtrugel music loop.wav");
     this.load.audio("coin-collect", "Mono/coin collect.wav");

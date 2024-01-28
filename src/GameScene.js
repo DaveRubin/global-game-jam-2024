@@ -7,6 +7,7 @@ import { Pit } from "./Pit";
 import { Coin } from "./Coin";
 import { StageBackground } from "./StageBackground";
 import { Foreground } from "./Foreground";
+import { Stats } from "./GameStats";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -14,6 +15,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    Stats.start(this.time.now);
+
     if (!this.sound.getAll('loop').length) {
       this.sound.play("loop", { loop: true, volume: 0.1,  });
     }
@@ -32,7 +35,7 @@ export default class GameScene extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.RIGHT
     );
 
-    this.isKeys = true;
+    this.isKeys = false;
     this.isPingPong = true;
     this.stage = new StageBackground(this);
     this.add.existing(this.stage);
@@ -186,6 +189,12 @@ export default class GameScene extends Phaser.Scene {
     this.worldContainer.y += 32 * this.invertWorldY(target);
     this.stage.layer.y += 32 * this.invertWorldY(target);
     this.stage.y += 32 * this.invertWorldY(target);
+
+    this.helpText = this.add.sprite(0, 0, 'helper-text');
+    this.worldContainer.add(this.helpText);
+    this.helpText.x = 32 * 4;
+    this.helpText.y = 32 * this.invertWorldY(4) - 15;
+    this.helpText.scale = 0.8;
   }
 
   invertWorldY(y) {
@@ -216,6 +225,7 @@ export default class GameScene extends Phaser.Scene {
       if (this.tryMove(this.characterX, this.characterY - 1)) {
         this.moveVertical(1);
         this.characterY -= 1;
+        Stats.move();
       }
     }
     if (
@@ -225,6 +235,7 @@ export default class GameScene extends Phaser.Scene {
       if (this.tryMove(this.characterX, this.characterY + 1)) {
         this.moveVertical(-1);
         this.characterY += 1;
+        Stats.move();
       }
     }
     if (
@@ -234,6 +245,7 @@ export default class GameScene extends Phaser.Scene {
       if (this.tryMove(this.characterX - 1, this.characterY)) {
         this.character.left();
         this.characterX -= 1;
+        Stats.move();
       }
     }
     if (
@@ -243,10 +255,12 @@ export default class GameScene extends Phaser.Scene {
       if (this.tryMove(this.characterX + 1, this.characterY)) {
         this.character.right();
         this.characterX += 1;
+        Stats.move();
       }
     }
 
     if (this.stage.isWin(this.characterX, this.characterY)) {
+      Stats.end(this.time.now);
       this.character.isAlive = false;
       this.time.delayedCall(2000, () => {
         this.scene.start('you-win');
@@ -268,9 +282,11 @@ export default class GameScene extends Phaser.Scene {
         obstacle.worldY === this.characterY
       ) {
         if (obstacle instanceof Coin) {
+          Stats.collect();
           obstacle.collect();
         } else {
           if (obstacle.kill) {
+            Stats.end(this.time.now);
             this.handleLandingOnPit(obstacle.kill);
           }
         }

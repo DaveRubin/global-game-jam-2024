@@ -1,5 +1,6 @@
 
 import Phaser from 'phaser';
+import { Stats } from './GameStats';
 
 export default class YouLoseScene extends Phaser.Scene {
     constructor() {
@@ -29,10 +30,23 @@ export default class YouLoseScene extends Phaser.Scene {
             loop: true
         });
 
-        // const loseText = this.add.text(0, 0, 'LOSER!', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-        // loseText.originX = loseText.originY = 0.5;
-        // loseText.x = this.scale.gameSize.width / 2 - loseText.width / 2;
-        // loseText.y = 50;
+        const stats = this.add.container(50, 20);
+        const statsClock = this.add.sprite(0, 0, 'end-clock');
+        const statsClockText = this.add.text(-73, 0-6, Stats.getTotalTime(), { align: 'right', fixedWidth: 50 });
+        const statsSteps = this.add.sprite(0, 40, 'end-steps');
+        const statsStepsText = this.add.text(-73, 40-6, Stats.moves.toString(), { align: 'right', fixedWidth: 50 });
+        const statsCoins = this.add.sprite(0, 80, 'end-coins');
+        const statsCoinsText = this.add.text(-73, 80-6, Stats.coins.toString(), { align: 'right', fixedWidth: 50 });
+        stats.scale = 0.5;
+        stats.alpha = 0;
+        stats.add([statsClock, statsCoins, statsSteps, statsClockText, statsCoinsText, statsStepsText, ]);
+        this.tweens.add({
+            targets: stats,
+            alpha: 1,
+            ease: Phaser.Math.Easing.Sine.InOut,
+            duration: 300,
+            delay: 2000
+        });
 
         const buttonContainer = this.add.container(this.scale.gameSize.width / 2, this.scale.gameSize.height / 2 + 16);
         const button = this.add.sprite(0, 0, "character", "button");
@@ -45,6 +59,7 @@ export default class YouLoseScene extends Phaser.Scene {
             duration: 300,
             delay: 2000
         });
+        
 
         const pressed = this.add.sprite(0, 0, "character", "button_pressed");
         pressed.alpha = 0;

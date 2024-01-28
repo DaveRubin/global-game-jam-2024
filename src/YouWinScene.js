@@ -1,5 +1,6 @@
 
 import Phaser from 'phaser';
+import { Stats } from './GameStats';
 
 export default class YouWinScene extends Phaser.Scene {
     constructor() {
@@ -20,6 +21,24 @@ export default class YouWinScene extends Phaser.Scene {
         button.alpha = 0;
         this.tweens.add({
             targets: button,
+            alpha: 1,
+            ease: Phaser.Math.Easing.Sine.InOut,
+            duration: 300,
+            delay: 4000
+        });
+
+        const stats = this.add.container(50, 20);
+        const statsClock = this.add.sprite(0, 0, 'end-clock');
+        const statsClockText = this.add.text(-73, 0-6, Stats.getTotalTime(), { align: 'right', fixedWidth: 50 });
+        const statsSteps = this.add.sprite(0, 40, 'end-steps');
+        const statsStepsText = this.add.text(-73, 40-6, Stats.moves.toString(), { align: 'right', fixedWidth: 50 });
+        const statsCoins = this.add.sprite(0, 80, 'end-coins');
+        const statsCoinsText = this.add.text(-73, 80-6, Stats.coins.toString(), { align: 'right', fixedWidth: 50 });
+        stats.scale = 0.5;
+        stats.alpha = 0;
+        stats.add([statsClock, statsCoins, statsSteps, statsClockText, statsCoinsText, statsStepsText, ]);
+        this.tweens.add({
+            targets: stats,
             alpha: 1,
             ease: Phaser.Math.Easing.Sine.InOut,
             duration: 300,
