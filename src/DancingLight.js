@@ -13,12 +13,12 @@ const MIN = {
 }
 
 export class DancingLight extends Phaser.GameObjects.Sprite {
-  constructor(scene, x = 0, y = 0, isOffset = false) {
-    super(scene, x, y, "flares", "red");
+  constructor(scene, x = 0, y = 0, isOffset = false, color = "red") {
+    super(scene, x, y, "flares", color);
     const offset = isOffset ? 1 : 0;
 
-    this.scale = offset ? MIN.scale : MAX.scale;
-    this.alpha = offset ? MIN.alpha : MAX.alpha;
+    this.scale = !offset ? MIN.scale : MAX.scale;
+    this.alpha = !offset ? MIN.alpha : MAX.alpha;
 
     this.blendMode = Phaser.BlendModes.ADD;
 
@@ -27,15 +27,15 @@ export class DancingLight extends Phaser.GameObjects.Sprite {
         scene.tweens.add({
           targets: [this],
           ...MAX,
-          duration: 200,
+          duration: 100,
           ease: Phaser.Math.Easing.Cubic.Out,
         });
+      } else {
         scene.tweens.add({
           targets: [this],
           ...MIN,
-          duration: 700,
-          delay: 300,
-          ease: Phaser.Math.Easing.Cubic.In,
+          duration: 100,
+          ease: Phaser.Math.Easing.Cubic.Out,
         });
       }
     });

@@ -76,6 +76,11 @@ export class AudioView extends Phaser.GameObjects.Container {
 
       [this.leftBars[0], this.rightBars[0]].forEach(x => x.alpha = !this.isSucceeded);
     });
+    const graphics = this.scene.add.graphics();
+    const color = [DARK_COLOR, DARK_COLOR, DARK_COLOR, DARK_COLOR];
+    graphics.fillGradientStyle(...color, 1, 1, 0, 0);
+    graphics.fillRect(0, 96, 256, 16);
+    this.add(graphics);
     this.createHidingGradients();
     this.audioParticles = new AudioParticle(
       scene,

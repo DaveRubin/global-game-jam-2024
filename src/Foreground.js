@@ -5,7 +5,7 @@ import { Heartbeat } from "./HeartbeatService";
 
 
 const HEIGHT = gameMap.length * 32;
-const WIDTH = gameMap[0].length;
+const WIDTH = gameMap[0].length-1;
 const placeFromBottom = (x, y) => {
   return [x * 32, (gameMap.length - y) * 32]
 }
@@ -27,13 +27,32 @@ export class Foreground extends Phaser.GameObjects.Container {
 
 
     this.add(new DancingLight(scene, ...placeFromBottom(0, 2)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 2)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 2), true));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 8), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 4)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 4), true));
+
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 6)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 6), true));
+
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 8)));
     this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 8), true));
 
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 10)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 10), true));
+
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 12)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 12), true));
+
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 34)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 34), true));
+
+    this.add(new DancingLight(scene, ...placeFromBottom(2.5, 22.5), false, 'green'));
+    this.add(new DancingLight(scene, ...placeFromBottom(5.5, 22.5), true, 'green'));
+
+
     this.add(new DancingLight(scene, ...placeFromBottom(0, 25)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 25)));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 25), true));
 
 
     this.add(scene.add.sprite(scene.scale.gameSize.width / 2, 32, "character", "chair"));
@@ -47,9 +66,9 @@ export class Foreground extends Phaser.GameObjects.Container {
     const plank1 = scene.add.sprite(scene.scale.gameSize.width / 2 - 96, HEIGHT - 13 * 32, "character", "plank1");
     const plank2 = scene.add.sprite(scene.scale.gameSize.width / 2 + 96, HEIGHT - 13 * 32, "character", "plank1");
 
-    const p1 = scene.add.sprite(...placeFromBottom(2.5, 22), "character", "plank1");
+    const p1 = scene.add.sprite(...placeFromBottom(1.5, 27), "character", "plank1");
     this.add(p1);
-    const p2 = scene.add.sprite(...placeFromBottom(5.5, 19), "character", "plank1");
+    const p2 = scene.add.sprite(...placeFromBottom(6.5, 27), "character", "plank1");
     this.add(p2);
 
     this.add(plank1);
