@@ -87,10 +87,6 @@ export class StageBackground extends Phaser.GameObjects.Container {
     return gameMap[vector.y][vector.x];
   }
 
-  getStartingPoint() {
-    return new Phaser.Math.Vector2(4, this.rows - 2);
-  }
-
   isWin(x, y) {
     return above[y][x] === 'plgo';
   }

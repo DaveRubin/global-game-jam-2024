@@ -7,7 +7,8 @@ import { DARK_COLOR, LIGHT_COLOR } from "./colors";
 export class AudioView extends Phaser.GameObjects.Container {
   initialY = 0;
   targetY = 0;
-  bars = [];
+  leftBars = [];
+  rightBars = [];
 
   constructor(scene, x = 0, y = 0, height, isShowBoom = true) {
     super(scene, x, y);
@@ -20,25 +21,36 @@ export class AudioView extends Phaser.GameObjects.Container {
 
     this.height = height;
     this.particalHeight = this.height * 0.9;
-    this.barDistance = this.height;
+    this.barDistance = 60;
     this.barWidth = 2;
-    this.barSpeed = this.barDistance / Heartbeat.beatTempo;
+    this.leftBarspeed = this.barDistance / Heartbeat.beatTempo;
     this.createBackground();
+    Heartbeat.eventEmitter.addEventListener('beat', () => {
+      this.isSucceeded = false;
+    });
     Heartbeat.onSuccess = (action) => {
       if (!this.isShowBoom) {
         return;
       }
       this.scene.sound.play('glow', { volume: 0.05 });
       this.successOnCurrent();
-      const bar = this.getCurrentBar();
-      const targetX = bar ? bar.x : 0;
-      this.audioParticles.showArrow(action, targetX);
+      this.audioParticles.showArrow(action, this.scene.scale.gameSize.width / 2);
     };
+    Heartbeat.onFail = () => {
+      this.isSucceeded = true;
+      this.audioParticles.showArrow('fail', this.scene.scale.gameSize.width / 2);
+    }
     for (let i = 0; i < 3; i++) {
       const bar = scene.add.rectangle(0, this.height / 2, this.barWidth, this.height, 0xffffff);
       bar.x = i * this.barDistance + (scene.scale.gameSize.width / 2);
       this.add(bar);
-      this.bars.push(bar);
+      this.leftBars.push(bar);
+    }
+    for (let i = 0; i < 3; i++) {
+      const bar = scene.add.rectangle(0, this.height / 2, this.barWidth, this.height, 0xffffff);
+      bar.x = i * this.barDistance + (scene.scale.gameSize.width / 2);
+      this.add(bar);
+      this.rightBars.push(bar);
     }
     const particlesEngine = this.scene.add.particles("flares");
 
@@ -59,13 +71,11 @@ export class AudioView extends Phaser.GameObjects.Container {
     });
 
     scene.events.on("update", (time, delta) => {
-      this.moveBars(scene, time, delta);
+      this.moveBars(scene, time, delta, this.leftBars, 1);
+      this.moveBars(scene, time, delta, this.rightBars, -1);
+
+      [this.leftBars[0], this.rightBars[0]].forEach(x => x.alpha = !this.isSucceeded);
     });
-    const graphics = this.scene.add.graphics();
-    const color = [DARK_COLOR, DARK_COLOR, DARK_COLOR, DARK_COLOR];
-    graphics.fillGradientStyle(...color, 1, 1, 0, 0);
-    graphics.fillRect(0, 96, 256, 16);
-    this.add(graphics);
     this.createHidingGradients();
     this.audioParticles = new AudioParticle(
       scene,
@@ -77,21 +87,26 @@ export class AudioView extends Phaser.GameObjects.Container {
   }
 
   successOnCurrent() {
-    const bar = this.getCurrentBar();
-    if (bar) {
+    const bars = this.getCurrentBars();
+    for(let bar of bars) {
       this.emitter.explode(7, bar.x, bar.y);
+      this.isSucceeded = true;
     }
   }
 
-  getCurrentBar() {
-    return this.bars.reduce((lowest, current) => {
+  getCurrentBars() {
+    return [this.getCurrentBar(this.leftBars), this.getCurrentBar(this.rightBars)];
+  }
+
+  getCurrentBar(bars) {
+    return bars.reduce((lowest, current) => {
       // If the current item has a lower value than the lowest found so far, update lowest
       if (Math.abs(this.scene.scale.gameSize.width / 2 - current.x) < Math.abs(this.scene.scale.gameSize.width / 2 - lowest.x)) {
-        return current;
+          return current;
       } else {
-        return lowest;
+          return lowest;
       }
-    }, this.bars[0]);
+    }, bars[0]);
   }
 
   createBackground() {
@@ -105,7 +120,7 @@ export class AudioView extends Phaser.GameObjects.Container {
     const background2 = this.scene.add.rectangle(
       this.scene.scale.gameSize.width / 2,
       this.height / 2,
-      40,
+      (1 - Heartbeat.offset) * this.scene.scale.gameSize.width / 2,
       this.height,
       LIGHT_COLOR
     );
@@ -123,13 +138,13 @@ export class AudioView extends Phaser.GameObjects.Container {
     this.add(graphics);
   };
 
-  moveBars(scene, time, delta) {
+  moveBars(scene, time, delta, bars, direction) {
     if (!this.scene) {
       return;
     }
-    this.bars.forEach((bar, i) => {
-      const targetX = 0 + this.barDistance * (i - 2) + this.scene.scale.gameSize.width / 2;
-      const startX = this.barDistance * (i - 1) + this.scene.scale.gameSize.width / 2;
+    bars.forEach((bar, i) => {
+      const targetX = this.scene.scale.gameSize.width / 2 + this.barDistance * (i) * direction;
+      const startX = this.scene.scale.gameSize.width / 2 + this.barDistance * (i+1) * direction;
       bar.x = Phaser.Math.Linear(startX, targetX, Heartbeat.normalizedModule);
     });
   }

@@ -39,6 +39,7 @@ export default class LoaderScene extends Phaser.Scene {
 
     this.load.image("tiles", "assets/Tilemap.png");
     this.load.image("arrow", "assets/arrow.png");
+    this.load.image("no", "assets/angry.png");
     this.load.image("helper-text", "assets/help-text.png");
 
     this.load.image("end-clock", "assets/end/clock.png");

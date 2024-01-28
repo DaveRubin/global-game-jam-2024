@@ -10,12 +10,14 @@ class EventEmitter extends EventTarget {
 class HeartbeatService {
   total;
   onSuccess;
+  onFail;
   onSuccessLine;
 
   eventEmitter = new EventEmitter();
   onSuccessCalibrate;
 
   isCalibrating = false;
+  isKeys = false;
 
   constructor() {
     this.beatCount = 0;
@@ -24,9 +26,8 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatTempo = 800;
-    this.startOffset = 0.475;
-    this.endOffset = 0.475;
+    this.beatTempo = 850;
+    this.offset = 0.35;
 
     const minHex = 45;
     const maxHex = 75;
@@ -45,19 +46,20 @@ class HeartbeatService {
     console.log('ok', JSON.stringify(this.actions));
   }
 
-  update(now) {
+  update(now, keys) {
     this.hadBeat = this.isBeat;
     this.lastInputAction = this.inputAction;
+    this.keys = keys;
+    this.now = now;
 
+    const lastNormalizedModule = this.normalizedModule;
     this.isBeat = this.calculateBeat(now);
 
-    if (!this.hadBeat && this.isBeat) {
+    if (lastNormalizedModule > this.normalizedModule ) {
       this.beatCount++;
+      this.nextFrameBeat = true;
       this.eventEmitter.dispatch("beat", { beatCount: this.beatCount });
-      // create an event emitter and emit an event
-      // this.events.emit("beat", this.beatCount);
     }
-
     this.inputAction = this.getCurrentAction();
     this.calculateAction();
 
@@ -80,6 +82,7 @@ class HeartbeatService {
       } else {
         if (!this.isCalibrating && this.lastInputAction) {
           this.skipBeat = true;
+          this.onFail();
         } else if (this.inputAction) {
           this.currentAction = this.inputAction;
           this.onSuccess?.(this.currentAction);
@@ -96,23 +99,39 @@ class HeartbeatService {
   calculateBeat(now) {
     this.module = now % this.beatTempo;
     this.normalizedModule = this.module / this.beatTempo;
-    const isWithinBeatWindow = this.normalizedModule > (1 - this.startOffset) || this.normalizedModule < this.endOffset;
-
+    const isWithinBeatWindow = this.normalizedModule > this.offset;
+    //console.log('normalized', this.normalizedModule, 'ok', isWithinBeatWindow)
     return isWithinBeatWindow;
   }
   getCurrentAction() {
-    if (instance.volume < 0.075) {
-      return null;
-    }
-
-    for (let action of this.actions) {
-      if (
-        action.window.x < instance.pitch &&
-        instance.pitch < action.window.y
-      ) {
-        return action.name;
+    if (!this.isKeys || this.keys == null) {
+      if (instance.volume < 0.075) {
+        return null;
+      }
+      for (let action of this.actions) {
+        if (
+          action.window.x < instance.pitch &&
+          instance.pitch < action.window.y
+        ) {
+          return action.name;
+        }
       }
     }
+    else {
+      if (this.keys.up) {
+        return 'up';
+      }
+      if (this.keys.down) {
+        return 'down';
+      }
+      if (this.keys.left) {
+        return 'left';
+      }
+      if (this.keys.right) {
+        return 'right';
+      }
+    }
+    
     return null;
   }
   startCalibrate() {

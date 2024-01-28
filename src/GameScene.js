@@ -43,7 +43,7 @@ export default class GameScene extends Phaser.Scene {
     this.worldContainer = this.add.container(0, 0);
     this.worldContainer.y += 6 - 32 * (this.stage.rows - 11);
 
-    const startingPoint = this.stage.getStartingPoint();
+    const startingPoint = new Phaser.Math.Vector2(4, this.stage.rows - 2);
     this.characterY = startingPoint.y;
     this.characterX = startingPoint.x;
 
@@ -201,8 +201,12 @@ export default class GameScene extends Phaser.Scene {
     return this.stage.rows - y;
   }
 
+  getKeys() {
+    return { up: Phaser.Input.Keyboard.JustDown(this.upKey), down: Phaser.Input.Keyboard.JustDown(this.downKey), left: Phaser.Input.Keyboard.JustDown(this.leftKey), right: Phaser.Input.Keyboard.JustDown(this.rightKey) };
+  }
+
   update(time, delta) {
-    Heartbeat.update(time);
+    Heartbeat.update(time, this.getKeys());
     this.beatDebugRect.fillColor = Heartbeat.isBeat ? 0xff0000 : 0xffffff;
     this.obstacleMovement();
 

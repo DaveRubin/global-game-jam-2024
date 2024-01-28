@@ -19,7 +19,8 @@ export class AudioParticle extends Phaser.GameObjects.Container {
   }
 
   showArrow(action, x) {
-    const rect = this.scene.add.sprite(0, this.y + this.sprite.y, 'arrow');
+    const isFail = action === 'fail';
+    const rect = this.scene.add.sprite(0, this.y + this.sprite.y, isFail ? 'no' : 'arrow');
     rect.alpha = 0.9;
     rect.scale = 0;
     rect.blendMode = "ADD";
@@ -27,23 +28,24 @@ export class AudioParticle extends Phaser.GameObjects.Container {
       'up': 90,
       'left': 0,
       'right': 180,
+      'no': 0,
     };
     rect.setAngle(angle[action]);
-    rect.x = x;
+    rect.x = isFail ? this.scene.scale.gameSize.width / 2 : x;
     rect.y = Math.max(rect.y, rect.height * 0.5);
 
     this.scene.tweens.add({
       targets: rect,
       scale: 1,
       ease: Phaser.Math.Easing.Bounce.Out,
-      duration: 400,
+      duration: 300,
     });
-    this.scene.time.delayedCall(600, () => {
+    this.scene.time.delayedCall(400, () => {
       this.scene.tweens.add({
         targets: rect,
         scale: 0,
         ease: Phaser.Math.Easing.Sine.InOut,
-        duration: 300,
+        duration: 100,
         onComplete: () => rect.destroy()
       });
     });
