@@ -26,8 +26,8 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatTempo = 850;
-    this.offset = 0.35;
+    this.beatTempo = 800;
+    this.offset = 0.40;
 
     const minHex = 45;
     const maxHex = 75;
