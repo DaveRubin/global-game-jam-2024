@@ -26,8 +26,9 @@ class HeartbeatService {
     this.inputAction = null;
     this.lastInputAction = null;
 
-    this.beatTempo = 800;
-    this.offset = 0.40;
+    this.beatTempo = 1000;
+    this.volumeThreshold = 0.035;
+    this.offset = 0.5;
 
     const minHex = 45;
     const maxHex = 75;
@@ -105,7 +106,7 @@ class HeartbeatService {
   }
   getCurrentAction() {
     if (!this.isKeys || this.keys == null) {
-      if (instance.volume < 0.075) {
+      if (instance.volume < this.volumeThreshold) {
         return null;
       }
       for (let action of this.actions) {
