@@ -282,7 +282,6 @@ export default class GameScene extends Phaser.Scene {
         obstacle.worldY === this.characterY
       ) {
         if (obstacle instanceof Coin) {
-          Stats.collect();
           obstacle.collect();
         } else {
           if (obstacle.kill) {

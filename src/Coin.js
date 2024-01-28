@@ -1,3 +1,5 @@
+import { Stats } from "./GameStats";
+
 export class Coin extends Phaser.GameObjects.Container {
     constructor(scene, x, y, worldX, worldY) {
         super(scene, x, y);
@@ -30,6 +32,7 @@ export class Coin extends Phaser.GameObjects.Container {
         if (this.collected) {
             return;
         }
+        Stats.collect();
         this.scene.sound.play('coin-collect', { volume: 0.05 });
         this.collected = true;
 
