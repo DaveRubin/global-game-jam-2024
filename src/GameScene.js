@@ -51,8 +51,6 @@ export default class GameScene extends Phaser.Scene {
     this.add.existing(this.character);
     this.positionCharacter(this.character, startingPoint.x, startingPoint.y);
 
-    new AudioView(this, 0, 0, 32 * 3);
-
     this.beatDebugRect = this.add.rectangle(0, 0, 200, 30, 0xffffff);
     this.beatDebugRect.alpha = 0;
 
@@ -166,12 +164,12 @@ export default class GameScene extends Phaser.Scene {
       this.obstacles.push(obstacle);
     }
     this.character.jump();
-    const foreground = new Foreground(this, 0, 0);
-
-    this.worldContainer.add(foreground);
+    this.foreground = new Foreground(this, 0, 0);
+    this.add.existing(this.foreground);
 
     const target = this.characterY + 3;
     this.worldContainer.y += 32 * this.invertWorldY(target);
+    this.foreground.y = this.worldContainer.y;
     this.stage.layer.y += 32 * this.invertWorldY(target);
     this.stage.y += 32 * this.invertWorldY(target);
 
@@ -180,6 +178,8 @@ export default class GameScene extends Phaser.Scene {
     this.helpText.x = 32 * 4;
     this.helpText.y = 32 * this.invertWorldY(4) - 15;
     this.helpText.scale = 0.8;
+
+    new AudioView(this, 0, 0, 32 * 3);
   }
 
   invertWorldY(y) {
@@ -289,6 +289,7 @@ export default class GameScene extends Phaser.Scene {
         this.moveScreen(this.worldContainer, 0, 32);
         this.moveScreen(this.stage, 0, 32);
         this.moveScreen(this.stage.layer, 0, 32);
+        this.moveScreen(this.foreground, 0, 32);
       } else {
         this.character.up();
       }
@@ -298,6 +299,7 @@ export default class GameScene extends Phaser.Scene {
         this.moveScreen(this.worldContainer, 0, -32);
         this.moveScreen(this.stage, 0, -32);
         this.moveScreen(this.stage.layer, 0, -32);
+        this.moveScreen(this.foreground, 0, -32);
       } else {
         this.character.down();
       }

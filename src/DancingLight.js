@@ -13,17 +13,18 @@ const MIN = {
 }
 
 export class DancingLight extends Phaser.GameObjects.Sprite {
-  constructor(scene, x = 0, y = 0, isOffset = false, color = "red") {
+  constructor(scene, x = 0, y = 0, offset, module, color = "red") {
     super(scene, x, y, "flares", color);
-    const offset = isOffset ? 1 : 0;
 
-    this.scale = !offset ? MIN.scale : MAX.scale;
-    this.alpha = !offset ? MIN.alpha : MAX.alpha;
+    const isStart = offset % module === 0;
+
+    this.scale = !isStart ? MIN.scale : MAX.scale;
+    this.alpha = !isStart ? MIN.alpha : MAX.alpha;
 
     this.blendMode = Phaser.BlendModes.ADD;
 
     Heartbeat.eventEmitter.addEventListener("beat", (e) => {
-      if ((e.detail.beatCount + offset) % 2) {
+      if ((e.detail.beatCount + offset) % module === 0) {
         scene.tweens.add({
           targets: [this],
           ...MAX,

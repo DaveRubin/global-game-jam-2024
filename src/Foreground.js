@@ -26,33 +26,32 @@ export class Foreground extends Phaser.GameObjects.Container {
     this.scene = scene;
 
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 2)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 2), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 2), 0, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 2), 0, 6));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 4)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 4), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 4), 5, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 4), 5, 6));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 6)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 6), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 6), 4, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 6), 4, 6));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 8)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 8), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 8), 3, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 8), 3, 6));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 10)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 10), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 10), 2, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 10), 2, 6));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 12)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 12), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 12), 1, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 12), 1, 6));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 34)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 34), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 29), 0, 2));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 29), 1, 2));
+    
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 34), 0, 2));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 34), 0, 2));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(2.5, 22.5), false, 'green'));
-    this.add(new DancingLight(scene, ...placeFromBottom(5.5, 22.5), true, 'green'));
-
-
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 25)));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 25), true));
+    this.add(new DancingLight(scene, ...placeFromBottom(2.5, 22.5), 0, 2, 'green'));
+    this.add(new DancingLight(scene, ...placeFromBottom(5.5, 22.5), 1, 2, 'green'));
 
 
     this.add(scene.add.sprite(scene.scale.gameSize.width / 2, 32, "character", "chair"));
