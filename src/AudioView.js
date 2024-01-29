@@ -32,7 +32,6 @@ export class AudioView extends Phaser.GameObjects.Container {
       if (!this.isShowBoom) {
         return;
       }
-      this.scene.sound.play('glow', { volume: 0.05 });
       this.successOnCurrent();
       this.audioParticles.showArrow(action, this.scene.scale.gameSize.width / 2);
     };
