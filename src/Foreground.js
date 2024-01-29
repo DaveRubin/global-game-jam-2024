@@ -26,23 +26,23 @@ export class Foreground extends Phaser.GameObjects.Container {
     this.scene = scene;
 
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 2), 0, 6));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 2), 0, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 2), 0, 3));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 2), 0, 3));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 4), 5, 6));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 4), 5, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 4), 2, 3));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 4), 2, 3));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 6), 4, 6));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 6), 4, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 6), 1, 3));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 6), 1, 3));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 8), 3, 6));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 8), 3, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 8), 0, 3));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 8), 0, 3));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 10), 2, 6));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 10), 2, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 10), 2, 3));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 10), 2, 3));
 
-    this.add(new DancingLight(scene, ...placeFromBottom(0, 12), 1, 6));
-    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 12), 1, 6));
+    this.add(new DancingLight(scene, ...placeFromBottom(0, 12), 1, 3));
+    this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 12), 1, 3));
 
     this.add(new DancingLight(scene, ...placeFromBottom(0, 29), 0, 2));
     this.add(new DancingLight(scene, ...placeFromBottom(WIDTH, 29), 1, 2));

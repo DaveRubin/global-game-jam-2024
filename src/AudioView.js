@@ -38,6 +38,7 @@ export class AudioView extends Phaser.GameObjects.Container {
     };
     Heartbeat.onFail = () => {
       this.isSucceeded = true;
+      this.scene.cameras.main.shake(100);
       this.audioParticles.showArrow('fail', this.scene.scale.gameSize.width / 2);
     }
     for (let i = 0; i < 3; i++) {
