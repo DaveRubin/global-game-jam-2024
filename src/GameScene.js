@@ -167,6 +167,8 @@ export default class GameScene extends Phaser.Scene {
     this.foreground = new Foreground(this, 0, 0);
     this.add.existing(this.foreground);
 
+    this.worldContainer.add(this.add.sprite(this.scale.gameSize.width / 2, 32, "character", "chair"));
+
     const target = this.characterY + 3;
     this.worldContainer.y += 32 * this.invertWorldY(target);
     this.foreground.y = this.worldContainer.y;

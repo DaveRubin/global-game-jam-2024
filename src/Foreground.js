@@ -53,8 +53,6 @@ export class Foreground extends Phaser.GameObjects.Container {
     this.add(new DancingLight(scene, ...placeFromBottom(2.5, 22.5), 0, 2, 'green'));
     this.add(new DancingLight(scene, ...placeFromBottom(5.5, 22.5), 1, 2, 'green'));
 
-
-    this.add(scene.add.sprite(scene.scale.gameSize.width / 2, 32, "character", "chair"));
     const gold1 = scene.add.sprite(scene.scale.gameSize.width / 2 - 64, 96, "character", "plank2");
     this.add(gold1);
     const gold2 = scene.add.sprite(scene.scale.gameSize.width / 2 + 64, 96, "character", "plank2");
