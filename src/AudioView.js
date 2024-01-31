@@ -71,8 +71,12 @@ export class AudioView extends Phaser.GameObjects.Container {
     });
 
     scene.events.on("update", (time, delta) => {
+      if (!this.scene) {
+        return;
+      }
       this.moveBars(scene, time, delta, this.leftBars, 1);
       this.moveBars(scene, time, delta, this.rightBars, -1);
+      this.colorBars([...this.leftBars, ...this.rightBars]);
 
       [this.leftBars[0], this.rightBars[0]].forEach(x => x.alpha = !this.isSucceeded);
     });
@@ -144,13 +148,20 @@ export class AudioView extends Phaser.GameObjects.Container {
   };
 
   moveBars(scene, time, delta, bars, direction) {
-    if (!this.scene) {
-      return;
-    }
+    
     bars.forEach((bar, i) => {
       const targetX = this.scene.scale.gameSize.width / 2 + this.barDistance * (i) * direction;
       const startX = this.scene.scale.gameSize.width / 2 + this.barDistance * (i+1) * direction;
       bar.x = Phaser.Math.Linear(startX, targetX, Heartbeat.normalizedModule);
     });
+  }
+
+  colorBars(bars) {
+    const middle = this.scene.scale.gameSize.width / 2;
+    const offset = (1 - Heartbeat.offset) * this.scene.scale.gameSize.width / 2;
+    bars.forEach(bar => {
+      const isWithin = Math.abs(middle - bar.x)*2 < offset;
+      bar.fillColor = isWithin ? 0x007700 : 0x770000
+    })
   }
 }

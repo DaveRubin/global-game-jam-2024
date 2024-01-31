@@ -29,6 +29,8 @@ class HeartbeatService {
     this.beatTempo = 1000;
     this.volumeThreshold = 0.035;
     this.offset = 0.5;
+    this.graceTime = 500;
+    this.currentGrace = 0;
 
     const minHex = 45;
     const maxHex = 75;
@@ -59,10 +61,11 @@ class HeartbeatService {
     if (lastNormalizedModule > this.normalizedModule ) {
       this.beatCount++;
       this.nextFrameBeat = true;
+      this.skipBeat = false;
       this.eventEmitter.dispatch("beat", { beatCount: this.beatCount });
     }
     this.inputAction = this.getCurrentAction();
-    this.calculateAction();
+    this.calculateAction(now);
 
     if (this.currentAction != null) {
       console.log(
@@ -76,25 +79,29 @@ class HeartbeatService {
       );
     }
   }
-  calculateAction() {
-    if (this.isBeat) {
-      if (this.skipBeat) {
-        this.currentAction = null;
-      } else {
-        if (!this.isCalibrating && this.lastInputAction) {
-          this.skipBeat = true;
-          this.onFail();
-        } else if (this.inputAction) {
-          this.currentAction = this.inputAction;
-          this.onSuccess?.(this.currentAction);
-          this.onSuccessLine?.(this.currentAction);
-          this.onSuccessCalibrate?.(this.currentAction);
-          this.skipBeat = true;
-        }
-      }
-    } else {
-      this.skipBeat = false;
+  calculateAction(now) {
+    if (this.skipBeat) {
       this.currentAction = null;
+      return;
+    }
+
+    if (this.currentGrace > now) {
+      return;
+    }
+
+    if (this.inputAction) {
+      this.skipBeat = true;
+      this.currentGrace = this.graceTime + now;
+      if (this.isBeat) {
+        this.currentAction = this.inputAction;
+        this.onSuccess?.(this.currentAction);
+        this.onSuccessLine?.(this.currentAction);
+        this.onSuccessCalibrate?.(this.currentAction);
+        return this.currentAction;
+      }
+
+      this.onFail?.();
+      return null;
     }
   }
   calculateBeat(now) {
