@@ -92,16 +92,15 @@ class HeartbeatService {
     if (this.inputAction) {
       this.skipBeat = true;
       this.currentGrace = this.graceTime + now;
-      if (this.isBeat) {
-        this.currentAction = this.inputAction;
-        this.onSuccess?.(this.currentAction);
-        this.onSuccessLine?.(this.currentAction);
-        this.onSuccessCalibrate?.(this.currentAction);
-        return this.currentAction;
+      if (!this.isBeat && !this.isCalibrating) {
+        this.onFail?.();
+        return null;
       }
-
-      this.onFail?.();
-      return null;
+      this.currentAction = this.inputAction;
+      this.onSuccess?.(this.currentAction);
+      this.onSuccessLine?.(this.currentAction);
+      this.onSuccessCalibrate?.(this.currentAction);
+      return this.currentAction;
     }
   }
   calculateBeat(now) {
