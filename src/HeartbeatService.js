@@ -31,6 +31,7 @@ class HeartbeatService {
     this.offset = 0.5;
     this.graceTime = 500;
     this.currentGrace = 0;
+    this.coyote = 0.3;
 
     const minHex = 45;
     const maxHex = 75;
@@ -56,11 +57,11 @@ class HeartbeatService {
     this.now = now;
 
     const lastNormalizedModule = this.normalizedModule;
-    this.isBeat = this.calculateBeat(now);
+    this.calculateBeat(now);
 
     if (lastNormalizedModule > this.normalizedModule ) {
+      this.canCoyote = !this.skipBeat;
       this.beatCount++;
-      this.nextFrameBeat = true;
       this.skipBeat = false;
       this.eventEmitter.dispatch("beat", { beatCount: this.beatCount });
     }
@@ -80,8 +81,8 @@ class HeartbeatService {
     }
   }
   calculateAction(now) {
+    this.currentAction = null;
     if (this.skipBeat) {
-      this.currentAction = null;
       return;
     }
 
@@ -90,16 +91,16 @@ class HeartbeatService {
     }
 
     if (this.inputAction) {
-      this.skipBeat = true;
+      this.skipBeat = !this.isCoyote;
       this.currentGrace = this.graceTime + now;
-      if (!this.isBeat && !this.isCalibrating) {
+      if (!this.isCoyote && !this.isBeat && !this.isCalibrating) {
         this.onFail?.();
         return null;
       }
       this.currentAction = this.inputAction;
-      this.onSuccess?.(this.currentAction);
-      this.onSuccessLine?.(this.currentAction);
-      this.onSuccessCalibrate?.(this.currentAction);
+      this.onSuccess?.(this.currentAction, this.isCoyote);
+      this.onSuccessLine?.(this.currentAction, this.isCoyote);
+      this.onSuccessCalibrate?.(this.currentAction, this.isCoyote);
       return this.currentAction;
     }
   }
@@ -107,8 +108,9 @@ class HeartbeatService {
     this.module = now % this.beatTempo;
     this.normalizedModule = this.module / this.beatTempo;
     const isWithinBeatWindow = this.normalizedModule > this.offset;
-    //console.log('normalized', this.normalizedModule, 'ok', isWithinBeatWindow)
-    return isWithinBeatWindow;
+    this.isCoyote = this.canCoyote && this.normalizedModule < this.coyote;
+    this.isBeat = isWithinBeatWindow;
+    //console.log('what', this.isCoyote, this.isBeat, this.normalizedModule);
   }
   getCurrentAction() {
     if (!this.isKeys || this.keys == null) {

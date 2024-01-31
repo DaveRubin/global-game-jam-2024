@@ -28,11 +28,11 @@ export class AudioView extends Phaser.GameObjects.Container {
     Heartbeat.eventEmitter.addEventListener('beat', () => {
       this.isSucceeded = false;
     });
-    Heartbeat.onSuccess = (action) => {
+    Heartbeat.onSuccess = (action, isCoyote) => {
       if (!this.isShowBoom) {
         return;
       }
-      this.successOnCurrent();
+      this.successOnCurrent(isCoyote);
       this.audioParticles.showArrow(action, this.scene.scale.gameSize.width / 2);
     };
     Heartbeat.onFail = () => {
@@ -95,11 +95,11 @@ export class AudioView extends Phaser.GameObjects.Container {
     this.add(this.audioParticles);
   }
 
-  successOnCurrent() {
+  successOnCurrent(isCoyote) {
     const bars = this.getCurrentBars();
     for(let bar of bars) {
-      this.emitter.explode(7, bar.x, bar.y);
-      this.isSucceeded = true;
+      this.emitter.explode(7, isCoyote ? this.scene.scale.gameSize.width / 2 : bar.x, bar.y);
+      this.isSucceeded = !isCoyote;
     }
   }
 
