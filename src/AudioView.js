@@ -161,7 +161,8 @@ export class AudioView extends Phaser.GameObjects.Container {
     const offset = (1 - Heartbeat.offset) * this.scene.scale.gameSize.width / 2;
     bars.forEach(bar => {
       const isWithin = Math.abs(middle - bar.x)*2 < offset;
-      bar.fillColor = isWithin ? 0x007700 : 0x770000
+      bar.width = isWithin ? this.barWidth * 2 : this.barWidth;
+      bar.fillColor = isWithin ? 0x44f0aa : 0xffffff;
     })
   }
 }
